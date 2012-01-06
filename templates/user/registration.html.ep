@@ -1,0 +1,33 @@
+<script src="http://code.jquery.com/jquery-1.7.min.js"></script>
+
+<script>
+    $(document).ready( function() {
+        $('#form-registration-show').click(function(){
+            
+            var password = 'form-registration-password';
+            
+            if ( $(this).attr('checked') == 'checked' )
+            {
+                var old_pass = $('#' + password);
+                var new_pass = old_pass.clone();
+                new_pass.attr('type', 'text');
+                new_pass.attr('id', 'visible-' + password);
+            }
+            else
+            {
+                var old_pass = $('#visible-' + password);
+                var new_pass = old_pass.clone();
+                new_pass.attr('type', 'password');
+                new_pass.attr('id', password);
+            }
+
+            new_pass.insertBefore(old_pass);
+            old_pass.remove();
+
+            return true;
+
+        });
+    });
+</script>
+
+<%=b $form %>

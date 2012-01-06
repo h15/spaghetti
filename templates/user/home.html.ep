@@ -1,0 +1,13 @@
+% layout 'default';
+% title l('Profile') . ' ' . $user->{name};
+
+<table class=homeUser>
+
+% for my $k ( qw/name mail createAt modifyAt accessAt/ ) {
+%
+%   $user->{$k} = render_datetime($user->{$k}) if $k =~ /At$/;
+%
+    <tr><td><%=l $k %></td><td><%= $user->{$k} %></td></tr>
+
+% }
+</table>

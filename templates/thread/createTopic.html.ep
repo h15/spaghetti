@@ -1,0 +1,4 @@
+% layout 'default';
+% title l('Create new topic');
+
+%=b $form

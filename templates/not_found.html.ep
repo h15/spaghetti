@@ -1,0 +1,7 @@
+% layout 'default';
+% title l('Not found');
+
+<div class="rounded error">
+    <%=l 'This page does not exist or you can\'t read it.' %>
+</div>
+
