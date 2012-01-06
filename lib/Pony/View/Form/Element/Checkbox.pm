@@ -2,7 +2,7 @@ package Pony::View::Form::Element::Checkbox;
 use Pony::Object qw/Pony::View::Form::Element/;
 
     has valueForm => q/<input type="checkbox" class="pony-checkbox"
-                              id="%s" %s name="%s" required="%s">/;
+                              id="%s" %s name="%s" %s>/;
     
     sub render
         {
@@ -11,7 +11,7 @@ use Pony::Object qw/Pony::View::Form::Element/;
             my $value  = ( $this->value ? 'checked=checked' : '' );
             
             sprintf $this->valueForm, "$formId-".$this->id,
-                    $value, $this->name, $this->required;
+                    $value, $this->name, ($this->required ? 'required' : '');
         }
 
 1;

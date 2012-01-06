@@ -189,7 +189,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     $threadModel->update( { textId  => $teId },
                                           { id      => $thId } );
                     
-                    $this->redirect_to('thread_showByUrl', url => "$thId-$url");
+                    $this->redirect_to('thread_show', url => "$thId-$url");
                 }
             }
             

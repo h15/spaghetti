@@ -2,7 +2,7 @@ package Pony::View::Form::Element::Select;
 use Pony::Object qw/Pony::View::Form::Element/;
 
     has selectForm =>
-        qq{<select class="pony-select" id="\%s" name="\%s" required="\%s">\n\%s</select>};
+        qq{<select class="pony-select" id="\%s" name="\%s" \%s>\n\%s</select>};
     has optionForm =>
         qq{<option class="pony-option" value="\%s">\%s</option>\n};
     
@@ -18,7 +18,7 @@ use Pony::Object qw/Pony::View::Form::Element/;
             }
             
             sprintf $this->selectForm, "$formId-".$this->id,
-                    $this->name, $this->required, $options;
+                    $this->name, ($this->required ? 'required' : ''), $options;
         }
 
 1;

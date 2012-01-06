@@ -2,7 +2,7 @@ package Pony::View::Form::Element::Textarea;
 use Pony::Object qw/Pony::View::Form::Element/;
 
     has valueForm =>
-    q{<textarea class="pony-textarea" id="%s" name="%s" required="%s">%s</textarea>};
+    q{<textarea class="pony-textarea" id="%s" name="%s" %s>%s</textarea>};
     
     sub render
         {
@@ -10,7 +10,7 @@ use Pony::Object qw/Pony::View::Form::Element/;
             my $formId = shift;
             
             sprintf $this->valueForm, "$formId-".$this->id,
-                    $this->name, $this->required, $this->value;
+                    $this->name, ($this->required ? 'required' : ''), $this->value;
         }
 
 1;

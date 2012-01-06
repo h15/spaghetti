@@ -2,7 +2,7 @@ package Pony::View::Form::Element::Text;
 use Pony::Object qw/Pony::View::Form::Element/;
 
     has valueForm =>
-        q/<input class="pony-text" id="%s" value="%s" name="%s" required="%s">/;
+        q/<input class="pony-text" id="%s" value="%s" name="%s" %s>/;
     
     sub render
         {
@@ -10,7 +10,7 @@ use Pony::Object qw/Pony::View::Form::Element/;
             my $formId = shift;
             
             sprintf $this->valueForm, "$formId-".$this->id,
-                    $this->value, $this->name, $this->required;
+                    $this->value, $this->name, ($this->required ? 'required' : '');
         }
 
 1;
