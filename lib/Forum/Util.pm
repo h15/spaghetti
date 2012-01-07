@@ -1,8 +1,10 @@
 package Forum::Util;
+use utf8;
 
     sub rusToLatUrl
         {
             my $s = shift;
+            
             $s =~ s/А/a/ig;
             $s =~ s/Б/b/ig;
             $s =~ s/В/v/ig;

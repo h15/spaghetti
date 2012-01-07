@@ -1,0 +1,39 @@
+% layout 'default';
+% title l('Group list');
+
+<table class=list>
+    <tr>
+        <th>
+            <%=l 'name' %>
+        </th>
+        <th>
+            <%=l 'prioritet' %>
+        </th>
+        <th>
+            <%=l 'edit' %>
+        </th>
+        <th>
+            <%=l 'delete' %>
+        </th>
+    </tr>
+%   for my $g ( @$groups )
+%   {
+    <tr>
+        <td>
+            <a href="<%= url_for('admin_group_show', id => $g->{id})
+                    %>"><%= $g->{name} %></a>
+        </td>
+        <td>
+            <%= $g->{prioritet} %>
+        </td>
+        <td>
+            <a href="<%= url_for('admin_group_edit', id => $g->{id})
+                    %>"><%=l 'edit' %></a>
+        </td>
+        <td>
+            <a href="<%= url_for('admin_group_delete', id => $g->{id})
+                    %>"><%=l 'delete' %></a>
+        </td>
+    </tr>
+%   }
+</table>

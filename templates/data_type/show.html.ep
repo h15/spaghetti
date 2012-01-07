@@ -1,0 +1,29 @@
+% layout 'default';
+% title l('Data type') . ' ' . $type->{name};
+
+<table>
+    <tr>
+        <td>
+            <%=l 'name' %>
+        </td>
+        <td>
+            <%= $type->{name} %>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <%=l 'description' %>
+        </td>
+        <td>
+            <%=b $type->{desc} %>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <%=l 'prioritet' %>
+        </td>
+        <td>
+            <%= $type->{prioritet} %>
+        </td>
+    </tr>
+</table>

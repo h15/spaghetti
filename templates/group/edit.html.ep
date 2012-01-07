@@ -1,0 +1,4 @@
+% layout 'default';
+% title l('Edit group') . ' ' . $group->{name};
+
+<%=b $form %>

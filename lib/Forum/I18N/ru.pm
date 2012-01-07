@@ -26,7 +26,8 @@ our %Lexicon = (
     'week'          => 'неделя',
     'day'           => 'день',
     'hour'          => 'час',
-   
+    'edit'          => 'изменить',
+    'delete'        => 'удалить',
     'description'   => 'описание',
    
     'ban options'   => 'блокировка',

@@ -1,0 +1,4 @@
+% layout 'default';
+% title l('Edit data type') . ' ' . $type->{name};
+
+<%=b $form %>

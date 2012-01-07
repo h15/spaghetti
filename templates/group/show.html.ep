@@ -1,0 +1,29 @@
+% layout 'default';
+% title l('Group') . ' ' . $group->{name};
+
+<table>
+    <tr>
+        <td>
+            <%=l 'name' %>
+        </td>
+        <td>
+            <%= $group->{name} %>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <%=l 'description' %>
+        </td>
+        <td>
+            <%=b $group->{desc} %>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <%=l 'prioritet' %>
+        </td>
+        <td>
+            <%= $group->{prioritet} %>
+        </td>
+    </tr>
+</table>

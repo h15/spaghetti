@@ -1,8 +1,8 @@
 package Forum::Controller::Thread;
 use Mojo::Base 'Mojolicious::Controller';
     
-    use Forum::Form::CreateTopic;
-    use Forum::Form::CreateThread;
+    use Forum::Form::Topic::Create;
+    use Forum::Form::Thread::Create;
     use Forum::Util;
     use Pony::Crud::Dbh::MySQL;
     use Pony::Crud::MySQL;
@@ -11,80 +11,61 @@ use Mojo::Base 'Mojolicious::Controller';
     sub show
         {
             my $this = shift;
-            my $url  = $this->param('url');
+            my $url  = $this->param('url') || 0;
             my $topicModel = new Pony::Crud::MySQL('topic');
-            my ( $id, $topic );
             
             # Get Topic ID from requested url.
             # It can be string (url) or integer (id).
             
-            if ( $url !~ /^\d*$/ )
-            {
-                $topic = [ $topicModel->list({url => $url}, undef,
-                                                'threadId', undef, 0, 1) ]->[0];
-                
-                $id = $topic->{threadId};
-            }
-            else
-            {
-                $id = int $url;
-                
-                $topic = [ $topicModel->list({threadId => $id}, undef,
-                                                'threadId', undef, 0, 1) ]->[0];
-            }
+            my $id = $url !~ /^\d*$/ ?
+                        $topicModel->list({url=>$url},'threadId','threadId',undef,0,1) ]->[0]->{threadId} :
+                        int $url;
             
-            $topic = {} unless $topic;
+            # Paginator
+            #
             
-            my $threadModel= new Pony::Crud::MySQL('thread');
-            my $textModel  = new Pony::Crud::MySQL('text');
-            my $userModel  = new Pony::Crud::MySQL('user');
-            
-            my $thread = $threadModel->read({ id => $id });
-            
-            # If user wanna topic - get topic start.
-            # Else - just thread line.
-            
-            if ( $thread )
-            {
-                # Topic exists.
-                #
-                
-                my $text = $textModel->read({ id => $thread->{textId} });
-                %$topic = ( %$topic, %$text, %$thread );
-            }
-            
-            my $ts = $userModel->read({ id => $thread->{userId} }) || {};
-            $this->stash(ts => $ts);
-            $this->stash(topic => $topic);
-            
-            my $page = int $this->param('page');
+            my $page = int ( $this->param('page') || 0 );
                $page = 1 if $page < 1;
              --$page;
             
             my $conf = Pony::Stash->findOrCreate( thread => { size => 50 } );
             
-            my $threadModel = new Pony::Crud::MySQL('thread');
-            my $thread  = ( $id > 0 ? $threadModel->read({ id => $id }) : {} );
-            
-            # A few crap for more speed.
+            # Quick and dirty :)
             #
             
             my $q = sprintf 'SELECT th.id, th.createAt, th.modifyAt, th.parentId,
                                     th.topicId, th.userId, t.`text`, t1.title,
-                                    t1.url, u.name, u.banId
+                                    t1.url, u.name, u.mail, u.banId, COUNT(subt.*)
                                 FROM `thread` th
-                                LEFT JOIN `text`  t  ON( th.textId  = t.id  )
-                                LEFT JOIN `topic` t1 ON( t1.threadId= th.id )
-                                LEFT JOIN `user`  u  ON( th.userId  = u.id  )
-                                    WHERE th.topicId = \'%s\'
-                                        ORDER BY t1.threadId, th.id ASC
-                                        LIMIT %s, %s',
-                            $id, $page * $conf->{size}, $conf->{size};
+                                LEFT JOIN `text`    t    ON ( th.textId    = t.id  )
+                                LEFT JOIN `topic`   t1   ON ( t1.threadId  = th.id )
+                                LEFT JOIN `user`    u    ON ( th.userId    = u.id  )
+                                LEFT JOIN `thread`  subt ON ( subt.topicId = th.id )
+                                LEFT JOIN `dataType` dt  ON ( dt. )
+                                    WHERE ( th.topicId=%d or th.id=%d )
+                                        AND th.id IN
+                                            (
+                                                SELECT `threadId` FROM `threadToDataType`
+                                                WHERE `dataType` IN
+                                                (
+                                                    SELECT `dataType` FROM `access`
+                                                    WHERE `RWCD` & 1 != 0 AND `groupId` IN
+                                                    (
+                                                        SELECT `groupId` FROM `userToGroup`
+                                                        WHERE `userId`=%d
+                                                    )
+                                                )
+                                            )
+                                    ORDER BY t1.threadId, th.id ASC
+                                    LIMIT %d, %d',
+                                $id, $id, $this->user->{id},
+                                $page * $conf->{size}, $conf->{size};
             
             my @threads = $threadModel->raw( $q );
-            my $form = new Forum::Form::CreateThread;
+            my $form = new Forum::Form::Thread::Create;
             
             $this->stash( threads => \@threads );
+            $this->stash( id      => $id       );
             $this->stash( form    => $form     );
             $this->render;
         }
@@ -94,7 +75,7 @@ use Mojo::Base 'Mojolicious::Controller';
             my $this = shift;
             my $pid  = int $this->param('parentId');
             my $tid  = int $this->param('topicId');
-            my $form = new Forum::Form::CreateThread;
+            my $form = new Forum::Form::Thread::Create;
                $form->elements->{parentId}->value = $pid;
                $form->elements->{topicId}->value  = $tid;
             
@@ -143,7 +124,7 @@ use Mojo::Base 'Mojolicious::Controller';
             my $this = shift;
             my $pid  = int $this->param('parentId');
             my $tid  = int $this->param('topicId');
-            my $form = new Forum::Form::CreateTopic;
+            my $form = new Forum::Form::Topic::Create;
                $form->elements->{parentId}->value = $pid;
                $form->elements->{topicId}->value  = $tid;
             
@@ -193,6 +174,119 @@ use Mojo::Base 'Mojolicious::Controller';
                 }
             }
             
+            $this->stash( form => $form->render );
+            $this->render;
+        }
+    
+    sub edit
+        {
+            my $this = shift;
+            my $id   = int $this->param('id');
+            my $form = new Forum::Form::Thread::Create;
+               $form->action = $this->url_for( thread_edit => id => $id );
+            
+            my $threadModel= new Pony::Crud::MySQL('thread');
+            my $textModel  = new Pony::Crud::MySQL('text');
+            
+            my $thread = $threadModel->read({ id => $id });
+            my $text = $textModel->read({ id => $thread->{textId} });
+            
+            if ( $this->req->method eq 'POST' )
+            {
+                $form->data->{$_} = $this->param($_) for keys %{$form->elements};
+                
+                if ( $form->isValid )
+                {
+                    my $text = $form->elements->{text}->value;
+                    
+                    $threadModel->update
+                    (
+                        { modifyAt => time    },
+                        { id => $thread->{id} }
+                    );
+                               
+                    my $textId = $textModel->create
+                    ({
+                        text => Forum::Util::escape($text),
+                        threadId => $thread->{id}
+                    });
+                    
+                    $threadModel->update( { textId   => $textId,
+                                            modifyAt => time },
+                                          { id       => $thread->{id} } );
+                    
+                    $this->redirect_to('thread_edit', url => $thread->{id});
+                }
+            }
+            
+            for my $k ( keys %{$form->elements} )
+            {
+                $form->elements->{$k}->value = $text->{$k}   if defined $text->{$k};
+                $form->elements->{$k}->value = $thread->{$k} if defined $thread->{$k};
+            }
+            
+            $this->stash( id => $id );
+            $this->stash( form => $form->render );
+            $this->render;
+        }
+    
+    
+    sub editTopic
+        {
+            my $this = shift;
+            my $id   = int $this->param('id');
+            my $form = new Forum::Form::Topic::Create;
+               $form->action = $this->url_for( topic_edit => id => $id );
+            
+            my $threadModel= new Pony::Crud::MySQL('thread');
+            my $topicModel = new Pony::Crud::MySQL('topic');
+            my $textModel  = new Pony::Crud::MySQL('text');
+            
+            my $thread= $threadModel->read({ id => $id });
+            my $topic = [ $topicModel->list( {threadId => $id}, undef,
+                                             'threadId', undef, 0, 1 ) ]->[0];
+            my $text  = $textModel->read({ id => $thread->{textId} });
+            
+            if ( $this->req->method eq 'POST' )
+            {
+                $form->data->{$_} = $this->param($_) for keys %{$form->elements};
+                
+                if ( $form->isValid )
+                {
+                    my $textVal = $form->elements->{text}->value;
+                    my $title   = $form->elements->{title}->value;
+                    
+                    my $data = { modifyAt => time };
+                    
+                    if ( $text->{text} ne $textVal )
+                    {
+                        my $textId = $textModel->create
+                                     ({ text => Forum::Util::escape($textVal),
+                                        threadId => $thread->{id} });
+                        
+                        $data->{textId} = $textId;
+                    }
+                    
+                    if ( $topic->{title} ne $title )
+                    {
+                        $topicModel->update({ title => $title },
+                                            { threadId => $id });
+                    }
+                    
+                    $threadModel->update( $data, { id => $id } );
+                    
+                    $this->redirect_to('topic_edit', url => $id);
+                }
+            }
+            
+            for my $k ( keys %{$form->elements} )
+            {
+                $form->elements->{$k}->value = $text->{$k} if defined $text->{$k};
+                $form->elements->{$k}->value = $thread->{$k} if defined $thread->{$k};
+                $form->elements->{$k}->value = $topic->{$k} if defined $topic->{$k};
+            }
+            
+            $this->stash( id => $id );
             $this->stash( form => $form->render );
             $this->render;
         }
