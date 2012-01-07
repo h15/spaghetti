@@ -41,7 +41,6 @@ use Mojo::Base 'Mojolicious::Controller';
                                 LEFT JOIN `topic`   t1   ON ( t1.threadId  = th.id )
                                 LEFT JOIN `user`    u    ON ( th.userId    = u.id  )
                                 LEFT JOIN `thread`  subt ON ( subt.topicId = th.id )
-                                LEFT JOIN `dataType` dt  ON ( dt. )
                                     WHERE ( th.topicId=%d or th.id=%d )
                                         AND th.id IN
                                             (
