@@ -35,12 +35,11 @@ use Mojo::Base 'Mojolicious::Controller';
             
             my $q = sprintf 'SELECT th.id, th.createAt, th.modifyAt, th.parentId,
                                     th.topicId, th.userId, t.`text`, t1.title,
-                                    t1.url, u.name, u.mail, u.banId, COUNT(subt.*)
+                                    t1.url, u.name, u.mail, u.banId
                                 FROM `thread` th
-                                LEFT JOIN `text`    t    ON ( th.textId    = t.id  )
-                                LEFT JOIN `topic`   t1   ON ( t1.threadId  = th.id )
-                                LEFT JOIN `user`    u    ON ( th.userId    = u.id  )
-                                LEFT JOIN `thread`  subt ON ( subt.topicId = th.id )
+                                LEFT OUTER JOIN `text`    t    ON ( th.textId    = t.id  )
+                                LEFT OUTER JOIN `topic`   t1   ON ( t1.threadId  = th.id )
+                                LEFT OUTER JOIN `user`    u    ON ( th.userId    = u.id  )
                                     WHERE ( th.topicId=%d or th.id=%d )
                                         AND th.id IN
                                             (
@@ -109,6 +108,17 @@ use Mojo::Base 'Mojolicious::Controller';
                     
                     $threadModel->update( { textId  => $teId },
                                           { id      => $thId } );
+                    
+                    # Inheritance of groups
+                    #
+                    my $t2dtModel = new Pony::Crud::MySQL('threadToDataType');
+                    my @types = $t2dtModel->list({threadId => $parent},
+                                        'dataTypeId', undef, undef, 0, 100);
+                    
+                    my $q = 'INSERT INTO `threadToDataType`(`threadId`,`dataTypeId`) VALUES';
+                    my @v = map { sprintf '(%s,%s)', $thId, $_->{dataTypeId} } @types;
+                    
+                    $t2dtModel->raw( $q . join ',' @v );
                     
                     $this->redirect_to('thread_show', url => $topic);
                 }

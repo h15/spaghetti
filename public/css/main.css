@@ -6,7 +6,7 @@
         display:none;
     }
     
-    article.post
+    article.post, header.topic
     {
 	    -moz-border-radius:5px;
 	    -webkit-border-radius:5px;
@@ -23,7 +23,7 @@
         border:1px solid #D8D9DB;
     }
     
-    article.post nav
+    article.post nav, header.topic nav
     {
 	    -moz-border-radius:5px 5px 0px 0px;
 	    -webkit-border-radius:5px 5px 0px 0px;
@@ -32,6 +32,16 @@
         padding:4px;
 	    
         background:#E8E9EB;
+    }
+    
+    header.topic nav
+    {
+        background:#D0C9DB;
+    }
+    
+    header.topic
+    {
+        border:1px solid #D0C9DB;
     }
     
     article.post:nth-child(2n) nav

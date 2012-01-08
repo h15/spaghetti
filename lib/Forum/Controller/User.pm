@@ -86,6 +86,13 @@ use Mojo::Base 'Mojolicious::Controller';
                                     password  => md5_hex( $mail . $pass )
                                  });
                         
+                        my $u2gModel = new Pony::Crud::MySQL('userToGroup');
+                        
+                        # Default group.
+                        #
+                        $u2gModel->create({ userId  => $id,
+                                            groupId => 999 });
+                        
                         $this->session( userId  => $id )
                              ->redirect_to('user_home');
                     }

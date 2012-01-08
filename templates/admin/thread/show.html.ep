@@ -1,0 +1,71 @@
+% layout 'default';
+% title 'Configure special params for' . ' ' . $thread->{title};
+
+% for my $t ( @$types )
+% {
+<div class=type>
+    
+    <acronym title="<%= $t->{desc} %>"><%= $t->{name} %></acronym>
+    
+    % if ( grep { $_ == $t->{id} } @$threadTypes )
+    % {
+    <a href="<%= url_for(admin_thread_removeType => id => $thread->{id} => type => $t->{id}) %>"><%=l 'remove' %></a>
+    % }
+    % else
+    % {
+    <a href="<%= url_for(admin_thread_addType => id => $thread->{id} => type => $t->{id}) %>"><%=l 'add' %></a>
+    % }
+</div>
+% }
+
+<header class=topic id="thread-<%= $thread->{id} %>">
+    <nav>
+        <div class="sefl">
+            <a href="<%= url_for('thread_show', url => ( $thread->{url} ? $thread->{url} : $thread->{id} ) )
+                    %>"><%= ( defined $thread->{title} && length $thread->{title} ) ? $thread->{title} : '#' %></a>
+        </div>
+        <div class="parents">
+            <a href="<%= url_for('admin_thread_show', id => $thread->{parentId}) %>">&uarr;</a>
+            <a href="<%= url_for('admin_thread_show', id => $thread->{topicId}) %>">&uArr;</a>
+        </div>
+        <div class="time">
+            % if ( $thread->{modifyAt} == $thread->{createAt} ) {
+            %
+                <%= render_datetime($thread->{modifyAt}) %>
+            %
+            % } else {
+            %
+                <acronym title="<%= format_datetime($thread->{createAt}) %>">
+                    <%= render_datetime($thread->{modifyAt}) %>
+                </acronym>
+            %
+            % }
+        </div>
+        
+        <div class="user">
+            <%= render_user($thread->{userId}) %>
+        </div>
+        
+        <div class="controlls">
+            <div class="editThread">
+    
+                % if ( defined $thread->{title} )
+                % {
+                <a href="<%= url_for('admin_topic_edit', id => $thread->{id} )
+                        %>"><%=l 'edit' %></a>
+                % }else {
+                <a href="<%= url_for('admin_thread_edit', id => $thread->{id} )
+                        %>"><%=l 'edit' %></a>
+                % }
+            
+                
+            </div>
+        </div>
+        
+        <div class=cb></div>
+    </nav>
+    
+    <div class="postContent">
+        <%=b $thread->{text} %>
+    </div>
+</header>

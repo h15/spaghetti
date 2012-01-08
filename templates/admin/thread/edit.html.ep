@@ -1,0 +1,6 @@
+% layout 'default';
+% title l('Edit post');
+
+<a href="<%= url_for( 'thread_show', url => $id ) %>"><%=l 'Go to thread' %></a>
+
+%=b $form

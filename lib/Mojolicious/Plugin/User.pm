@@ -69,6 +69,9 @@ use Pony::Object 'Mojolicious::Plugin';
                 {
                     my ( $self, $user ) = @_;
                     
+                    $user = Pony::Crud::MySQL->new('user')->read({id => $user})
+                                                unless ( ref $user eq 'HASH' );
+                    
                     return new Mojo::ByteStream
                     (
                         sprintf '<a href="%s" class="%s">%s</a>',

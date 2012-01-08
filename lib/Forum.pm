@@ -33,9 +33,9 @@ use Mojo::Base 'Mojolicious';
             ##  Routes
             ##
             
-            my $r = $this->routes->namespace('thread::Controller');
+            my $r = $this->routes->namespace('Forum::Controller');
             my $a = $r->bridge->to('admin#auth')->route('/admin')
-                      ->to( namespace => 'thread::Controller::Admin' );
+                      ->to( namespace => 'Forum::Controller::Admin' );
             
             # User
             #
@@ -84,6 +84,21 @@ use Mojo::Base 'Mojolicious';
             $a->route('/thread/edit/:id')
                 ->to('thread#edit')
                   ->name('admin_thread_edit');
+            $a->route('/thread/show/:id')
+                ->to('thread#show')
+                  ->name('admin_thread_show');
+            $a->route('/thread/:id/type/:type/add')
+                ->to('thread#addType')
+                  ->name('admin_thread_addType');
+            $a->route('/thread/:id/type/:type/remove')
+                ->to('thread#removeType')
+                  ->name('admin_thread_removeType');
+            $a->route('/thread/list/:page')
+                ->to('thread#list')
+                  ->name('admin_thread_list');
+            $a->route('/thread/list')
+                ->to('thread#list')
+                  ->name('admin_thread_list');
             
             # Groups
             #

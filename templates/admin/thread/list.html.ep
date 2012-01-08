@@ -1,0 +1,63 @@
+% layout 'default';
+% title 'List of threads';
+
+% for my $t ( @$threads )
+% {
+
+<article class="post" id="thread-<%= $t->{id} %>">
+    <nav>
+        <div class="sefl">
+            <a href="<%= url_for('thread_show', url => ( $t->{url} ? $t->{url} : $t->{id} ) )
+                    %>"><%= ( defined $t->{title} && length $t->{title} ) ? $t->{title} : '#' %></a>
+        </div>
+        <div class="parents">
+            <a href="<%= url_for('thread_show', url => $t->{parentId}) %>">&uarr;</a>
+            <a href="<%= url_for('thread_show', url => $t->{topicId}) %>">&uArr;</a>
+        </div>
+        <div class="time">
+            % if ( $t->{modifyAt} == $t->{createAt} ) {
+            %
+                <%= render_datetime($t->{modifyAt}) %>
+            %
+            % } else {
+            %
+                <acronym title="<%= format_datetime($t->{createAt}) %>">
+                    <%= render_datetime($t->{modifyAt}) %>
+                </acronym>
+            %
+            % }
+        </div>
+        <div class="user">
+            <%= render_user({ id    => $t->{userId},
+                              name  => $t->{name},
+                              banId => $t->{banId} }) %>
+        </div>
+    
+        % if ( $t->{userId} == user->{id} )
+        % {
+        <div class="controlls">
+            <div class="editThread">
+    
+                % if ( defined $t->{title} )
+                % {
+                <a href="<%= url_for('topic_edit', id => $t->{id} )
+                        %>"><%=l 'edit' %></a>
+                % }else {
+                <a href="<%= url_for('thread_edit', id => $t->{id} )
+                        %>"><%=l 'edit' %></a>
+                % }
+            
+            </div>
+        </div>
+        % }
+        
+        <div class=cb></div>
+    </nav>
+    
+    <div class="postContent">
+        <%=b $t->{text} %>
+    </div>
+</article>
+
+% }
+
