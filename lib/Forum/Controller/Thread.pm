@@ -18,8 +18,8 @@ use Mojo::Base 'Mojolicious::Controller';
             # It can be string (url) or integer (id).
             
             my $id = $url !~ /^\d*$/ ?
-                        $topicModel->list({url=>$url},'threadId','threadId',undef,0,1) ]->[0]->{threadId} :
-                        int $url;
+                        int $url :
+                        [ $topicModel->list({url=>$url},['threadId'],'threadId',undef,0,1) ]->[0]->{threadId};
             
             # Paginator
             #
@@ -44,10 +44,10 @@ use Mojo::Base 'Mojolicious::Controller';
                                         AND th.id IN
                                             (
                                                 SELECT `threadId` FROM `threadToDataType`
-                                                WHERE `dataType` IN
+                                                WHERE `dataTypeId` IN
                                                 (
-                                                    SELECT `dataType` FROM `access`
-                                                    WHERE `RWCD` & 1 != 0 AND `groupId` IN
+                                                    SELECT `dataTypeId` FROM `access`
+                                                    WHERE `RWCD` & 1 != 0 or `groupId` IN
                                                     (
                                                         SELECT `groupId` FROM `userToGroup`
                                                         WHERE `userId`=%d
@@ -59,9 +59,9 @@ use Mojo::Base 'Mojolicious::Controller';
                                 $id, $id, $this->user->{id},
                                 $page * $conf->{size}, $conf->{size};
             
-            my @threads = $threadModel->raw( $q );
+            my @threads = $topicModel->raw( $q );
             my $form = new Forum::Form::Thread::Create;
-            
+            die $this->dumper(\@threads);
             $this->stash( threads => \@threads );
             $this->stash( id      => $id       );
             $this->stash( form    => $form     );
@@ -118,7 +118,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     my $q = 'INSERT INTO `threadToDataType`(`threadId`,`dataTypeId`) VALUES';
                     my @v = map { sprintf '(%s,%s)', $thId, $_->{dataTypeId} } @types;
                     
-                    $t2dtModel->raw( $q . join ',' @v );
+                    $t2dtModel->raw( $q . join(',', @v) );
                     
                     $this->redirect_to('thread_show', url => $topic);
                 }

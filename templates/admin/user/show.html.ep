@@ -1,0 +1,52 @@
+% layout 'default';
+% title l('Configure user') . ' ' . $user->{name};
+
+% for my $g ( @$groups )
+% {
+<div class=group>
+    
+    <acronym title="<%= $g->{desc} %>"><%= $g->{name} %></acronym>
+    
+    % if ( grep { $_ == $g->{id} } @$userGroups )
+    % {
+    <a href="<%= url_for(admin_user_removeGroup => id => $user->{id} => group => $g->{id}) %>"><%=l 'remove' %></a>
+    % }
+    % else
+    % {
+    <a href="<%= url_for(admin_user_addGroup => id => $user->{id} => group => $g->{id}) %>"><%=l 'add' %></a>
+    % }
+</div>
+% }
+
+<table class=user id="user-<%= $user->{id} %>">
+    <tr>
+        <td><%=l 'name' %></td>
+        <td><%= $user->{name} %></td>
+    </tr>
+    <tr>
+        <td><%=l 'mail' %></td>
+        <td><%= $user->{mail} %></td>
+    </tr>
+    <tr>
+        <td><%=l 'accessAt' %></td>
+        <td><%= render_datetime $user->{accessAt} %></td>
+    </tr>
+    <tr>
+        <td><%=l 'createAt' %></td>
+        <td><%= render_datetime $user->{createAt} %></td>
+    </tr>
+    <tr>
+        <td><%=l 'modifyAt' %></td>
+        <td><%= render_datetime $user->{modifyAt} %></td>
+    </tr>
+    <tr>
+        <td><%=l 'status' %></td>
+        <td><%= l( $user->{banId} ? 'banned' : 'active' ) %></td>
+    </tr>
+    <tr>
+        <td><%=l 'banTime' %></td>
+        <td><%= render_datetime $user->{banTime} %></td>
+    </tr>
+</table>
+
+<a class=red href="<%= url_for(admin_user_delete => id => $user->{id}) %>"><%=l 'Delete user' %></a>

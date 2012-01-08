@@ -62,8 +62,20 @@ use Mojo::Base 'Mojolicious';
             $a->route('/user/:page')
                 ->to('user#list')
                   ->name('admin_user_list');
+            $a->route('/user/show/:id')
+                ->to('user#show')
+                  ->name('admin_user_show');
+            $a->route('/user/:id/group/:group/add')
+                ->to('user#addGroup')
+                  ->name('admin_user_addGroup');
+            $a->route('/user/:id/group/:group/remove')
+                ->to('user#removeGroup')
+                  ->name('admin_user_removeGroup');
+            $a->route('/user/delete/:id')
+                ->to('user#delete')
+                  ->name('admin_user_delete');
             
-            # thread
+            # Thread
             #
             
             $r->route('/thread/create')
@@ -75,37 +87,37 @@ use Mojo::Base 'Mojolicious';
             $r->route('/thread')
                 ->to('thread#show')
                   ->name('thread_index');
-            $r->route('/thread/:url')
-                ->to('thread#show')
-                  ->name('thread_show');
-            $r->route('/thread/:url/:page', page => qr/\d+/)
-                ->to('thread#show')
-                  ->name('thread_show');
             $r->route('/thread/edit/:id')
                 ->to('thread#edit')
                   ->name('thread_edit');
             $r->route('/topic/edit/:id')
                 ->to('thread#editTopic')
                   ->name('topic_edit');
+            $r->route('/thread/:url')
+                ->to('thread#show')
+                  ->name('thread_show');
+            $r->route('/thread/:url/:page', page => qr/\d+/)
+                ->to('thread#show')
+                  ->name('thread_show');
             
             $a->route('/thread/edit/:id')
                 ->to('thread#edit')
                   ->name('admin_thread_edit');
-            $a->route('/thread/show/:id')
-                ->to('thread#show')
-                  ->name('admin_thread_show');
             $a->route('/thread/:id/type/:type/add')
                 ->to('thread#addType')
                   ->name('admin_thread_addType');
             $a->route('/thread/:id/type/:type/remove')
                 ->to('thread#removeType')
                   ->name('admin_thread_removeType');
-            $a->route('/thread/list/:page')
+            $a->route('/thread/:page', page => qr/\d+/)
                 ->to('thread#list')
                   ->name('admin_thread_list');
-            $a->route('/thread/list')
+            $a->route('/thread')
                 ->to('thread#list')
                   ->name('admin_thread_list');
+            $a->route('/thread/show/:id')
+                ->to('thread#show')
+                  ->name('admin_thread_show');
             
             # Groups
             #

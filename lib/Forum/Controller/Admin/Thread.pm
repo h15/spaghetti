@@ -15,7 +15,7 @@ use Mojo::Base 'Mojolicious::Controller';
             my $this = shift;
             my $id   = int $this->param('id');
             my $form = new Forum::Form::Admin::Thread::Create;
-               $form->action .= "/$id";
+               $form->action = $this->url_for('admin_thread_edit', id => $id);
             
             my $threadModel= new Pony::Crud::MySQL('thread');
             my $textModel  = new Pony::Crud::MySQL('text');

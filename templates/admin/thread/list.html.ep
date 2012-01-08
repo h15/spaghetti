@@ -9,12 +9,12 @@
 <article class="post" id="thread-<%= $t->{id} %>">
     <nav>
         <div class="sefl">
-            <a href="<%= url_for('thread_show', url => ( $t->{url} ? $t->{url} : $t->{id} ) )
+            <a href="<%= url_for('admin_thread_show', id => $t->{id} )
                     %>"><%= ( defined $t->{title} && length $t->{title} ) ? $t->{title} : '#' %></a>
         </div>
         <div class="parents">
-            <a href="<%= url_for('thread_show', url => $t->{parentId}) %>">&uarr;</a>
-            <a href="<%= url_for('thread_show', url => $t->{topicId}) %>">&uArr;</a>
+            <a href="<%= url_for('admin_thread_show', id => $t->{parentId}) %>">&uarr;</a>
+            <a href="<%= url_for('admin_thread_show', id => $t->{topicId}) %>">&uArr;</a>
         </div>
         <div class="time">
             % if ( $t->{modifyAt} == $t->{createAt} ) {

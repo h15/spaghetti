@@ -23,6 +23,69 @@ use Mojo::Base 'Mojolicious::Controller';
             $this->stash( users => \@users );
             $this->render('admin/user/list');
         }
+    
+    sub show
+        {
+            my $this = shift;
+            my $id   = $this->param('id');
+            
+            my $user = Pony::Crud::MySQL->new('user')->read({id => $id});
+            my @groups = Pony::Crud::MySQL->new('group')->list;
+            
+            my @g = map { $_->{groupId} }
+                      Pony::Crud::MySQL
+                        ->new('userToGroup')
+                          ->list({userId => $id},['groupId'],'groupId');
+            
+            $this->stash( user       => $user    );
+            $this->stash( groups     => \@groups );
+            $this->stash( userGroups => \@g      );
+            
+            $this->render('admin/user/show');
+        }
+    
+    sub delete
+        {
+            my $this = shift;
+            my $id   = $this->param('id');
+            Pony::Crud::MySQL->new('user')->delete({id => $id});
+            
+            $this->redirect_to('admin_user_delete', id => $id);
+        }
+
+    sub addGroup
+        {
+            my $this    = shift;
+            my $id      = int ( $this->param('id')    || 0 );
+            my $groupId = int ( $this->param('group') || 0 );
+            
+            # Smth. wrong
+            #
+            
+            $this->redirect_to('admin_user_list') if $id == 0 || $groupId == 0;
+            
+            Pony::Crud::MySQL->new('userToGroup')
+                             ->create({userId => $id, groupId => $groupId});
+            
+            $this->redirect_to('admin_user_show', id => $id);
+        }
+    
+    sub removeGroup
+        {
+            my $this    = shift;
+            my $id      = int ( $this->param('id')    || 0 );
+            my $groupId = int ( $this->param('group') || 0 );
+            
+            # Smth. wrong
+            #
+            
+            $this->redirect_to('admin_user_list') if $id == 0 || $groupId == 0;
+            
+            Pony::Crud::MySQL->new('userToGroup')
+                             ->delete({userId => $id, groupId => $groupId});
+            
+            $this->redirect_to('admin_user_show', id => $id);
+        }
 
 1;
 
