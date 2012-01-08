@@ -12,7 +12,17 @@ use Mojo::Base 'Mojolicious::Controller';
             my $model = new Pony::Crud::MySQL('group');
             my $group = $model->read({id => $id});
             
-            $this->stash(group => $group);
+            # Get types
+            #
+            
+            my @types = Pony::Crud::MySQL->new('dataType')->list;
+            my @access= Pony::Crud::MySQL
+                          ->new('access')
+                            ->list({groupId => $id},undef,'dataTypeId');
+                            
+            $this->stash(access => \@access);
+            $this->stash(types  => \@types);
+            $this->stash(group  => $group);
             $this->render;
         }
     
@@ -127,6 +137,35 @@ use Mojo::Base 'Mojolicious::Controller';
             $this->redirect_to('admin_group_list');
         }
 
+    sub access
+        {
+            my $this  = shift;
+            my $group = $this->param('group');
+            my $type  = $this->param('type');
+            my $rwcd  = 0;
+            
+            $rwcd += 1 if defined $this->param('read');
+            $rwcd += 2 if defined $this->param('write');
+            $rwcd += 4 if defined $this->param('create');
+            $rwcd += 8 if defined $this->param('delete');
+            
+            my $a = Pony::Crud::MySQL->new('access')
+                      ->list({ dataTypeId => $type, groupId => $group },
+                                    ['RWCD'], 'dataTypeId', undef, 0, 1 );
+            
+            if ( $a )
+            {
+                Pony::Crud::MySQL->new('access')->update
+                ({ RWCD => $rwcd }, { dataTypeId => $type, groupId => $group });
+            }
+            else
+            {
+                Pony::Crud::MySQL->new('access')->create
+                ({ RWCD => $rwcd, dataTypeId => $type, groupId => $group });
+            }
+            
+            $this->redirect_to('admin_group_show', id => $group);
+        }
 1;
 
 __END__

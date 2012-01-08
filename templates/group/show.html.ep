@@ -1,6 +1,31 @@
 % layout 'default';
 % title l('Group') . ' ' . $group->{name};
 
+<table class=list>
+    <tr>
+        <th><%=l 'name' %></th>
+        <th><%=l 'rights' %></th>
+    </tr>
+% for my $t ( @$types )
+% {
+%   my @access = grep { $_->{dataTypeId} == $t->{id} } @$access;
+%   my $rwcd = ( @access ? $access[0]->{RWCD} : 0 );
+%
+    <tr>
+        <td><acronym title="<%= $t->{desc} %>"><%= $t->{name} %></acronym></td>
+        <td>
+<form method=post action="<%= url_for(admin_group_access => group => $group->{id} => type => $t->{id}) %>">
+    <acronym title="Read"  >R</acronym><input type="checkbox" name="read"   <%= $rwcd & 1 ? 'checked=checked' : '' %>>
+    <acronym title="Write" >W</acronym><input type="checkbox" name="write"  <%= $rwcd & 2 ? 'checked=checked' : '' %>>
+    <acronym title="Create">C</acronym><input type="checkbox" name="create" <%= $rwcd & 4 ? 'checked=checked' : '' %>>
+    <acronym title="Delete">D</acronym><input type="checkbox" name="delete" <%= $rwcd & 8 ? 'checked=checked' : '' %>>
+    <input type="submit" value="Send">
+</form>
+        </td>
+    </tr>
+% }
+</table>
+
 <table>
     <tr>
         <td>

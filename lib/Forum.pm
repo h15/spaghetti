@@ -140,6 +140,9 @@ use Mojo::Base 'Mojolicious';
             $a->route('/group/delete/:id', id => qr/\d+/)
                 ->to('group#delete')
                   ->name('admin_group_delete');
+            $a->route('/group/:group/access/type/:type', group => qr/\d+/, type => qr/\d+/)
+                ->to('group#access')
+                  ->name('admin_group_access');
             
             # Data Types
             #

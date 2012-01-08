@@ -47,7 +47,7 @@ use Mojo::Base 'Mojolicious::Controller';
                                                 WHERE `dataTypeId` IN
                                                 (
                                                     SELECT `dataTypeId` FROM `access`
-                                                    WHERE `RWCD` & 1 != 0 or `groupId` IN
+                                                    WHERE `RWCD` & 1 != 0 AND `groupId` IN
                                                     (
                                                         SELECT `groupId` FROM `userToGroup`
                                                         WHERE `userId`=%d
@@ -58,7 +58,7 @@ use Mojo::Base 'Mojolicious::Controller';
                                     LIMIT %d, %d',
                                 $id, $id, $this->user->{id},
                                 $page * $conf->{size}, $conf->{size};
-            
+            die $q;
             my @threads = $topicModel->raw( $q );
             my $form = new Forum::Form::Thread::Create;
             die $this->dumper(\@threads);
