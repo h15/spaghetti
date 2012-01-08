@@ -1,7 +1,6 @@
 package Forum;
 use Mojo::Base 'Mojolicious';
     
-    use lib '../pony/lib/';
     use Pony::Stash;
     use Pony::Crud::Dbh::MySQL;
     
@@ -28,6 +27,7 @@ use Mojo::Base 'Mojolicious';
             
             $this->plugin('user');
             $this->plugin('I18N');
+            $this->plugin('access');
             
             ##
             ##  Routes
@@ -36,6 +36,10 @@ use Mojo::Base 'Mojolicious';
             my $r = $this->routes->namespace('Forum::Controller');
             my $a = $r->bridge->to('admin#auth')->route('/admin')
                       ->to( namespace => 'Forum::Controller::Admin' );
+            
+            $r->route('/404')
+              ->to('#notFound')
+                ->name('404');
             
             # User
             #
@@ -84,9 +88,6 @@ use Mojo::Base 'Mojolicious';
             $r->route('/thread/new/topic')
                 ->to('thread#createTopic')
                   ->name('thread_createTopic');
-            $r->route('/thread')
-                ->to('thread#show')
-                  ->name('thread_index');
             $r->route('/thread/edit/:id')
                 ->to('thread#edit')
                   ->name('thread_edit');
@@ -99,6 +100,9 @@ use Mojo::Base 'Mojolicious';
             $r->route('/thread/:url/:page', page => qr/\d+/)
                 ->to('thread#show')
                   ->name('thread_show');
+            $r->route('/thread')
+                ->to('thread#show')
+                  ->name('thread_index');
             
             $a->route('/thread/edit/:id')
                 ->to('thread#edit')
@@ -291,6 +295,11 @@ use Mojo::Base 'Mojolicious';
                         }
                 }
             );
+        }
+
+    sub notFound
+        {
+            shift->render('not_found');
         }
 
 1;

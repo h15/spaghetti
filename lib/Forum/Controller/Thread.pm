@@ -17,9 +17,9 @@ use Mojo::Base 'Mojolicious::Controller';
             # Get Topic ID from requested url.
             # It can be string (url) or integer (id).
             
-            my $id = $url !~ /^\d*$/ ?
-                        int $url :
-                        [ $topicModel->list({url=>$url},['threadId'],'threadId',undef,0,1) ]->[0]->{threadId};
+            my $id = ( $url =~ /^\d*$/ ? int $url :
+                       [ $topicModel->list({url=>$url},['threadId'],'threadId',
+                                                undef,0,1) ]->[0]->{threadId} );
             
             # Paginator
             #
@@ -58,10 +58,13 @@ use Mojo::Base 'Mojolicious::Controller';
                                     LIMIT %d, %d',
                                 $id, $id, $this->user->{id},
                                 $page * $conf->{size}, $conf->{size};
-            die $q;
+            
             my @threads = $topicModel->raw( $q );
+            
+            $this->redirect_to('404') unless @threads;
+            
             my $form = new Forum::Form::Thread::Create;
-            die $this->dumper(\@threads);
+            
             $this->stash( threads => \@threads );
             $this->stash( id      => $id       );
             $this->stash( form    => $form     );
@@ -73,6 +76,9 @@ use Mojo::Base 'Mojolicious::Controller';
             my $this = shift;
             my $pid  = int $this->param('parentId');
             my $tid  = int $this->param('topicId');
+            
+            $this->redirect_to('404') unless $this->access($tid, 'c');
+            
             my $form = new Forum::Form::Thread::Create;
                $form->elements->{parentId}->value = $pid;
                $form->elements->{topicId}->value  = $tid;
@@ -133,6 +139,9 @@ use Mojo::Base 'Mojolicious::Controller';
             my $this = shift;
             my $pid  = int $this->param('parentId');
             my $tid  = int $this->param('topicId');
+            
+            $this->redirect_to('404') unless $this->access($tid, 'c');
+            
             my $form = new Forum::Form::Topic::Create;
                $form->elements->{parentId}->value = $pid;
                $form->elements->{topicId}->value  = $tid;
@@ -191,6 +200,9 @@ use Mojo::Base 'Mojolicious::Controller';
         {
             my $this = shift;
             my $id   = int $this->param('id');
+            
+            $this->redirect_to('404') unless $this->access($id, 'w');
+            
             my $form = new Forum::Form::Thread::Create;
                $form->action = $this->url_for( thread_edit => id => $id );
             
@@ -244,6 +256,9 @@ use Mojo::Base 'Mojolicious::Controller';
         {
             my $this = shift;
             my $id   = int $this->param('id');
+            
+            $this->redirect_to('404') unless $this->access($id, 'w');
+            
             my $form = new Forum::Form::Topic::Create;
                $form->action = $this->url_for( topic_edit => id => $id );
             
