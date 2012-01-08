@@ -1,5 +1,5 @@
 % layout 'default';
-% title 'List of threads';
+% title l 'List of threads';
 
 %= $paginator
 

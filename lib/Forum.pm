@@ -56,6 +56,13 @@ use Mojo::Base 'Mojolicious';
                 ->to('user#registration')
                   ->name('user_registration');
             
+            $a->route('/user')
+                ->to('user#list')
+                  ->name('admin_user_list');
+            $a->route('/user/:page')
+                ->to('user#list')
+                  ->name('admin_user_list');
+            
             # thread
             #
             
@@ -155,7 +162,7 @@ use Mojo::Base 'Mojolicious';
                     my ( $self, $urlName, $cur, $count, $size ) = @_;
                     my $html = '';
                     
-                    return if $count <= $size;
+                    return '' if $count <= $size;
                     
                     my $last = int ( $count / $size );
                      ++$last if $count % $size;
@@ -218,6 +225,8 @@ use Mojo::Base 'Mojolicious';
                 {
                     my ($self, $val) = @_;
                     
+                    return 'never' if $val == 0;
+                    
                     my ( $s, $mi, $h, $d, $mo, $y ) = localtime;
                     my ( $sec, $min, $hour, $day, $mon, $year )
                             = map { $_ < 10 ? "0$_" : $_ } localtime($val);
@@ -233,8 +242,8 @@ use Mojo::Base 'Mojolicious';
                                     $hour == $h ?
                                         $min == $mi ?
                                             $sec == $s ?
-                                                $thread::I18N::ru::Lexicon{'now'}
-                                            : $thread::I18N::ru::Lexicon{'a few seconds ago'}
+                                                $Forum::I18N::ru::Lexicon{'now'}
+                                            : $Forum::I18N::ru::Lexicon{'a few seconds ago'}
                                         : ago( min => $mi - $min, $self )
                                     : ago( hour => $h - $hour, $self )
                                 : "$hour:$min, $day.$mon"
@@ -262,8 +271,8 @@ use Mojo::Base 'Mojolicious';
                                 : 1
                             );
                             
-                            return $val ." ". $thread::I18N::ru::Lexicon{"${type}s$a"}
-                                        ." ". $thread::I18N::ru::Lexicon{ago};
+                            return $val ." ". $Forum::I18N::ru::Lexicon{"${type}s$a"}
+                                        ." ". $Forum::I18N::ru::Lexicon{ago};
                         }
                 }
             );

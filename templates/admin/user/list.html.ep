@@ -1,0 +1,33 @@
+% layout 'default';
+% title l 'List of users';
+
+%= $paginator
+
+<table class="user">
+    <tr>
+        <th><%=l 'name'     %></th>
+        <th><%=l 'mail'     %></th>
+        <th><%=l 'accessAt' %></th>
+        <th><%=l 'createAt' %></th>
+        <th><%=l 'modifyAt' %></th>
+        <th><%=l 'status'   %></th>
+        <th><%=l 'banTime'  %></th>
+    </tr>
+    
+% for my $u ( @$users )
+% {
+
+    <tr id="user-<%= $u->{id} %>">
+        <td><%= $u->{name} %></td>
+        <td><%= $u->{mail} %></td>
+        <td><%= render_datetime $u->{accessAt} %></td>
+        <td><%= render_datetime $u->{createAt} %></td>
+        <td><%= render_datetime $u->{modifyAt} %></td>
+        <td><%= l( $u->{banId} ? 'banned' : 'active' ) %></td>
+        <td><%= render_datetime $u->{banTime} %></td>
+    </tr>
+
+% }
+</table>
+
+%= $paginator
