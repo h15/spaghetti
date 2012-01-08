@@ -1,6 +1,8 @@
 % layout 'default';
 % title 'List of threads';
 
+%= $paginator
+
 % for my $t ( @$threads )
 % {
 
@@ -61,3 +63,4 @@
 
 % }
 
+%= $paginator

@@ -139,9 +139,8 @@ use Mojo::Base 'Mojolicious::Controller';
             
             my $page = int ( $this->param('page') || 0 );
                $page = 1 if $page < 1;
-             --$page;
             
-            my $conf = Pony::Stash->findOrCreate( thread => { size => 50 } );
+            my $conf = Pony::Stash->findOrCreate( thread => { size => 10 } );
             
             # Quick and dirty :)
             #
@@ -155,10 +154,13 @@ use Mojo::Base 'Mojolicious::Controller';
                                 LEFT OUTER JOIN `user`    u    ON ( th.userId    = u.id  )
                                     ORDER BY t1.threadId, th.id ASC
                                     LIMIT %d, %d',
-                                $page * $conf->{size}, $conf->{size};
+                                ($page - 1) * $conf->{size}, $conf->{size};
             
             my @threads = Pony::Crud::MySQL->new('thread')->raw( $q );
+            my $count = Pony::Crud::MySQL->new('thread')->count;
             
+            $this->stash( paginator => $this->paginator
+                          ('admin_thread_list', $page, $count, $conf->{size}) );
             $this->stash( threads => \@threads );
             $this->render('admin/thread/list');
         }

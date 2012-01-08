@@ -150,6 +150,42 @@ use Mojo::Base 'Mojolicious';
             
             $this->helper
             (
+                paginator => sub
+                {
+                    my ( $self, $urlName, $cur, $count, $size ) = @_;
+                    my $html = '';
+                    
+                    return if $count <= $size;
+                    
+                    my $last = int ( $count / $size );
+                     ++$last if $count % $size;
+                    
+                    # Render first page.
+                    #
+                    $html .= sprintf '<a href="%s">&lArr;</a>',
+                             $self->url_for($urlName, page => 1) if $cur != 1;
+                    
+                    for my $i ( $cur - 5 .. $cur + 5 )
+                    {
+                        next if $i < 1 || $i > $last;
+                        
+                        $html .= ( $i == $cur ?
+                                        sprintf '<span>%s</span>', $cur :
+                                        sprintf '<a href="%s">%s</a>',
+                                            $self->url_for($urlName, page => $i), $i );
+                    }
+                    
+                    # Render last page.
+                    #
+                    $html .= sprintf '<a href="%s">&rArr;</a>',
+                             $self->url_for($urlName, page => $last) if $cur != $last;
+                    
+                    new Mojo::ByteStream("<div class=\"paginator\">$html</div>");
+                }
+            );
+            
+            $this->helper
+            (
                 format_datetime => sub
                 {
                     my ( $self, $val ) = @_;
