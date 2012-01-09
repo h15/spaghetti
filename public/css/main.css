@@ -1,3 +1,8 @@
+    body
+    {
+        padding:0px;
+        margin:0px;
+    }
 
     nav, header, article, footer { display: block; }
 
@@ -92,12 +97,12 @@
         color:#D31141;
     }
     
-    #form-createTopic td
+    #form-createTopic td, #form-thread-create td
     {
         display:none;
     }
     
-    #form-createTopic td:nth-child(2n)
+    #form-createTopic td:nth-child(2n), #form-thread-create td:nth-child(2n)
     {
         display:block;
     }
@@ -106,4 +111,31 @@
     {
         width:664px;
         height:300px;
+    }
+    
+    .alignleft   { float:left; margin:0px 5px;  }
+    .alignright  { float:right; margin:0px 5px; }
+    .aligncenter { margin:0px auto }
+    
+    nav.overall
+    {
+        background:#E8E9EB;
+        border-bottom:1px solid #C8C9CB;
+        padding:2px 5px 2px 5px;
+    }
+    
+    nav.overall a
+    {
+        text-decoration:none;
+    }
+    
+    article.content, footer.overall, header.overall
+    {
+        width:800px;
+        margin:0px auto;
+    }
+    
+    #form-createTopic .pony-text
+    {
+        width:660px;
     }

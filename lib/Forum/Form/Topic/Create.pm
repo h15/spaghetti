@@ -1,7 +1,7 @@
 package Forum::Form::Topic::Create;
 use Pony::Object qw/Pony::View::Form/;
 
-    has action => '/forum/new/topic';
+    has action => '/thread/new/topic';
     has method => 'post';
     has id     => 'form-createTopic';
 
@@ -17,7 +17,7 @@ use Pony::Object qw/Pony::View::Form/;
                     label       => 'Title',
                     validators  =>
                     {
-                        Length  => [ 2, 100 ],
+                        Length  => [ 2, 64 ],
                     }
                 }
             );

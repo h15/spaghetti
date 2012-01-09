@@ -1,6 +1,8 @@
 % layout 'default';
 % title l('Data type list');
 
+<a href="<%= url_for( 'admin_dataType_create' ) %>"><%=l 'Add new' %></a>
+
 <table class=list>
     <tr>
         <th>

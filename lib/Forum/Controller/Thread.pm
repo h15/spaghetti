@@ -35,7 +35,24 @@ use Mojo::Base 'Mojolicious::Controller';
             
             my $q = sprintf 'SELECT th.id, th.createAt, th.modifyAt, th.parentId,
                                     th.topicId, th.userId, t.`text`, t1.title,
-                                    t1.url, u.name, u.mail, u.banId
+                                    t1.url, u.name, u.mail, u.banId,
+                                    (
+                                        SELECT COUNT(*) FROM `thread` a 
+                                            WHERE ( a.id = th.id )
+                                                AND a.id IN
+                                                    (
+                                                        SELECT `threadId` FROM `threadToDataType`
+                                                        WHERE `dataTypeId` IN
+                                                        (
+                                                            SELECT `dataTypeId` FROM `access`
+                                                            WHERE `RWCD` & 2 != 0 AND `groupId` IN
+                                                            (
+                                                                SELECT `groupId` FROM `userToGroup`
+                                                                WHERE `userId`=%d
+                                                            )
+                                                        )
+                                                    ) 
+                                    ) as W
                                 FROM `thread` th
                                 LEFT OUTER JOIN `text`    t    ON ( th.textId    = t.id  )
                                 LEFT OUTER JOIN `topic`   t1   ON ( t1.threadId  = th.id )
@@ -56,18 +73,22 @@ use Mojo::Base 'Mojolicious::Controller';
                                             )
                                     ORDER BY t1.threadId, th.id ASC
                                     LIMIT %d, %d',
-                                $id, $id, $this->user->{id},
+                                $this->user->{id}, $id, $id, $this->user->{id},
                                 $page * $conf->{size}, $conf->{size};
             
             my @threads = $topicModel->raw( $q );
             
-            $this->redirect_to('404') unless @threads;
+            #$this->redirect_to('404') unless @threads;
             
             my $form = new Forum::Form::Thread::Create;
+            my $topicForm = new Forum::Form::Topic::Create;
+            
+            $this->stash( create  => $this->access($id, 'c') );
             
             $this->stash( threads => \@threads );
             $this->stash( id      => $id       );
             $this->stash( form    => $form     );
+            $this->stash(topicForm=> $topicForm);
             $this->render;
         }
     
@@ -80,6 +101,7 @@ use Mojo::Base 'Mojolicious::Controller';
             $this->redirect_to('404') unless $this->access($tid, 'c');
             
             my $form = new Forum::Form::Thread::Create;
+               $form->action = $this->url_for('thread_create');
                $form->elements->{parentId}->value = $pid;
                $form->elements->{topicId}->value  = $tid;
             
@@ -119,12 +141,12 @@ use Mojo::Base 'Mojolicious::Controller';
                     #
                     my $t2dtModel = new Pony::Crud::MySQL('threadToDataType');
                     my @types = $t2dtModel->list({threadId => $parent},
-                                        'dataTypeId', undef, undef, 0, 100);
+                                        ['dataTypeId'], 'dataTypeId', undef, 0, 100);
                     
                     my $q = 'INSERT INTO `threadToDataType`(`threadId`,`dataTypeId`) VALUES';
                     my @v = map { sprintf '(%s,%s)', $thId, $_->{dataTypeId} } @types;
                     
-                    $t2dtModel->raw( $q . join(',', @v) );
+                    Pony::Crud::Dbh::MySQL->new->dbh->do( $q . join(',', @v) );
                     
                     $this->redirect_to('thread_show', url => $topic);
                 }
@@ -137,12 +159,13 @@ use Mojo::Base 'Mojolicious::Controller';
     sub createTopic
         {
             my $this = shift;
-            my $pid  = int $this->param('parentId');
-            my $tid  = int $this->param('topicId');
+            my $pid  = int ( $this->param('parentId') || 0 );
+            my $tid  = int ( $this->param('topicId' ) || 0 );
             
             $this->redirect_to('404') unless $this->access($tid, 'c');
             
             my $form = new Forum::Form::Topic::Create;
+               $form->action = $this->url_for('thread_createTopic');
                $form->elements->{parentId}->value = $pid;
                $form->elements->{topicId}->value  = $tid;
             

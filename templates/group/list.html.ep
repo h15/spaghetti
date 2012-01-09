@@ -1,6 +1,8 @@
 % layout 'default';
 % title l('Group list');
 
+<a href="<%= url_for( 'admin_group_create' ) %>"><%=l 'Add new' %></a>
+
 <table class=list>
     <tr>
         <th>

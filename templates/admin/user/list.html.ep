@@ -1,5 +1,5 @@
 % layout 'default';
-% title l 'List of users';
+% title l 'User list';
 
 %= $paginator
 

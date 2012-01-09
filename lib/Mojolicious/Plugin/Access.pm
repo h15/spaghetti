@@ -29,7 +29,7 @@ use Pony::Object 'Mojolicious::Plugin';
     
     sub register
         {
-            my ( $self, $app ) = @_;
+            my ( $this, $app ) = @_;
             
             $app->helper
             (
@@ -38,12 +38,13 @@ use Pony::Object 'Mojolicious::Plugin';
                     my ( $self, $tid, $right ) = @_;
                     my $uid = $self->user->{id};
                     
-                    my $q = sprintf $self->sql, int($tid),
-                                $self->const->{$right}, int($uid);
+                    my $q = sprintf $this->sql, int($tid),
+                                $this->const->{$right}, int($uid);
                     
                     my @t = Pony::Crud::MySQL->new('thread')->raw($q);
                     
                     return 1 if @t;
+                    return 1 if grep { $_ == 1 } @{ $self->user->{groups} };
                     return 0;
                 }
             );

@@ -1,5 +1,9 @@
 % layout 'default';
-% title l 'List of threads';
+% title l 'Thread list';
+
+<a href="<%= url_for('thread_createTopic') %>">
+    <div class="button"><%=l 'Add root thread' %></div>
+</a>
 
 %= $paginator
 

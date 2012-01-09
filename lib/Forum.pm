@@ -37,9 +37,13 @@ use Mojo::Base 'Mojolicious';
             my $a = $r->bridge->to('admin#auth')->route('/admin')
                       ->to( namespace => 'Forum::Controller::Admin' );
             
+            $a->route('/')
+                ->to('admin#index')
+                  ->name('admin_admin_index');
+            
             $r->route('/404')
-              ->to('#notFound')
-                ->name('404');
+                ->to('#notFound')
+                  ->name('404');
             
             # User
             #

@@ -1,0 +1,18 @@
+% layout 'default';
+% title l('Admin panel');
+
+<div class=item>
+    <a href="<%= url_for('admin_user_list') %>"><%=l 'User list' %></a>
+</div>
+
+<div class=item>
+    <a href="<%= url_for('admin_thread_list') %>"><%=l 'Thread list' %></a>
+</div>
+
+<div class=item>
+    <a href="<%= url_for('admin_group_list') %>"><%=l 'Group list' %></a>
+</div>
+
+<div class=item>
+    <a href="<%= url_for('admin_dataType_list') %>"><%=l 'Thread type list' %></a>
+</div>

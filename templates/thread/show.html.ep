@@ -39,7 +39,7 @@
                               banId => $t->{banId} }) %>
         </div>
     
-        % if ( $t->{userId} == user->{id} )
+        % if ( $t->{userId} == user->{id} || $t->{W} > 0 )
         % {
         <div class="controlls">
             <div class="editThread">
@@ -63,15 +63,30 @@
     <div class="postContent">
         <%=b $t->{text} %>
     </div>
+
+    %   if ( $create )
+    %   {
+            <a href="#" class=showButton id="showButton-<%= $t->{id} %>"><%=l 'response' %></a>
+            <a href="#" class="hidden hideButton" id="hideButton-<%= $t->{id} %>"><%=l 'hide' %></a>
+            
+            <a href="#" class=showButton id="showButton-createTopic<%= $t->{id} %>"><%=l 'create topic' %></a>
+            <a href="#" class="hidden hideButton" id="hideButton-createTopic<%= $t->{id} %>"><%=l 'hide' %></a>
+            
+            <div class=hidden id="hiddenArea-<%= $t->{id} %>">
+                % $form->elements->{parentId}->value = $t->{id};
+                % $form->elements->{topicId}->value  = $t->{topicId};
+                %
+                %=b $form->render
+            </div>
+            
+            <div class=hidden id="hiddenArea-createTopic<%= $t->{id} %>">
+                % $topicForm->elements->{parentId}->value = $t->{id};
+                % $topicForm->elements->{topicId}->value  = $t->{topicId};
+                %
+                %=b $topicForm->render
+            </div>
+    %   }
     
-    <a href="#" class=showButton id="showButton-<%= $t->{id} %>"><%=l 'response' %></a>
-    <a href="#" class="hidden hideButton" id="hideButton-<%= $t->{id} %>"><%=l 'hide' %></a>
-    <div class=hidden id="hiddenArea-<%= $t->{id} %>">
-        % $form->elements->{parentId}->value = $t->{id};
-        % $form->elements->{topicId}->value  = $t->{topicId};
-        %
-        %=b $form->render
-    </div>
 %   if ( $t->{id} == $id )
 %   {
 </header>

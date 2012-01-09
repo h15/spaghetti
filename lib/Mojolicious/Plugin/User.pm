@@ -18,6 +18,7 @@ use Pony::Object 'Mojolicious::Plugin';
             
             my($self, $app) = @_;
             my $userModel   = new Pony::Crud::MySQL('user');
+            my $u2gModel    = new Pony::Crud::MySQL('userToGroup');
             my $banModel    = new Pony::Crud::MySQL('ban');
             my $anonymous   = $userModel->read({id => 0});
             my $user        = $anonymous;
@@ -45,7 +46,18 @@ use Pony::Object 'Mojolicious::Plugin';
                     my $self = shift;
                     my $id   = $self->session('userId');
                     
-                    $user = ( $id ? $userModel->read({id=>$id}) : $anonymous );
+                    if ( $id )
+                    {
+                        $user = $userModel->read({id=>$id});
+                        my @groups = $u2gModel->list({userId => $id},
+                                            ['groupId'],'groupId',undef,0,99);
+                        
+                        $user->{groups} = [ map { $_->{groupId} } @groups ];
+                    }
+                    else
+                    {
+                        $user = $anonymous;
+                    }
                     
                     # If user was deactivate, he uses anonymous account,
                     # but with his ban reason.

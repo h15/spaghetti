@@ -61,7 +61,32 @@ our %Lexicon = (
     'change password'   => 'сменить пароль',
     'How to create new repository' => 'Как создать новый репозиторий',
     'Add server public key'        => 'Добавить публичный ключ сервера',
-    'This page does not exist or you can\'t read it.' => 'Эта страница не существует, или у Вас не хватает прав.'
+    'This page does not exist or you can\'t read it.' => 'Эта страница не существует, или у Вас не хватает прав.',
+    
+    'Forum'         => 'Форум',
+    'Admin panel'   => 'Администрировать',
+    'User list'     => 'Список пользователей',
+    'Thread list'   => 'Список тредов',
+    'Group list'    => 'Список групп',
+    'Thread type list'  => 'Список типов тредов',
+
+    'response'      => 'ответить',
+    'create topic'  => 'создать тему',
+    'hide'          => 'скрыть',
+    'Edit post'     => 'Редактировать',
+    'Go to thread'  => 'Перейти к треду',
+    'mail'          => 'E-mail',
+    'banTime'       => 'время блокирования',
+    'never'         => 'никогда',
+    'add'           => 'добавить',
+    'remove'        => 'убрать',
+    'Delete user'   => 'Удалить пользователя',
+    'Add root thread'   => 'Добавить корневой тред',
+    'Create new topic'  => 'Создать новую тему',
+    'Add new'       => 'Добавить ещё',
+    'prioritet'     => 'приоритет',
+    'rights'        => 'права',
+    'Send'          => 'Отправить',
 );
 
 $Lexicon{$_} = decode('utf8', $Lexicon{$_}) for keys %Lexicon;
