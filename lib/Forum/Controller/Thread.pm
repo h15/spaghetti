@@ -220,7 +220,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     my $q = 'INSERT INTO `threadToDataType`(`threadId`,`dataTypeId`) VALUES';
                     my @v = map { sprintf '(%s,%s)', $thId, $_->{dataTypeId} } @types;
                     
-                    Pony::Crud::Dbh::MySQL->new->dbh->do( $q . join(',', @v) );
+                    Pony::Crud::Dbh::MySQL->new->dbh->do( $q . join(',', @v) ) if @v;
                     
                     $this->redirect_to('thread_show', url => "$thId-$url");
                 }
