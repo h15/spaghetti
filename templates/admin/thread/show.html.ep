@@ -1,5 +1,5 @@
 % layout 'default';
-% title 'Configure special params for' . ' ' . $thread->{title};
+% title l('Configure special params for') . ' ' . $thread->{title};
 
 % for my $t ( @$types )
 % {

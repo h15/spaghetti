@@ -2,6 +2,7 @@
     {
         padding:0px;
         margin:0px;
+        font-style:"DejaVu Sans", Helvetica, Arial, Sans;
     }
 
     nav, header, article, footer { display: block; }
@@ -139,3 +140,10 @@
     {
         width:660px;
     }
+    
+    h1, h2, h3, h4, h5, h6
+    {
+        font-weight:400;
+        color:#60596B;
+    }
+    

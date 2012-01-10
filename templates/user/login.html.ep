@@ -1,1 +1,9 @@
-<%=b $form %>
+% layout 'default';
+% title l('Login');
+
+%=b $form
+
+
+    <a href="<%= url_for('user_registration')
+            %>"><%=l 'Registration' %></a>
+

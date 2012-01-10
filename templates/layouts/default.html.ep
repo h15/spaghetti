@@ -35,16 +35,31 @@
             <a href="/thread"><%=l 'Forum' %></a>
         </div>
         
-        <div class="alignright">
-            <%= render_user(user) %>
-        </div>
+        % if ( user->{id} )
+        % {
+        
+            <div class="alignright">
+                <%= render_user(user) %>
+            </div>
+        
+        %
+        % } else {
+        %
+        
+            <div class="alignright">
+                <a href="<%= url_for('user_login')
+                        %>"><%=l 'Login' %></a>
+            </div>
+        
+        %
+        % }
         
         % if ( grep { $_ == 1 } @{ user->{groups} } )
         % {
         
-        <div class="alignright">
-            <a href="/admin"><%=l 'Admin panel' %></a>
-        </div>
+            <div class="alignright">
+                <a href="/admin"><%=l 'Admin panel' %></a>
+            </div>
         
         %
         % }

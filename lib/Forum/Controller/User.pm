@@ -127,7 +127,7 @@ use Mojo::Base 'Mojolicious::Controller';
             my $this = shift;
             
             $this->session( userId  => 0 )
-                 ->redirect_to('forum_index');
+                 ->redirect_to('thread_index');
         }
 
 1;

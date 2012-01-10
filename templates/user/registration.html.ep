@@ -1,3 +1,6 @@
+% layout 'default';
+% title l('Registration');
+
 <script src="http://code.jquery.com/jquery-1.7.min.js"></script>
 
 <script>
@@ -30,4 +33,4 @@
     });
 </script>
 
-<%=b $form %>
+%=b $form

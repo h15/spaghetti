@@ -69,6 +69,7 @@ our %Lexicon = (
     'Thread list'   => 'Список тредов',
     'Group list'    => 'Список групп',
     'Thread type list'  => 'Список типов тредов',
+    'Data type list'=> 'Список типов данных',
 
     'response'      => 'ответить',
     'create topic'  => 'создать тему',
@@ -87,6 +88,11 @@ our %Lexicon = (
     'prioritet'     => 'приоритет',
     'rights'        => 'права',
     'Send'          => 'Отправить',
+    'Password'      => 'Пароль',
+    'Registration'  => 'Регистрация',
+    'Create new data type'  => 'Создать новый тип данных',
+    'Data type'     => 'Тип данных',
+    'Configure special params for' => 'Настройка специальных параметров для',
 );
 
 $Lexicon{$_} = decode('utf8', $Lexicon{$_}) for keys %Lexicon;

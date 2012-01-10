@@ -71,14 +71,14 @@ use Mojo::Base 'Mojolicious::Controller';
                                                     )
                                                 )
                                             )
-                                    ORDER BY t1.threadId, th.id ASC
+                                    ORDER BY th.id ASC
                                     LIMIT %d, %d',
                                 $this->user->{id}, $id, $id, $this->user->{id},
                                 $page * $conf->{size}, $conf->{size};
             
             my @threads = $topicModel->raw( $q );
             
-            #$this->redirect_to('404') unless @threads;
+            $this->redirect_to('404') unless @threads;
             
             my $form = new Forum::Form::Thread::Create;
             my $topicForm = new Forum::Form::Topic::Create;
@@ -210,6 +210,17 @@ use Mojo::Base 'Mojolicious::Controller';
                     
                     $threadModel->update( { textId  => $teId },
                                           { id      => $thId } );
+                    
+                    # Inheritance of groups
+                    #
+                    my $t2dtModel = new Pony::Crud::MySQL('threadToDataType');
+                    my @types = $t2dtModel->list({threadId => $parent},
+                                        ['dataTypeId'], 'dataTypeId', undef, 0, 100);
+                    
+                    my $q = 'INSERT INTO `threadToDataType`(`threadId`,`dataTypeId`) VALUES';
+                    my @v = map { sprintf '(%s,%s)', $thId, $_->{dataTypeId} } @types;
+                    
+                    Pony::Crud::Dbh::MySQL->new->dbh->do( $q . join(',', @v) );
                     
                     $this->redirect_to('thread_show', url => "$thId-$url");
                 }

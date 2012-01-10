@@ -1,6 +1,8 @@
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
 create table `user`
 (
-    `id`        int(11) unsigned not null auto_increment primary key,
+    `id`        int(11) unsigned auto_increment primary key,
     `mail`      varchar(255) character set utf8 collate utf8_general_ci   not null,
     `password`  varchar(32)  character set ascii collate ascii_general_ci not null,
     `name`      varchar(255) character set utf8 collate utf8_general_ci   not null,
@@ -15,6 +17,9 @@ create table `user`
     
     FOREIGN KEY (`banId`)  REFERENCES `ban`(`id`)
 );
+
+INSERT INTO `user` (`id`, `mail`, `password`, `name`, `createAt`, `modifyAt`, `accessAt`, `banId`, `banTime`) VALUES(0,'anonymous@lorcode.org','','anonymous',0,0,0,0,0),
+(1,'admin@lorcode.org','eaf959d9e23b7a07bf6364f50efd6007','admin',0,0,0,0,0);
 
 create table `mailConfirm`
 (
@@ -43,6 +48,11 @@ create table `group`
     `prioritet` int(11) unsigned not null default 0
 );
 
+INSERT INTO `group` (`id`, `name`, `desc`, `prioritet`) VALUES
+(0,'Anonymous','',0),
+(1,'Admin','',0),
+(999, 'User', 'Simple user', 9999);
+
 create table `userToGroup`
 (
     `userId`    int(11) unsigned not null,
@@ -51,6 +61,10 @@ create table `userToGroup`
     FOREIGN KEY (`userId`)  REFERENCES `user`(`id`),
     FOREIGN KEY (`groupId`) REFERENCES `group`(`id`)
 );
+
+INSERT INTO `userToGroup` (`userId`, `groupId`) VALUES
+(0,0),
+(1,1);
 
 create table `access`
 (
