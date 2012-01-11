@@ -1,4 +1,4 @@
-package Forum::Controller::Admin;
+package Spaghetti::Controller::Admin;
 use Mojo::Base 'Mojolicious::Controller';
     
     use Pony::Stash;

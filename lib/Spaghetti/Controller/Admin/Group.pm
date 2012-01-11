@@ -1,9 +1,9 @@
-package Forum::Controller::Admin::Group;
+package Spaghetti::Controller::Admin::Group;
 use Mojo::Base 'Mojolicious::Controller';
 
-    use Forum::Form::Admin::Group::Create;
+    use Spaghetti::Form::Admin::Group::Create;
     use Pony::Crud::MySQL;
-    use Forum::Util;
+    use Spaghetti::Util;
 
     sub show
         {
@@ -47,7 +47,7 @@ use Mojo::Base 'Mojolicious::Controller';
     sub create
         {
             my $this = shift;
-            my $form = new Forum::Form::Admin::Group::Create;
+            my $form = new Spaghetti::Form::Admin::Group::Create;
             
             if ( $this->req->method eq 'POST' )
             {
@@ -72,7 +72,7 @@ use Mojo::Base 'Mojolicious::Controller';
                         my $id = $model->create
                                  ({
                                     name      => $name,
-                                    desc      => Forum::Util::escape($desc),
+                                    desc      => Spaghetti::Util::escape($desc),
                                     prioritet => $prio
                                  });
                         
@@ -91,7 +91,7 @@ use Mojo::Base 'Mojolicious::Controller';
             my $id    = $this->param('id');
             my $model = new Pony::Crud::MySQL('group');
             my $group = $model->read({id => $id});
-            my $form  = new Forum::Form::Admin::Group::Create;
+            my $form  = new Spaghetti::Form::Admin::Group::Create;
                $form->action = $this->url_for('admin_group_edit');
             
             if ( $this->req->method eq 'POST' )
@@ -108,7 +108,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     (
                         {
                             name      => $name,
-                            desc      => Forum::Util::escape($desc),
+                            desc      => Spaghetti::Util::escape($desc),
                             prioritet => $prio
                         },
                         {

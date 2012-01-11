@@ -1,5 +1,7 @@
-package Forum;
+package Spaghetti;
 use Mojo::Base 'Mojolicious';
+    
+    our $VERSION = '0.000002';
     
     use Pony::Stash;
     use Pony::Crud::Dbh::MySQL;
@@ -33,9 +35,9 @@ use Mojo::Base 'Mojolicious';
             ##  Routes
             ##
             
-            my $r = $this->routes->namespace('Forum::Controller');
+            my $r = $this->routes->namespace('Spaghetti::Controller');
             my $a = $r->bridge->to('admin#auth')->route('/admin')
-                      ->to( namespace => 'Forum::Controller::Admin' );
+                      ->to( namespace => 'Spaghetti::Controller::Admin' );
             
             $a->route('/')
                 ->to('admin#index')
@@ -265,8 +267,8 @@ use Mojo::Base 'Mojolicious';
                                     $hour == $h ?
                                         $min == $mi ?
                                             $sec == $s ?
-                                                $Forum::I18N::ru::Lexicon{'now'}
-                                            : $Forum::I18N::ru::Lexicon{'a few seconds ago'}
+                                                $Spaghetti::I18N::ru::Lexicon{'now'}
+                                            : $Spaghetti::I18N::ru::Lexicon{'a few seconds ago'}
                                         : ago( min => $mi - $min, $self )
                                     : ago( hour => $h - $hour, $self )
                                 : "$hour:$min, $day.$mon"
@@ -294,8 +296,8 @@ use Mojo::Base 'Mojolicious';
                                 : 1
                             );
                             
-                            return $val ." ". $Forum::I18N::ru::Lexicon{"${type}s$a"}
-                                        ." ". $Forum::I18N::ru::Lexicon{ago};
+                            return $val ." ". $Spaghetti::I18N::ru::Lexicon{"${type}s$a"}
+                                        ." ". $Spaghetti::I18N::ru::Lexicon{ago};
                         }
                 }
             );

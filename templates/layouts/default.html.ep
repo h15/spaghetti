@@ -67,6 +67,8 @@
         <div class=cb></div>
     </nav>
     
+<div class=wrap>
+
     <header class=overall>
       <h1><%= title %></h1>
     </header>
@@ -75,10 +77,19 @@
         <%= content %>
     </article>
     
+</div>
+
+<div class=overallFooter>
+
     <footer class=overall>
-        <div class="aligncenter">
-            <small>Powered by <a href="http://lorcode.org/">LorCode</a>.</small>
-        </div>
+            <small style="color:#888">
+                Spaghetti &mdash; forum system for developers<br>
+                Current version: <%= $Spaghetti::VERSION %><br>
+                Powered by <a href="http://lorcode.org/">LorCode</a>
+            </small>
     </footer>
+
+</div>
+
   </body>
 </html>

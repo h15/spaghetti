@@ -1,9 +1,9 @@
-package Forum::Form::Topic::Create;
+package Spaghetti::Form::Login;
 use Pony::Object qw/Pony::View::Form/;
 
-    has action => '/thread/new/topic';
+    has action => '/user/login';
     has method => 'post';
-    has id     => 'form-createTopic';
+    has id     => 'form-login';
 
     sub create
         {
@@ -11,34 +11,28 @@ use Pony::Object qw/Pony::View::Form/;
             
             $this->addElement
             (
-                title => text =>
+                mail => text =>
                 {
                     required    => 1,
-                    label       => 'Title',
+                    label       => 'E-mail',
                     validators  =>
                     {
-                        Length  => [ 2, 64 ],
+                        Like    => qr/[\.\-\w\d]+\@(?:[\.\-\w\d]+\.)+[\w]{2,5}/,
                     }
                 }
             );
             
             $this->addElement
             (
-                text => textarea =>
+                password => password =>
                 {
                     required    => 1,
-                    label       => 'Text',
+                    label       => 'Password',
+                    validators  =>
+                    {
+                        Length  => [ 8, 32 ],
+                    }
                 }
-            );
-            
-            $this->addElement
-            (
-                parentId => hidden =>
-            );
-            
-            $this->addElement
-            (
-                topicId => hidden =>
             );
             
             $this->addElement( submit => submit => {ignore => 1} );

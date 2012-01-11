@@ -1,5 +1,5 @@
-package Forum::I18N::ru;
-use base 'Forum::I18N';
+package Spaghetti::I18N::ru;
+use base 'Spaghetti::I18N';
 
 use Encode 'decode';
 

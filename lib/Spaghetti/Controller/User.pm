@@ -1,15 +1,15 @@
-package Forum::Controller::User;
+package Spaghetti::Controller::User;
 use Mojo::Base 'Mojolicious::Controller';
     
-    use Forum::Form::Login;
-    use Forum::Form::Registration;
+    use Spaghetti::Form::Login;
+    use Spaghetti::Form::Registration;
     use Pony::Crud::MySQL;
     use Digest::MD5 "md5_hex";
 
     sub login
         {
             my $this = shift;
-            my $form = new Forum::Form::Login;
+            my $form = new Spaghetti::Form::Login;
             
             if ( $this->req->method eq 'POST' )
             {
@@ -50,7 +50,7 @@ use Mojo::Base 'Mojolicious::Controller';
     sub registration
         {
             my $this = shift;
-            my $form = new Forum::Form::Registration;
+            my $form = new Spaghetti::Form::Registration;
             
             if ( $this->req->method eq 'POST' )
             {

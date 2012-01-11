@@ -1,9 +1,9 @@
-package Forum::Controller::Thread;
+package Spaghetti::Controller::Thread;
 use Mojo::Base 'Mojolicious::Controller';
     
-    use Forum::Form::Topic::Create;
-    use Forum::Form::Thread::Create;
-    use Forum::Util;
+    use Spaghetti::Form::Topic::Create;
+    use Spaghetti::Form::Thread::Create;
+    use Spaghetti::Util;
     use Pony::Crud::Dbh::MySQL;
     use Pony::Crud::MySQL;
     use Pony::Stash;
@@ -80,8 +80,8 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->redirect_to('404') unless @threads;
             
-            my $form = new Forum::Form::Thread::Create;
-            my $topicForm = new Forum::Form::Topic::Create;
+            my $form = new Spaghetti::Form::Thread::Create;
+            my $topicForm = new Spaghetti::Form::Topic::Create;
             
             $this->stash( create  => $this->access($id, 'c') );
             
@@ -100,7 +100,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->redirect_to('404') unless $this->access($tid, 'c');
             
-            my $form = new Forum::Form::Thread::Create;
+            my $form = new Spaghetti::Form::Thread::Create;
                $form->action = $this->url_for('thread_create');
                $form->elements->{parentId}->value = $pid;
                $form->elements->{topicId}->value  = $tid;
@@ -131,7 +131,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     my $teId = $textModel->create
                                ({
                                     threadId    => $thId,
-                                    text        => Forum::Util::escape($text),
+                                    text        => Spaghetti::Util::escape($text),
                                });
                     
                     $threadModel->update( { textId  => $teId },
@@ -164,7 +164,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->redirect_to('404') unless $this->access($tid, 'c');
             
-            my $form = new Forum::Form::Topic::Create;
+            my $form = new Spaghetti::Form::Topic::Create;
                $form->action = $this->url_for('thread_createTopic');
                $form->elements->{parentId}->value = $pid;
                $form->elements->{topicId}->value  = $tid;
@@ -180,7 +180,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     my $parent= $form->elements->{parentId}->value;
                     my $topic = $form->elements->{parentId}->value;
                     my $userId= $this->user->{id};
-                    my $url   = substr(Forum::Util::rusToLatUrl($title), 0, 52);
+                    my $url   = substr(Spaghetti::Util::rusToLatUrl($title), 0, 52);
                     
                     my $threadModel= new Pony::Crud::MySQL('thread');
                     my $topicModel = new Pony::Crud::MySQL('topic');
@@ -205,7 +205,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     my $teId = $textModel->create
                                ({
                                     threadId    => $thId,
-                                    text        => Forum::Util::escape($text),
+                                    text        => Spaghetti::Util::escape($text),
                                });
                     
                     $threadModel->update( { textId  => $teId },
@@ -237,7 +237,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->redirect_to('404') unless $this->access($id, 'w');
             
-            my $form = new Forum::Form::Thread::Create;
+            my $form = new Spaghetti::Form::Thread::Create;
                $form->action = $this->url_for( thread_edit => id => $id );
             
             my $threadModel= new Pony::Crud::MySQL('thread');
@@ -262,7 +262,7 @@ use Mojo::Base 'Mojolicious::Controller';
                                
                     my $textId = $textModel->create
                     ({
-                        text => Forum::Util::escape($text),
+                        text => Spaghetti::Util::escape($text),
                         threadId => $thread->{id}
                     });
                     
@@ -293,7 +293,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->redirect_to('404') unless $this->access($id, 'w');
             
-            my $form = new Forum::Form::Topic::Create;
+            my $form = new Spaghetti::Form::Topic::Create;
                $form->action = $this->url_for( topic_edit => id => $id );
             
             my $threadModel= new Pony::Crud::MySQL('thread');
@@ -319,7 +319,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     if ( $text->{text} ne $textVal )
                     {
                         my $textId = $textModel->create
-                                     ({ text => Forum::Util::escape($textVal),
+                                     ({ text => Spaghetti::Util::escape($textVal),
                                         threadId => $thread->{id} });
                         
                         $data->{textId} = $textId;

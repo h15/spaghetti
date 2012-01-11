@@ -1,9 +1,9 @@
-package Forum::Controller::Admin::DataType;
+package Spaghetti::Controller::Admin::DataType;
 use Mojo::Base 'Mojolicious::Controller';
 
-    use Forum::Form::Admin::DataType::Create;
+    use Spaghetti::Form::Admin::DataType::Create;
     use Pony::Crud::MySQL;
-    use Forum::Util;
+    use Spaghetti::Util;
 
     sub show
         {
@@ -37,7 +37,7 @@ use Mojo::Base 'Mojolicious::Controller';
     sub create
         {
             my $this = shift;
-            my $form = new Forum::Form::Admin::DataType::Create;
+            my $form = new Spaghetti::Form::Admin::DataType::Create;
             
             if ( $this->req->method eq 'POST' )
             {
@@ -62,7 +62,7 @@ use Mojo::Base 'Mojolicious::Controller';
                         my $id = $model->create
                                  ({
                                     name      => $name,
-                                    desc      => Forum::Util::escape($desc),
+                                    desc      => Spaghetti::Util::escape($desc),
                                     prioritet => $prio
                                  });
                         
@@ -81,7 +81,7 @@ use Mojo::Base 'Mojolicious::Controller';
             my $id    = $this->param('id');
             my $model = new Pony::Crud::MySQL('dataType');
             my $type  = $model->read({id => $id});
-            my $form  = new Forum::Form::Admin::DataType::Create;
+            my $form  = new Spaghetti::Form::Admin::DataType::Create;
                $form->action = $this->url_for('admin_dataType_edit');
             
             if ( $this->req->method eq 'POST' )
@@ -98,7 +98,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     (
                         {
                             name      => $name,
-                            desc      => Forum::Util::escape($desc),
+                            desc      => Spaghetti::Util::escape($desc),
                             prioritet => $prio
                         },
                         {

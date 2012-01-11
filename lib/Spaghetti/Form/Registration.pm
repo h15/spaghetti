@@ -1,4 +1,4 @@
-package Forum::Form::Registration;
+package Spaghetti::Form::Registration;
 use Pony::Object qw/Pony::View::Form/;
 
     has action => '/user/registration';

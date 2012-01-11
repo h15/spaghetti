@@ -1,4 +1,4 @@
-package Forum::Form::Admin::DataType::Create;
+package Spaghetti::Form::Admin::DataType::Create;
 use Pony::Object qw/Pony::View::Form/;
 
     has action => '/admin/type/new';

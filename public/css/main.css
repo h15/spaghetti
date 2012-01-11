@@ -4,8 +4,20 @@
         margin:0px;
         font-style:"DejaVu Sans", Helvetica, Arial, Sans;
     }
+    
+    html
+    {
+        background:#EDEDED;
+    }
 
     nav, header, article, footer { display: block; }
+    
+    .wrap
+    {
+        background:#fff;
+        padding:10px 0px;
+        min-height:400px;
+    }
 
     .hidden
     {
@@ -134,6 +146,19 @@
     {
         width:800px;
         margin:0px auto;
+    }
+    
+    footer.overall
+    {
+        margin-top:20px;
+    }
+    
+    .overallFooter
+    {
+        border-top:1px solid #C8C9CB;
+        margin:0px;
+        min-height:180px;
+        background:url('/pic/fsm.png') no-repeat right top;
     }
     
     #form-createTopic .pony-text

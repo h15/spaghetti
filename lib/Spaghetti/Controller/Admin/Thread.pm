@@ -1,8 +1,8 @@
-package Forum::Controller::Admin::Thread;
+package Spaghetti::Controller::Admin::Thread;
 use Mojo::Base 'Mojolicious::Controller';
     
-    use Forum::Form::Admin::Thread::Create;
-    use Forum::Util;
+    use Spaghetti::Form::Admin::Thread::Create;
+    use Spaghetti::Util;
     use Pony::Crud::Dbh::MySQL;
     use Pony::Crud::MySQL;
     use Pony::Stash;
@@ -14,7 +14,7 @@ use Mojo::Base 'Mojolicious::Controller';
         {
             my $this = shift;
             my $id   = int $this->param('id');
-            my $form = new Forum::Form::Admin::Thread::Create;
+            my $form = new Spaghetti::Form::Admin::Thread::Create;
                $form->action = $this->url_for('admin_thread_edit', id => $id);
             
             my $threadModel= new Pony::Crud::MySQL('thread');
@@ -43,7 +43,7 @@ use Mojo::Base 'Mojolicious::Controller';
                                
                     $textModel->update
                     (
-                        { text => Forum::Util::escape($text) },
+                        { text => Spaghetti::Util::escape($text) },
                         { id => $thread->{textId} }
                     );
                     

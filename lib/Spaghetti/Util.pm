@@ -1,4 +1,4 @@
-package Forum::Util;
+package Spaghetti::Util;
 use utf8;
 
     sub rusToLatUrl

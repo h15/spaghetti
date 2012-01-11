@@ -1,9 +1,9 @@
-package Forum::Form::Admin::Thread::Create;
+package Spaghetti::Form::Admin::Group::Create;
 use Pony::Object qw/Pony::View::Form/;
 
-    has action => '/admin/thread/create';
+    has action => '/admin/group/new';
     has method => 'post';
-    has id     => 'form-admin-thread-create';
+    has id     => 'form-admin-group-create';
 
     sub create
         {
@@ -11,45 +11,31 @@ use Pony::Object qw/Pony::View::Form/;
             
             $this->addElement
             (
-                text => textarea =>
+                name => text =>
                 {
                     required    => 1,
-                    label       => 'Text',
-                }
-            );
-            
-            $this->addElement
-            (
-                parentId => text =>
-                {
-                    required    => 1,
-                    label       => 'Parent',
+                    label       => 'Name',
                     validators  =>
                     {
-                        Like    => qr/\d+/,
+                        Length  => [ 1, 64 ],
                     }
                 }
             );
             
             $this->addElement
             (
-                topicId => text =>
+                desc => textarea =>
                 {
                     required    => 1,
-                    label       => 'Topic',
-                    validators  =>
-                    {
-                        Like    => qr/\d+/,
-                    }
+                    label       => 'Description'
                 }
             );
             
             $this->addElement
             (
-                textId => text =>
+                prioritet => text =>
                 {
-                    required    => 1,
-                    label       => 'Text',
+                    label       => 'Prioritet',
                     validators  =>
                     {
                         Like    => qr/\d+/,

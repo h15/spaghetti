@@ -1,4 +1,4 @@
-package Forum::Controller::Admin::User;
+package Spaghetti::Controller::Admin::User;
 use Mojo::Base 'Mojolicious::Controller';
 
     use Pony::Crud::MySQL;
