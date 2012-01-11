@@ -172,3 +172,8 @@
         color:#60596B;
     }
     
+    .paginator a, .paginator span
+    {
+        margin:5px;
+        text-decoration:none;
+    }

@@ -27,22 +27,39 @@ use Mojo::Base 'Mojolicious::Controller';
             
             my $page = int ( $this->param('page') || 0 );
                $page = 1 if $page < 1;
-             --$page;
             
-            my $conf = Pony::Stash->findOrCreate( thread => { size => 50 } );
+            my $conf = Pony::Stash->findOrCreate( thread => { size => 10 } );
+            
+            # Get thread list.
+            #
             
             my $sth = $dbh->prepare( $Spaghetti::SQL::thread->{show} );
                $sth->execute( $this->user->{id}, $id, $id, $this->user->{id},
-                                        $page * $conf->{size}, $conf->{size} );
+                                     ($page-1) * $conf->{size}, $conf->{size} );
             
             my $threads = $sth->fetchall_hashref('id');
             
             $this->redirect_to('404') unless $threads;
             
+            # Get thread count.
+            #
+            
+            $sth = $dbh->prepare( $Spaghetti::SQL::thread->{showCount} );
+            $sth->execute( $id, $id, $this->user->{id} );
+            
+            my $count = $sth->fetchrow_hashref();
+            
+            # Prepare to render.
+            #
+            
             my $form = new Spaghetti::Form::Thread::Create;
             my $topicForm = new Spaghetti::Form::Topic::Create;
             
-            $this->stash( create  => $this->access($id, 'c') );
+            $this->stash( create => $this->access($id, 'c') );
+            
+            $this->stash( paginator =>
+                            $this->paginator( 'thread_show_p', $page,
+                                $count->{count}, $conf->{size}, [ url => $id ] ) );
             
             $this->stash( threads => $threads  );
             $this->stash( id      => $id       );

@@ -42,6 +42,24 @@ our $thread =
                         )
                 ORDER BY th.id ASC
                 LIMIT ?, ?},
+    showCount =>
+    q{
+        SELECT COUNT(*) AS count FROM `thread` th
+            WHERE ( th.topicId = ? or th.id = ? )
+                AND th.id IN
+                    (
+                        SELECT `threadId` FROM `threadToDataType`
+                        WHERE `dataTypeId` IN
+                        (
+                            SELECT `dataTypeId` FROM `access`
+                            WHERE `RWCD` & 1 != 0 AND `groupId` IN
+                            (
+                                SELECT `groupId` FROM `userToGroup`
+                                WHERE `userId` = ?
+                            )
+                        )
+                    )
+    },
 };
 
 1;

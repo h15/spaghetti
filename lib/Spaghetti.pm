@@ -104,12 +104,13 @@ use Mojo::Base 'Mojolicious';
             $r->route('/thread/:url')
                 ->to('thread#show')
                   ->name('thread_show');
-            $r->route('/thread/:url/:page', page => qr/\d+/)
-                ->to('thread#show')
-                  ->name('thread_show');
             $r->route('/thread')
                 ->to('thread#show')
                   ->name('thread_index');
+            $r->route( '/thread/:url/page/:page',
+                       url => qr/[\w\d\-]+/, page => qr/\d+/ )
+                ->to('thread#show')
+                  ->name('thread_show_p');
             
             $a->route('/thread/edit/:id')
                 ->to('thread#edit')
@@ -185,7 +186,7 @@ use Mojo::Base 'Mojolicious';
             (
                 paginator => sub
                 {
-                    my ( $self, $urlName, $cur, $count, $size ) = @_;
+                    my ( $self, $urlName, $cur, $count, $size, $params ) = @_;
                     my $html = '';
                     
                     return '' if $count <= $size;
@@ -202,10 +203,12 @@ use Mojo::Base 'Mojolicious';
                     {
                         next if $i < 1 || $i > $last;
                         
+                        $params = [] unless defined $params;
+                        
                         $html .= ( $i == $cur ?
                                         sprintf '<span>%s</span>', $cur :
                                         sprintf '<a href="%s">%s</a>',
-                                            $self->url_for($urlName, page => $i), $i );
+                                        $self->url_for($urlName, @$params, page => $i), $i );
                     }
                     
                     # Render last page.
