@@ -5,7 +5,7 @@ use Pony::Object 'Mojolicious::Plugin';
     use Pony::Crud::MySQL;
     
     has sql => '
-                    SELECT `id` FROM `thread` WHERE `id`=%d AND `id` IN
+                    SELECT `id`, t.`userId` FROM `thread` AS t WHERE `id`=%d AND `id` IN
                     (
                         SELECT `threadId` FROM `threadToDataType`
                         WHERE `dataTypeId` IN
@@ -43,8 +43,24 @@ use Pony::Object 'Mojolicious::Plugin';
                     
                     my @t = Pony::Crud::MySQL->new('thread')->raw($q);
                     
+                    # Allow write action for owner.
+                    #
+                    
+                    return 1 if $right eq 'w' && $uid == $t[0]->{userId};
+                    
+                    # Allow by database record.
+                    #
+                    
                     return 1 if @t;
+                    
+                    # Allow for admin.
+                    #
+                    
                     return 1 if grep { $_ == 1 } @{ $self->user->{groups} };
+                    
+                    # Deny for others.
+                    #
+                    
                     return 0;
                 }
             );
