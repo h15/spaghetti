@@ -5,6 +5,7 @@ use Mojo::Base 'Mojolicious';
     
     use Pony::Stash;
     use Pony::Crud::Dbh::MySQL;
+    use Spaghetti::SQL;
     
     # This method will run once at server start
     sub startup

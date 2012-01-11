@@ -13,6 +13,7 @@ use Mojo::Base 'Mojolicious::Controller';
             my $this = shift;
             my $url  = $this->param('url') || 0;
             my $topicModel = new Pony::Crud::MySQL('topic');
+            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
             
             # Get Topic ID from requested url.
             # It can be string (url) or integer (id).
@@ -30,62 +31,20 @@ use Mojo::Base 'Mojolicious::Controller';
             
             my $conf = Pony::Stash->findOrCreate( thread => { size => 50 } );
             
-            # Quick and dirty :)
-            #
+            my $sth = $dbh->prepare( $Spaghetti::SQL::thread->{show} );
+               $sth->execute( $this->user->{id}, $id, $id, $this->user->{id},
+                                        $page * $conf->{size}, $conf->{size} );
             
-            my $q = sprintf 'SELECT th.id, th.createAt, th.modifyAt, th.parentId,
-                                    th.topicId, th.userId, t.`text`, t1.title,
-                                    t1.url, u.name, u.mail, u.banId,
-                                    (
-                                        SELECT COUNT(*) FROM `thread` a 
-                                            WHERE ( a.id = th.id )
-                                                AND a.id IN
-                                                    (
-                                                        SELECT `threadId` FROM `threadToDataType`
-                                                        WHERE `dataTypeId` IN
-                                                        (
-                                                            SELECT `dataTypeId` FROM `access`
-                                                            WHERE `RWCD` & 2 != 0 AND `groupId` IN
-                                                            (
-                                                                SELECT `groupId` FROM `userToGroup`
-                                                                WHERE `userId`=%d
-                                                            )
-                                                        )
-                                                    ) 
-                                    ) as W
-                                FROM `thread` th
-                                LEFT OUTER JOIN `text`    t    ON ( th.textId    = t.id  )
-                                LEFT OUTER JOIN `topic`   t1   ON ( t1.threadId  = th.id )
-                                LEFT OUTER JOIN `user`    u    ON ( th.userId    = u.id  )
-                                    WHERE ( th.topicId=%d or th.id=%d )
-                                        AND th.id IN
-                                            (
-                                                SELECT `threadId` FROM `threadToDataType`
-                                                WHERE `dataTypeId` IN
-                                                (
-                                                    SELECT `dataTypeId` FROM `access`
-                                                    WHERE `RWCD` & 1 != 0 AND `groupId` IN
-                                                    (
-                                                        SELECT `groupId` FROM `userToGroup`
-                                                        WHERE `userId`=%d
-                                                    )
-                                                )
-                                            )
-                                    ORDER BY th.id ASC
-                                    LIMIT %d, %d',
-                                $this->user->{id}, $id, $id, $this->user->{id},
-                                $page * $conf->{size}, $conf->{size};
+            my $threads = $sth->fetchall_hashref('id');
             
-            my @threads = $topicModel->raw( $q );
-            
-            $this->redirect_to('404') unless @threads;
+            $this->redirect_to('404') unless $threads;
             
             my $form = new Spaghetti::Form::Thread::Create;
             my $topicForm = new Spaghetti::Form::Topic::Create;
             
             $this->stash( create  => $this->access($id, 'c') );
             
-            $this->stash( threads => \@threads );
+            $this->stash( threads => $threads  );
             $this->stash( id      => $id       );
             $this->stash( form    => $form     );
             $this->stash(topicForm=> $topicForm);
@@ -347,6 +306,12 @@ use Mojo::Base 'Mojolicious::Controller';
             $this->stash( id => $id );
             $this->stash( form => $form->render );
             $this->render;
+        }
+
+    sub tracker
+        {
+            my $this = shift;
+            
         }
 
 1;
