@@ -37,21 +37,27 @@ use Pony::Object 'Mojolicious::Plugin';
                 {
                     my ( $self, $tid, $right ) = @_;
                     my $uid = $self->user->{id};
+                    my $model = Pony::Crud::MySQL->new('thread');
                     
-                    my $q = sprintf $this->sql, int($tid),
-                                $this->const->{$right}, int($uid);
-                    
-                    my @t = Pony::Crud::MySQL->new('thread')->raw($q);
-                    
-                    # Allow write action for owner.
-                    #
-                    
-                    return 1 if $right eq 'w' && $uid == $t[0]->{userId};
+                    $tid = 0 unless defined $tid;
                     
                     # Allow by database record.
                     #
                     
+                    my $q = sprintf $this->sql, int($tid),
+                                $this->const->{$right}, int($uid);
+                    
+                    my @t = $model->raw($q);
+                    
                     return 1 if @t;
+                    
+                    # Allow write action for owner.
+                    #
+                    my $t = $model->read({id => $tid}, ['userId']);
+                    
+                    return 0 unless defined $t;
+                    
+                    return 1 if $right eq 'w' && $uid == $t->{userId};
                     
                     # Allow for admin.
                     #
