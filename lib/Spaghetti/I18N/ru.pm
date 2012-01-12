@@ -93,6 +93,10 @@ our %Lexicon = (
     'Create new data type'  => 'Создать новый тип данных',
     'Data type'     => 'Тип данных',
     'Configure special params for' => 'Настройка специальных параметров для',
+    'Topic'         => 'Тема',
+    'Size'          => 'Размер',
+    'Time'          => 'Время',
+    'Tracker'       => 'Трекер',
 );
 
 $Lexicon{$_} = decode('utf8', $Lexicon{$_}) for keys %Lexicon;

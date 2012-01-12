@@ -34,6 +34,9 @@
         <div class="alignleft">
             <a href="/thread"><%=l 'Forum' %></a>
         </div>
+        <div class="alignleft">
+            <a href="/thread/tracker"><%=l 'Tracker' %></a>
+        </div>
         
         % if ( user->{id} )
         % {

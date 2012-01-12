@@ -177,3 +177,35 @@
         margin:5px;
         text-decoration:none;
     }
+    
+    table.list
+    {
+	    -moz-border-radius:5px;
+	    -webkit-border-radius:5px;
+	    border-radius:5px;
+	    -khtml-border-radius:5px;
+        color:#60596B;
+        width:100%;
+        border:1px solid #E8E9EB;
+    }
+    
+    table.list tr
+    {
+        background: #F0F0F0;
+    }
+    
+    table.list tr:first-child
+    {
+        background: #E8E9F4;
+    }
+    
+    table.list tr:nth-child(2n)
+    {
+        background: #E8E9EB;
+    }
+    
+    table.list td
+    {
+        padding:2px 5px;
+        margin:0px;
+    }
