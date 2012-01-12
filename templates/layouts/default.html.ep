@@ -87,7 +87,10 @@
     <footer class=overall>
             <small style="color:#888">
                 Spaghetti &mdash; forum system for developers<br>
-                Current version: <%= $Spaghetti::VERSION %><br>
+                Current version:
+                <acronym title="<%= $Spaghetti::COMMIT %>">
+                    <%= $Spaghetti::VERSION %>
+                </acronym><br>
                 Powered by <a href="http://lorcode.org/">LorCode</a>
             </small>
     </footer>

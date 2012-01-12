@@ -1,7 +1,8 @@
 package Spaghetti;
 use Mojo::Base 'Mojolicious';
     
-    our $VERSION = '0.000002';
+    our $VERSION = '0.000003';
+    our $COMMIT  = '';
     
     use Pony::Stash;
     use Pony::Crud::Dbh::MySQL;
@@ -12,10 +13,23 @@ use Mojo::Base 'Mojolicious';
         {
             my $this = shift;
             
+            # Get commit id
+            #
+            
+            if ( open C, './Changes' )
+            {
+                my $line = <C>;
+                $COMMIT = [ split ' ', $line ]->[1];
+                
+                close C;
+            }
+            
             ##
             ##  Configs
             ##
             
+            # Database
+            #
             Pony::Stash->new('./resources/stash.dat');
             Pony::Crud::Dbh::MySQL->new({
                 host     => 'localhost',
@@ -23,6 +37,15 @@ use Mojo::Base 'Mojolicious';
                 user     => 'pony',
                 password => 'pony secret'
             });
+            
+            # Init configs in stash if they did not define.
+            #
+            Pony::Stash->findOrCreate
+            ( thread =>
+              {
+                size => 20,
+              }
+            );
             
             ##
             ##  Plugins
@@ -101,9 +124,6 @@ use Mojo::Base 'Mojolicious';
             $r->route('/topic/edit/:id')
                 ->to('thread#editTopic')
                   ->name('topic_edit');
-            $r->route('/thread/:url')
-                ->to('thread#show')
-                  ->name('thread_show');
             $r->route('/thread')
                 ->to('thread#show')
                   ->name('thread_index');
@@ -111,6 +131,15 @@ use Mojo::Base 'Mojolicious';
                        url => qr/[\w\d\-]+/, page => qr/\d+/ )
                 ->to('thread#show')
                   ->name('thread_show_p');
+            $r->route('/thread/tracker')
+                ->to('thread#tracker')
+                  ->name('thread_tracker_index');
+            $r->route('/thread/tracker/:page', page => qr/\d/)
+                ->to('thread#tracker')
+                  ->name('thread_tracker');
+            $r->route('/thread/:url')
+                ->to('thread#show')
+                  ->name('thread_show');
             
             $a->route('/thread/edit/:id')
                 ->to('thread#edit')

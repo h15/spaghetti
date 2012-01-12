@@ -1,0 +1,131 @@
+commit 26356140d1538613a34f9ad405001b082724f0a8
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Fri Jan 13 02:02:00 2012 +0600
+
+    cosmetic fixes
+
+commit 9a1c09d48432d5c00c5de9324a432e0f5ed3afed
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Fri Jan 13 02:00:56 2012 +0600
+
+    add tracker action for threads 2
+
+commit 78ae81786b3d4b0f08b2cc300ef1fe46f14cdea5
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Fri Jan 13 02:00:00 2012 +0600
+
+    add tracker action for threads
+
+commit ada4b8f3c444c804f2bd9d4ecdb463455b884dd6
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Fri Jan 13 01:58:13 2012 +0600
+
+    fix access plugin
+
+commit c8f3ee3d0538e32b6067a64cc6572018aeb31a50
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Thu Jan 12 03:07:35 2012 +0600
+
+    add paginator to Thread->show
+
+commit ed834c8d9ec9976dedd6327a8564abb2db5943b2
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Thu Jan 12 02:05:47 2012 +0600
+
+    New custom SQL request will be locate in Spaghetti::SQL
+
+commit ea86b08141f97eae4b2742fe760a4b04a1068065
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Wed Jan 11 23:34:46 2012 +0600
+
+    owner can change his threads always... if he`s not banned
+
+commit 460060cb9a920521e8026e192e9f3905ea37d19e
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Wed Jan 11 21:27:09 2012 +0600
+
+    got a name :)
+
+commit fc62b8a18ba258d313d3eb7dfd5de5577362fa88
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Wed Jan 11 20:22:24 2012 +0600
+
+    Use actual Pony version
+
+commit 9ae023c0da2a98ffbd33785a70d9f585ceb35f96
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Tue Jan 10 08:23:57 2012 +0600
+
+    fix Inheritance of types for empty type list
+
+commit b4291e26205c9dbfd0b40776963aa136f3b6ebe3
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Tue Jan 10 07:49:43 2012 +0600
+
+    v0.0.1
+
+commit a929c05fd136c8513b6a5874a32bb0678f972c7a
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Tue Jan 10 05:11:06 2012 +0600
+
+    small fixes
+
+commit 4a0079bf3b81caaba3befa9ca9caa5532c745e22
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Mon Jan 9 04:00:28 2012 +0600
+
+    added access protection
+
+commit 00a91adff6f62ad695a45465f3c754bb3d46e80a
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Mon Jan 9 01:57:40 2012 +0600
+
+    add access action for admin->group
+
+commit dc8da9bf4851660e0b797c47f95a9f9be3f031de
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Jan 8 23:18:54 2012 +0600
+
+    admin->user looks done
+
+commit 19a12a6418b8b6ec796e179de9e2cb5cc8caf181
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Jan 8 21:18:29 2012 +0600
+
+    -
+
+commit 8fc06dc88e3d35f5dcbd8c13f745b9c19ca11d90
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Jan 8 20:35:11 2012 +0600
+
+    add paginator && clean up
+
+commit 3dc43c19cdb67f0bbcfd37f5b1be931a997ff012
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Jan 8 18:47:50 2012 +0600
+
+    -
+
+commit 993b3409b125751b08c5eff9eed5431844d63afd
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Jan 8 00:44:03 2012 +0600
+
+    small fix
+
+commit 7a700a1255dea748997eb3256daec14bbf9fe6ad
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Jan 8 00:39:54 2012 +0600
+
+    just save that
+
+commit 3ade9e9e00643f5f1b8b85c7c833ee539d84eb40
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sat Jan 7 02:48:17 2012 +0600
+
+    update Pony modules. Fix url name
+
+commit 27b64b9761d4aa2c3a71c98e90d92eaa9711463b
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sat Jan 7 01:53:10 2012 +0600
+
+    first interesting version
