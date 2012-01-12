@@ -60,6 +60,50 @@ our $thread =
                         )
                     )
     },
+    tracker =>
+    q{
+        SELECT  th.id, th.createAt, th.modifyAt, th.parentId,
+                th.topicId, th.userId, t.`text`, t1.title,
+                t1.url, u.name, u.mail, u.banId,
+                ( SELECT COUNT(*) FROM `thread`  WHERE topicId = th.id ) as count
+            FROM `thread` AS th
+            INNER JOIN `text`  AS t    ON ( th.textId    = t.id  )
+            INNER JOIN `topic` AS t1   ON ( t1.threadId  = th.id )
+            INNER JOIN `user`  AS u    ON ( th.userId    = u.id  )
+                WHERE th.id IN
+                (
+                    SELECT `threadId` FROM `threadToDataType`
+                    WHERE `dataTypeId` IN
+                    (
+                        SELECT `dataTypeId` FROM `access`
+                        WHERE `RWCD` & 1 != 0 AND `groupId` IN
+                        (
+                            SELECT `groupId` FROM `userToGroup`
+                            WHERE `userId` = ?
+                        )
+                    )
+                )
+                ORDER BY th.id DESC
+                LIMIT ?, ?
+    },
+    trackerCount =>
+    q{
+        SELECT COUNT(*) AS count FROM `thread` AS th
+        INNER JOIN `topic` AS t1 ON ( t1.threadId  = th.id )
+        WHERE th.id IN
+        (
+            SELECT `threadId` FROM `threadToDataType`
+            WHERE `dataTypeId` IN
+            (
+                SELECT `dataTypeId` FROM `access`
+                WHERE `RWCD` & 1 != 0 AND `groupId` IN
+                (
+                    SELECT `groupId` FROM `userToGroup`
+                    WHERE `userId` = ?
+                )
+            )
+        )
+    },
 };
 
 1;
