@@ -6,10 +6,11 @@ use Pony::Object 'Mojolicious::Plugin';
     # pages, authentitication, registration and other.
 
     use Digest::MD5 "md5_hex";
+    use URI::Escape qw(uri_escape);
     use Pony::Stash;
     use Pony::Crud::MySQL;
 
-    our $VERSION = '0.000005';
+    our $VERSION = '0.000006';
 
     sub register
         {
@@ -84,11 +85,17 @@ use Pony::Object 'Mojolicious::Plugin';
                     $user = Pony::Crud::MySQL->new('user')->read({id => $user})
                                                 unless ( ref $user eq 'HASH' );
                     
+                    my $default = sprintf 'http://%s:%s/pic/userpic.png',
+                                          $self->req->url->base->host,
+                                          $self->req->url->base->port;
+                    my $pic = sprintf '<img class=userpic_small src="http://www.gravatar.com/avatar/%s?d=%s&s=%s">',
+                                      md5_hex(lc $user->{mail}), uri_escape($default), 64;
+                    
                     return new Mojo::ByteStream
                     (
-                        sprintf '<a href="%s" class="%s">%s</a>',
+                        sprintf '<a href="%s" class="%s">%s%s</a>',
                             $app->url_for( 'user_profile', id => $user->{id} ),
-                            ($user->{banId} ? 'banned' : 'active'), $user->{name}
+                            ($user->{banId} ? 'banned' : 'active'), $pic, $user->{name}
                     );
                 }
             );

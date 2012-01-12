@@ -30,7 +30,7 @@ use Mojo::Base 'Mojolicious';
             
             # Database
             #
-            Pony::Stash->new('./resources/stash.dat');
+            
             Pony::Crud::Dbh::MySQL->new({
                 host     => 'localhost',
                 dbname   => 'pony',
@@ -40,6 +40,9 @@ use Mojo::Base 'Mojolicious';
             
             # Init configs in stash if they did not define.
             #
+            
+            Pony::Stash->new('./resources/stash.dat');
+            
             Pony::Stash->findOrCreate
             ( thread =>
               {

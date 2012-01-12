@@ -1,3 +1,9 @@
+commit 8c8128a7f8784c5dacfdcbfaf8f2399b8e3bcae3
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Fri Jan 13 02:12:17 2012 +0600
+
+    add commit id into footer
+
 commit 26356140d1538613a34f9ad405001b082724f0a8
 Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
 Date:   Fri Jan 13 02:02:00 2012 +0600

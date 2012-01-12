@@ -38,6 +38,7 @@
         <div class="user">
             <%= render_user({ id    => $t->{userId},
                               name  => $t->{name},
+                              mail  => $t->{mail},
                               banId => $t->{banId} }) %>
         </div>
     
@@ -142,6 +143,7 @@
         <div class="user">
             <%= render_user({ id    => $t->{userId},
                               name  => $t->{name},
+                              mail  => $t->{mail},
                               banId => $t->{banId} }) %>
         </div>
     
