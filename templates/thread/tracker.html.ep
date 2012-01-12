@@ -1,0 +1,45 @@
+% layout 'default';
+%
+% title l('Tracker');
+
+<table class="tracker list">
+    <tr>
+        <th><%=l 'Topic' %></th>
+        <th><%=l 'Size' %></th>
+        <th><%=l 'Time' %></th>
+        <th></th>
+    </tr>
+    
+% for my $k ( sort { $b <=> $a } keys %$threads )
+% {
+%     my $t = $threads->{$k};
+
+<tr class="post" id="thread-<%= $t->{id} %>">
+    
+    <td>
+            <a href="<%= url_for thread_show => url => $t->{url} %>"><%= $t->{title} %></a>
+    </td>
+    <td>
+        <%= $t->{count} %>
+    </td>
+    <td>
+        <%= render_datetime $t->{modifyAt} %>
+    </td>
+    <td>
+        <%= render_user
+            {
+                id    => $t->{userId},
+                name  => $t->{name},
+                mail  => $t->{mail},
+                banId => $t->{banId},
+            }
+        %>
+    </td>
+
+</tr>
+
+% }
+
+</table>
+
+%=b $paginator

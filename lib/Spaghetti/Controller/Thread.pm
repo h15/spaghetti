@@ -28,7 +28,7 @@ use Mojo::Base 'Mojolicious::Controller';
             my $page = int ( $this->param('page') || 0 );
                $page = 1 if $page < 1;
             
-            my $conf = Pony::Stash->findOrCreate( thread => { size => 10 } );
+            my $conf = Pony::Stash->get('thread');
             
             # Get thread list.
             #
@@ -61,10 +61,10 @@ use Mojo::Base 'Mojolicious::Controller';
                             $this->paginator( 'thread_show_p', $page,
                                 $count->{count}, $conf->{size}, [ url => $id ] ) );
             
-            $this->stash( threads => $threads  );
-            $this->stash( id      => $id       );
-            $this->stash( form    => $form     );
-            $this->stash(topicForm=> $topicForm);
+            $this->stash( threads   => $threads   );
+            $this->stash( id        => $id        );
+            $this->stash( form      => $form      );
+            $this->stash( topicForm => $topicForm );
             $this->render;
         }
     
@@ -328,7 +328,43 @@ use Mojo::Base 'Mojolicious::Controller';
     sub tracker
         {
             my $this = shift;
+            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
             
+            # Paginator
+            #
+            
+            my $page = int ( $this->param('page') || 0 );
+               $page = 1 if $page < 1;
+            
+            my $conf = Pony::Stash->get('thread');
+            
+            # Get thread list.
+            #
+            
+            my $sth = $dbh->prepare( $Spaghetti::SQL::thread->{tracker} );
+               $sth->execute( $this->user->{id}, ($page-1) * $conf->{size}, $conf->{size} );
+            
+            my $threads = $sth->fetchall_hashref('id');
+            
+            $this->redirect_to('404') unless $threads;
+            
+            # Get thread count.
+            #
+            
+            $sth = $dbh->prepare( $Spaghetti::SQL::thread->{trackerCount} );
+            $sth->execute( $this->user->{id} );
+            
+            my $count = $sth->fetchrow_hashref();
+            
+            # Prepare to render.
+            #
+            
+            $this->stash( paginator =>
+                            $this->paginator( 'thread_tracker', $page,
+                                $count->{count}, $conf->{size} ) );
+            
+            $this->stash( threads   => $threads   );
+            $this->render;
         }
 
 1;

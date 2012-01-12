@@ -21,7 +21,7 @@ use Mojo::Base 'Mojolicious::Controller';
             my $textModel  = new Pony::Crud::MySQL('text');
             
             my $thread = $threadModel->read({ id => $id });
-            my $text = $textModel->read({ id => $thread->{textId} });
+            my $text   = $textModel  ->read({ id => $thread->{textId} });
             
             if ( $this->req->method eq 'POST' )
             {
@@ -140,7 +140,7 @@ use Mojo::Base 'Mojolicious::Controller';
             my $page = int ( $this->param('page') || 0 );
                $page = 1 if $page < 1;
             
-            my $conf = Pony::Stash->findOrCreate( thread => { size => 10 } );
+            my $conf = Pony::Stash->get('thread');
             
             # Quick and dirty :)
             #
