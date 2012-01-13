@@ -10,7 +10,7 @@
         <th></th>
     </tr>
     
-% for my $k ( sort { $b <=> $a } keys %$threads )
+% for my $k ( sort { $threads->{$b}->{latest} <=> $threads->{$a}->{latest} } keys %$threads )
 % {
 %     my $t = $threads->{$k};
 
@@ -23,7 +23,7 @@
         <%= $t->{count} %>
     </td>
     <td>
-        <%= render_datetime $t->{modifyAt} %>
+        <%= render_datetime $t->{latest} %>
     </td>
     <td>
         <%= render_user
