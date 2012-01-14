@@ -5,6 +5,7 @@ use Mojo::Base 'Mojolicious::Controller';
     use Spaghetti::Form::Registration;
     use Spaghetti::Form::User::ChangePassword;
     use Pony::Crud::MySQL;
+    use Pony::Stash;
     use Digest::MD5 "md5_hex";
 
     sub login
@@ -20,26 +21,44 @@ use Mojo::Base 'Mojolicious::Controller';
                 {
                     my $mail = $form->elements->{mail}->value;
                     my $pass = $form->elements->{password}->value;
-                    
-                    my $where= { 'mail' => $mail,
-                                 'password' => md5_hex( $mail . $pass ) };
-                    
                     my $model= new Pony::Crud::MySQL('user');
-                    my $user = $model->read( $where, ['id'] );
+                    my $conf = Pony::Stash->get('user');
+                    my $user = $model->read({mail => $mail}, ['id','attempts']);
+                    my $att  = $user->{attempts};
                     
-                    if ( $user->{id} > 0 )
+                    if ( $att > $conf->{attempts} )
                     {
-                        # All fine.
-                        #
-                        $model->update({accessAt => time}, {id => $user->{id}});
-                        
-                        $this->session( userId  => $user->{id} )
-                             ->redirect_to('user_home');
+                        $form->elements->{submit}->errors
+                                = ['Too much login attempts'];
                     }
                     else
                     {
-                        $form->elements->{password}->errors
-                                = ['Invalid mail or password'];
+                        my $where= { 'mail' => $mail,
+                                     'password' => md5_hex( $mail . $pass ) };
+                                     
+                        $user = $model->read( $where, ['id'] );
+                    
+                        if ( defined $user && $user->{id} > 0 )
+                        {
+                            # All fine.
+                            #
+                            $model->update
+                            ( { accessAt => time,
+                                attempts => 0     },
+                              { id => $user->{id} } );
+                            
+                            $this->session( userId  => $user->{id} )
+                                 ->redirect_to('user_home');
+                        }
+                        else
+                        {
+                            $model->update
+                            ( { attempts => ++$att },
+                              { mail     => $mail  } );
+                            
+                            $form->elements->{password}->errors
+                                    = ['Invalid mail or password'];
+                        }
                     }
                 }
             }

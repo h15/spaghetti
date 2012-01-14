@@ -1,3 +1,9 @@
+commit 8d6068d0a5313902548df3d12f4186e8469cb35a
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Jan 15 03:48:59 2012 +0600
+
+    add "change password" action for users
+
 commit abfb0a3c7dca3eff2954c13a47b77ada1209c212
 Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
 Date:   Sun Jan 15 01:56:03 2012 +0600

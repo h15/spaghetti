@@ -58,6 +58,13 @@ use Mojo::Base 'Mojolicious';
               }
             );
             
+            Pony::Stash->findOrCreate
+            ( user =>
+              {
+                attempts => 3,
+              }
+            );
+            
             ##
             ##  Plugins
             ##

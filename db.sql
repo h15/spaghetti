@@ -11,6 +11,7 @@ create table `user`
     `accessAt`  int(11) not null,
     `banId`     int(11) not null default 0,
     `banTime`   int(11) not null default 0,
+    `attempts`  int(1)  unsigned not null default 0,
     
     unique (`mail`),
     unique (`name`),
