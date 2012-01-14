@@ -1,3 +1,15 @@
+commit 1532bf944d6a043da9e47462e63b4bd870f4077c
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Fri Jan 13 23:01:08 2012 +0600
+
+    fix for tracker
+
+commit f05c0c4cf308a77b5bd90710d8a40f0cbeebd87a
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Fri Jan 13 03:35:20 2012 +0600
+
+    add gravatar support for user pics
+
 commit 8c8128a7f8784c5dacfdcbfaf8f2399b8e3bcae3
 Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
 Date:   Fri Jan 13 02:12:17 2012 +0600

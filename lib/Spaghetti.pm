@@ -50,6 +50,14 @@ use Mojo::Base 'Mojolicious';
               }
             );
             
+            Pony::Stash->findOrCreate
+            ( mail =>
+              {
+                from => 'no-reply@lorcode.org',
+                site => 'http://lorcode.org:3000',
+              }
+            );
+            
             ##
             ##  Plugins
             ##
