@@ -1,3 +1,9 @@
+commit abfb0a3c7dca3eff2954c13a47b77ada1209c212
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Jan 15 01:56:03 2012 +0600
+
+    add mail plugin. Does not tested by spaghetti but should work
+
 commit 1532bf944d6a043da9e47462e63b4bd870f4077c
 Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
 Date:   Fri Jan 13 23:01:08 2012 +0600

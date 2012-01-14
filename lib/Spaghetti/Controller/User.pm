@@ -3,6 +3,7 @@ use Mojo::Base 'Mojolicious::Controller';
     
     use Spaghetti::Form::Login;
     use Spaghetti::Form::Registration;
+    use Spaghetti::Form::User::ChangePassword;
     use Pony::Crud::MySQL;
     use Digest::MD5 "md5_hex";
 
@@ -106,7 +107,9 @@ use Mojo::Base 'Mojolicious::Controller';
     sub home
         {
             my $this = shift;
+            my $form = new Spaghetti::Form::User::ChangePassword;
             
+            $this->stash( form => $form->render() );
             $this->stash( user => $this->user );
             $this->render;
         }
@@ -128,6 +131,49 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->session( userId  => 0 )
                  ->redirect_to('thread_index');
+        }
+
+    sub changePassword
+        {
+            my $this = shift;
+            my $form = new Spaghetti::Form::User::ChangePassword;
+            
+            if ( $this->req->method eq 'POST' )
+            {
+                $form->data->{$_} = $this->param($_) for keys %{$form->elements};
+                
+                if ( $form->isValid )
+                {
+                    my $oldPass = $form->elements->{oldPassword}->value;
+                    my $newPass = $form->elements->{newPassword}->value;
+                    
+                    my $model = new Pony::Crud::MySQL('user');
+                    
+                    my $where = { 'id'       => $this->user->{id},
+                                  'password' => md5_hex( $this->user->{mail} . $oldPass ) };
+                    
+                    my $user = $model->read( $where, ['id'] );
+                    
+                    if ( exists $user->{id} && $user->{id} > 0 )
+                    {
+                        # All fine.
+                        #
+                        $model->update
+                        ( { password => md5_hex($this->user->{mail}.$newPass) },
+                          { id => $user->{id} } );
+                        
+                        $this->redirect_to('user_home');
+                    }
+                    else
+                    {
+                        $form->elements->{oldPassword}->errors
+                                = ['Invalid password'];
+                    }
+                }
+            }
+            
+            $this->stash( form => $form->render() );
+            $this->render;
         }
 
 1;

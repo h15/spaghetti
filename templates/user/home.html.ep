@@ -11,3 +11,7 @@
 
 % }
 </table>
+
+<h3><%=l 'Change password' %></h3>
+
+%=b $form
