@@ -181,7 +181,10 @@ use Mojo::Base 'Mojolicious::Controller';
                         # All fine.
                         #
                         $model->update
-                        ( { password => md5_hex($this->user->{mail}.$newPass) },
+                        ( {
+                            modifyAt => time,
+                            password => md5_hex($this->user->{mail}.$newPass)
+                          },
                           { id => $user->{id} } );
                         
                         $this->redirect_to('user_home');
@@ -231,6 +234,7 @@ use Mojo::Base 'Mojolicious::Controller';
                             #
                             $model->update
                             ( {
+                                modifyAt => time,
                                 password => md5_hex($mail.$pass),
                                 mail     => $mail
                               },

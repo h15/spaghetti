@@ -278,6 +278,9 @@ use Mojo::Base 'Mojolicious';
                 format_datetime => sub
                 {
                     my ( $self, $val ) = @_;
+                    
+                    return '' unless defined $val;
+                    
                     my ( $str ) = $this->getDateTime($val);
                     
                     return $str;
@@ -289,6 +292,8 @@ use Mojo::Base 'Mojolicious';
                 render_datetime => sub
                 {
                     my ($self, $val) = @_;
+                    
+                    return '' unless defined $val;
                     
                     my ($str,$year,$mon,$day,$hour,$min,$sec) = $this->getDateTime($val);
                     
@@ -307,7 +312,7 @@ use Mojo::Base 'Mojolicious';
                 {
                     my ($self, $val) = @_;
                     
-                    return 'never' if $val == 0;
+                    return ('never',0,0,0,0,0,0) if $val == 0;
                     
                     my ( $s, $mi, $h, $d, $mo, $y ) = localtime;
                     my ( $sec, $min, $hour, $day, $mon, $year )

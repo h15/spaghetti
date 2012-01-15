@@ -1,3 +1,9 @@
+commit e27d4225727553e1021509e9f0b4bd8bdc048bc6
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Mon Jan 16 02:35:32 2012 +0600
+
+    Add change mail support
+
 commit 346a6faa9d5faa4173bd77c76d47d86a8cd1385f
 Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
 Date:   Sun Jan 15 04:26:18 2012 +0600
