@@ -1,3 +1,9 @@
+commit 346a6faa9d5faa4173bd77c76d47d86a8cd1385f
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Jan 15 04:26:18 2012 +0600
+
+    add login attempt protection
+
 commit 8d6068d0a5313902548df3d12f4186e8469cb35a
 Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
 Date:   Sun Jan 15 03:48:59 2012 +0600

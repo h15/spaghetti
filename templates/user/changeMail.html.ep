@@ -1,0 +1,4 @@
+% layout 'default';
+% title l('Change mail');
+
+%=b $form

@@ -110,6 +110,9 @@ use Mojo::Base 'Mojolicious';
             $r->route('/user/change/password')
                 ->to('user#changePassword')
                   ->name('user_change_password');
+            $r->route('/user/change/mail')
+                ->to('user#changeMail')
+                  ->name('user_change_mail');
             
             $a->route('/user')
                 ->to('user#list')

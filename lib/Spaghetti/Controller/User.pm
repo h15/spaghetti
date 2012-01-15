@@ -4,6 +4,7 @@ use Mojo::Base 'Mojolicious::Controller';
     use Spaghetti::Form::Login;
     use Spaghetti::Form::Registration;
     use Spaghetti::Form::User::ChangePassword;
+    use Spaghetti::Form::User::ChangeMail;
     use Pony::Crud::MySQL;
     use Pony::Stash;
     use Digest::MD5 "md5_hex";
@@ -126,9 +127,11 @@ use Mojo::Base 'Mojolicious::Controller';
     sub home
         {
             my $this = shift;
-            my $form = new Spaghetti::Form::User::ChangePassword;
+            my $formPass = new Spaghetti::Form::User::ChangePassword;
+            my $formMail = new Spaghetti::Form::User::ChangeMail;
             
-            $this->stash( form => $form->render() );
+            $this->stash( formPass => $formPass->render() );
+            $this->stash( formMail => $formMail->render() );
             $this->stash( user => $this->user );
             $this->render;
         }
@@ -186,6 +189,64 @@ use Mojo::Base 'Mojolicious::Controller';
                     else
                     {
                         $form->elements->{oldPassword}->errors
+                                = ['Invalid password'];
+                    }
+                }
+            }
+            
+            $this->stash( form => $form->render() );
+            $this->render;
+        }
+
+    sub changeMail
+        {
+            my $this = shift;
+            my $form = new Spaghetti::Form::User::ChangeMail;
+            
+            if ( $this->req->method eq 'POST' )
+            {
+                $form->data->{$_} = $this->param($_) for keys %{$form->elements};
+                
+                if ( $form->isValid )
+                {
+                    my $pass = $form->elements->{password}->value;
+                    my $mail = $form->elements->{mail}->value;
+                    
+                    my $model = new Pony::Crud::MySQL('user');
+                    
+                    my $where = { 'id'       => $this->user->{id},
+                                  'password' => md5_hex( $this->user->{mail} . $pass ) };
+                    
+                    my $user = $model->read( $where, ['id'] );
+                    
+                    if ( exists $user->{id} && $user->{id} > 0 )
+                    {
+                        # Does this mail already use.
+                        #
+                        $user = $model->read({ mail => $mail }, ['id']);
+                        
+                        unless ( defined $user && $user->{id} > 0 )
+                        {
+                            # All fine.
+                            #
+                            $model->update
+                            ( {
+                                password => md5_hex($mail.$pass),
+                                mail     => $mail
+                              },
+                              { id => $this->user->{id} } );
+                            
+                            $this->redirect_to('user_home');
+                        }
+                        else
+                        {
+                            $form->elements->{mail}->errors
+                                    = ['E-mail is already used'];
+                        }
+                    }
+                    else
+                    {
+                        $form->elements->{password}->errors
                                 = ['Invalid password'];
                     }
                 }

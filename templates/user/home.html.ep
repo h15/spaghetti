@@ -12,6 +12,26 @@
 % }
 </table>
 
-<h3><%=l 'Change password' %></h3>
+<div>
+    <a href="#" class=showButton id="showButton-password">
+        <%=l 'Change password' %></a>
+    <a href="#" class="hidden hideButton" id="hideButton-password">
+        <%=l 'hide' %></a>
 
-%=b $form
+    <div class=hidden id="hiddenArea-password">
+        <h3><%=l 'Change password' %></h3>
+        %=b $formPass
+    </div>
+</div>
+
+<div>
+    <a href="#" class=showButton id="showButton-mail">
+        <%=l 'Change mail' %></a>
+    <a href="#" class="hidden hideButton" id="hideButton-mail">
+        <%=l 'hide' %></a>
+
+    <div class=hidden id="hiddenArea-mail">
+        <h3><%=l 'Change mail' %></h3>
+        %=b $formMail
+    </div>
+</div>
