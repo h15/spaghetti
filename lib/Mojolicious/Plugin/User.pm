@@ -90,12 +90,18 @@ use Pony::Object 'Mojolicious::Plugin';
                                           $self->req->url->base->port;
                     my $pic = sprintf '<img class=userpic_small src="http://www.gravatar.com/avatar/%s?d=%s&s=%s">',
                                       md5_hex(lc $user->{mail}), uri_escape($default), 64;
+                    my $url =
+                        (
+                            $user->{id} != $self->user->{id} ?
+                                $app->url_for( 'user_profile', id => $user->{id} ) :
+                                $app->url_for( 'user_home' )
+                        );
                     
                     return new Mojo::ByteStream
                     (
                         sprintf '<a href="%s" class="%s">%s%s</a>',
-                            $app->url_for( 'user_profile', id => $user->{id} ),
-                            ($user->{banId} ? 'banned' : 'active'), $pic, $user->{name}
+                            $url, ($user->{banId} ? 'banned' : 'active'),
+                            $pic, $user->{name}
                     );
                 }
             );

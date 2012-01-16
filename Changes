@@ -1,3 +1,9 @@
+commit f6bd680fcd172141945797077514a6b77a1cf736
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Mon Jan 16 02:50:57 2012 +0600
+
+    fix getDateTime helper for 0 input value. Change modify date on change password or mail
+
 commit e27d4225727553e1021509e9f0b4bd8bdc048bc6
 Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
 Date:   Mon Jan 16 02:35:32 2012 +0600
