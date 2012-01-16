@@ -1,8 +1,9 @@
 package Spaghetti::Controller::User;
 use Mojo::Base 'Mojolicious::Controller';
     
-    use Spaghetti::Form::Login;
-    use Spaghetti::Form::Registration;
+    use Spaghetti::Form::User::Login;
+    use Spaghetti::Form::User::LoginViaMail;
+    use Spaghetti::Form::User::Registration;
     use Spaghetti::Form::User::ChangePassword;
     use Spaghetti::Form::User::ChangeMail;
     use Pony::Crud::MySQL;
@@ -12,7 +13,7 @@ use Mojo::Base 'Mojolicious::Controller';
     sub login
         {
             my $this = shift;
-            my $form = new Spaghetti::Form::Login;
+            my $form = new Spaghetti::Form::User::Login;
             
             if ( $this->req->method eq 'POST' )
             {
@@ -71,7 +72,7 @@ use Mojo::Base 'Mojolicious::Controller';
     sub registration
         {
             my $this = shift;
-            my $form = new Spaghetti::Form::Registration;
+            my $form = new Spaghetti::Form::User::Registration;
             
             if ( $this->req->method eq 'POST' )
             {
@@ -258,6 +259,121 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->stash( form => $form->render() );
             $this->render;
+        }
+        
+    sub loginViaMail
+        {
+            my $this = shift;
+            my $form = new Spaghetti::Form::User::LoginViaMail;
+            
+            if ( $this->req->method eq 'POST' )
+            {
+                $form->data->{$_} = $this->param($_) for keys %{$form->elements};
+                
+                if ( $form->isValid )
+                {
+                    my $conf = Pony::Stash->get('user');
+                    my $mail = $form->elements->{mail}->value;
+                    my $user = Pony::Crud::MySQL
+                                 ->new('user')
+                                   ->read({mail => $mail}, ['id']);
+                
+                    if ( defined $user && $user->{id} > 0 )
+                    {
+                        # All fine.
+                        #
+                        my $key = md5_hex(rand);
+                        
+                        Pony::Crud::MySQL
+                          ->new('mailConfirm')
+                            ->create({ expair => time + $conf->{expairMail},
+                                       mail   => $mail, secret => $key  });
+                        
+                        # Send mail.
+                        #
+                        $this->mail( login => $mail => Login =>
+                                     { key  => $key, mail => $mail } );
+                        
+                        $form = new Spaghetti::Form::User::LoginViaMail;
+                        
+                        $this->done('Check your mail');
+                    }
+                    else
+                    {
+                        $form->elements->{mail}->errors = ['Invalid mail'];
+                    }
+                }
+            }
+            
+            $this->stash( form => $form->render() );
+            $this->render;
+        }
+
+    sub mailConfirm
+        {
+            my $this = shift;
+            my $mail = $this->param('mail');
+            my $key  = $this->param('key');
+            my $conf = Pony::Stash->get('user');
+            my $model= new Pony::Crud::MySQL('mailConfirm');
+               $mail = $model->read({ mail => $mail }, undef, 'mail');
+            
+            # Mail does not used for confirm.
+            #
+            if ( not defined $mail )
+            {
+                $this->error("Does not exist");
+                return;
+            }
+            
+            # Too much attempts.
+            #
+            elsif ( $mail->{attempts} > $conf->{mailAttempts} )
+            {
+                $this->error("Too much login attempts");
+                return;
+            }
+            
+            # Too slow.
+            #
+            elsif ( $mail->{expair} > time )
+            {
+                $this->error("Time expaired");
+                return;
+            }
+            
+            # Wrong secret.
+            #
+            elsif ( $mail->{secret} ne $key )
+            {
+                $model->update( {attempts => $mail->{attempts}+1},
+                                {mail     => $mail->{mail}      } );
+                
+                $this->error("Does not exist");
+                return;
+            }
+            
+            # All fine.
+            #
+            else
+            {
+                $model->update
+                ( { accessAt => time,
+                    attempts => 0 },
+                  { mail => $mail->{mail} } );
+                
+                my $user = Pony::Crud::MySQL
+                             ->new('user')
+                               ->read({ mail => $mail->{mail} }, ['id']);
+                
+                if ( defined $user )
+                {
+                    $this->session( userId  => $user->{id} )
+                         ->redirect_to('user_home');
+                }
+            }
+            
+            $this->render('user_loginViaMail');
         }
 
 1;

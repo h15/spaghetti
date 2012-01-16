@@ -14,26 +14,29 @@ use Mojo::Base 'Mojolicious::Plugin';
             $app->helper
             ( mail => sub
                 {
-                    # It will bad, if you does not
-                    # define $type and $mail.
+                    # It will be bad, if you does not
+                    # define $type or $mail.
                     
                     my ( $self, $type, $mail, $title, $data ) = @_;
                     
                     $title ||= '';
                     $data  ||= {};
 
-                    $self->stash(
+                    $self->stash
+                    (
                         %$data,
                         title => $title,
                         host  => $conf->{site},
                     );
                     
-                    my $html = $self->render (
-                        partial    => 1,
-                        template   => "mail/$type",
-                    );
+                    my $html = $self->render
+                               (
+                                   partial    => 1,
+                                   template   => "mail/$type",
+                               );
                     
-                    MIME::Lite->new (
+                    MIME::Lite->new
+                    (
                         From    => $conf->{from},
                         To      => $mail,
                         Subject => $title,

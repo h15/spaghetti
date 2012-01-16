@@ -3,7 +3,10 @@
 
 %=b $form
 
-
+<div>
+    <a href="<%= url_for('user_loginViaMail')
+            %>"><%=l 'Login via mail' %></a>
+    |
     <a href="<%= url_for('user_registration')
             %>"><%=l 'Registration' %></a>
-
+</div>

@@ -1,9 +1,9 @@
-package Spaghetti::Form::Login;
+package Spaghetti::Form::User::LoginViaMail;
 use Pony::Object qw/Pony::View::Form/;
 
-    has action => '/user/login';
+    has action => '/user/login/mail';
     has method => 'post';
-    has id     => 'form-login';
+    has id     => 'form-login-via-mail';
 
     sub create
         {
@@ -18,19 +18,6 @@ use Pony::Object qw/Pony::View::Form/;
                     validators  =>
                     {
                         Like    => qr/[\.\-\w\d]+\@(?:[\.\-\w\d]+\.)+[\w]{2,5}/,
-                    }
-                }
-            );
-            
-            $this->addElement
-            (
-                password => password =>
-                {
-                    required    => 1,
-                    label       => 'Password',
-                    validators  =>
-                    {
-                        Length  => [ 8, 32 ],
                     }
                 }
             );

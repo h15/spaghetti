@@ -61,7 +61,9 @@ use Mojo::Base 'Mojolicious';
             Pony::Stash->findOrCreate
             ( user =>
               {
-                attempts => 3,
+                attempts        => 3,
+                mailAttempts    => 3,
+                expairMail      => 86400,
               }
             );
             
@@ -72,6 +74,7 @@ use Mojo::Base 'Mojolicious';
             $this->plugin('user');
             $this->plugin('I18N');
             $this->plugin('access');
+            $this->plugin('message');
             
             ##
             ##  Routes
@@ -101,6 +104,9 @@ use Mojo::Base 'Mojolicious';
             $r->route('/user/login')
                 ->to('user#login')
                   ->name('user_login');
+            $r->route('/user/login/mail')
+                ->to('user#loginViaMail')
+                  ->name('user_loginViaMail');
             $r->route('/user/logout')
                 ->to('user#logout')
                   ->name('user_logout');

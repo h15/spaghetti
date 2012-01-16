@@ -1,0 +1,4 @@
+% layout 'default';
+% title l('Login via mail');
+
+%=b $form
