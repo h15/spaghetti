@@ -1,3 +1,21 @@
+commit 842388b6d88fa762b37bb843431b60bc3dce40c0
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Tue Jan 17 01:18:12 2012 +0600
+
+    small fix for mail
+
+commit bc4a2dcbafbfda5aa0cfd085ffe1541e86d7c310
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Tue Jan 17 01:02:31 2012 +0600
+
+    fix Message plugin, rm primary key from mailConfirm
+
+commit 30c1b0464bbf1190aaa937015a6c3e3aa8695343
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Tue Jan 17 00:23:18 2012 +0600
+
+    forgot template for mail
+
 commit 3f27bee56876fa9a229ec5739c13cb5e70b55a10
 Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
 Date:   Tue Jan 17 00:16:53 2012 +0600
