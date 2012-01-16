@@ -361,7 +361,10 @@ use Mojo::Base 'Mojolicious::Controller';
             else
             {
                 $model->update({attempts => 0}, {mail => $mail->{mail}});
-                $userModel->update({accessAt => time}, {mail => $mail->{mail}});
+                $userModel->update
+                ({ attempts => 0,
+                   accessAt => time },
+                 { mail => $mail->{mail} });
                 
                 my $user = $userModel->read({ mail => $mail->{mail} }, ['id']);
                 
