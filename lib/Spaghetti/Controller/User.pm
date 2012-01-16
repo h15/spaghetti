@@ -316,7 +316,7 @@ use Mojo::Base 'Mojolicious::Controller';
             my $key  = $this->param('key');
             my $conf = Pony::Stash->get('user');
             my $model= new Pony::Crud::MySQL('mailConfirm');
-               $mail = $model->read({ mail => $mail }, undef, 'mail');
+               $mail = $model->list({ mail => $mail },undef,'mail',undef,0,1);
             
             # Mail does not used for confirm.
             #

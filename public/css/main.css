@@ -236,6 +236,8 @@
     {
         text-align:center;
         margin: 0px;
+        width:800px;
+        margin:0px auto;
     }
 
     .info

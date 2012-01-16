@@ -76,6 +76,9 @@
       <h1><%= title %></h1>
     </header>
     
+    % my $messageType = stash('messageType');
+    % my $message     = stash('message');
+    %
     % if ( defined $messageType )
     % {
         <div class="<%= $messageType %>">
