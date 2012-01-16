@@ -323,7 +323,6 @@ use Mojo::Base 'Mojolicious::Controller';
             if ( not defined $mail )
             {
                 $this->error("Does not exist");
-                return;
             }
             
             # Too much attempts.
@@ -331,7 +330,6 @@ use Mojo::Base 'Mojolicious::Controller';
             elsif ( $mail->{attempts} > $conf->{mailAttempts} )
             {
                 $this->error("Too much login attempts");
-                return;
             }
             
             # Too slow.
@@ -339,7 +337,6 @@ use Mojo::Base 'Mojolicious::Controller';
             elsif ( $mail->{expair} > time )
             {
                 $this->error("Time expaired");
-                return;
             }
             
             # Wrong secret.
@@ -350,7 +347,6 @@ use Mojo::Base 'Mojolicious::Controller';
                                 {mail     => $mail->{mail}      } );
                 
                 $this->error("Does not exist");
-                return;
             }
             
             # All fine.
@@ -368,6 +364,10 @@ use Mojo::Base 'Mojolicious::Controller';
                 
                 if ( defined $user )
                 {
+                    Pony::Crud::MySQL
+                             ->new('user')
+                               ->delete({ mail => $mail->{mail} });
+                    
                     $this->session( userId  => $user->{id} )
                          ->redirect_to('user_home');
                 }

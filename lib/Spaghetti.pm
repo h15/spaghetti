@@ -75,6 +75,7 @@ use Mojo::Base 'Mojolicious';
             $this->plugin('I18N');
             $this->plugin('access');
             $this->plugin('message');
+            $this->plugin('mail');
             
             ##
             ##  Routes
@@ -107,6 +108,9 @@ use Mojo::Base 'Mojolicious';
             $r->route('/user/login/mail')
                 ->to('user#loginViaMail')
                   ->name('user_loginViaMail');
+            $r->route('/user/login/mail/confirm')
+                ->to('user#mailConfirm')
+                  ->name('user_mailConfirm');
             $r->route('/user/logout')
                 ->to('user#logout')
                   ->name('user_logout');

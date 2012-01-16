@@ -76,6 +76,13 @@
       <h1><%= title %></h1>
     </header>
     
+    % if ( defined $messageType )
+    % {
+        <div class="<%= $messageType %>">
+            <%=l $message %>
+        </div>
+    % }
+    
     <article class=content>
         <%= content %>
     </article>

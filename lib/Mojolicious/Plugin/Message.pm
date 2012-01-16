@@ -2,7 +2,7 @@ package Mojolicious::Plugin::Message;
 use Mojo::Base 'Mojolicious::Plugin';
 use Carp;
 
-our $VERSION = 0.1;
+our $VERSION = 0.000002;
 
 sub register {
     my ( $self, $app ) = @_;
@@ -18,35 +18,29 @@ sub register {
     $app->helper(
         # Log and show error.
         error => sub {
-            my ($self, $message, $format) = @_;
+            my ($self, $message) = @_;
             $app->log->error($message);
-            $self->msg( error => $format => { message => $message } );
+            $self->msg( error => $message );
         }
     );
     
     $app->helper(
         # Show "Done", be nice.
         done => sub {
-            my ($self, $message, $format) = @_;
-            $self->msg( done => $format => { message => $message } );
+            my ($self, $message) = @_;
+            $self->msg( done => $message );
         }
     );
     
     $app->helper(
         # Do not use it directly.
         msg => sub {
-            # For example: (self, 'error', 'html',
+            # For example: (self, 'error',
             # { message => "Die, die, dive with me!" }).
-            my ($self, $template, $format, $data) = @_;
-            $format ||= 'html';
+            my ($self, $type, $data) = @_;
             
-            $self->stash(
-                %$data, 
-                title => $template
-            );
-            
-            $self->render(template => "message/$template");
-            $self->rendered(200);
+            $self->stash( messageType => $type );
+            $self->stash( message => $data );
         }
     );
 }

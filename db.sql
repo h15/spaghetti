@@ -25,7 +25,7 @@ INSERT INTO `user` (`id`, `mail`, `password`, `name`, `createAt`, `modifyAt`, `a
 create table `mailConfirm`
 (
     `expair`    int(11) unsigned not null default 0,
-    `mail`      varchar(255) character set utf8 collate utf8_general_ci not null primary key,
+    `mail`      varchar(255) character set utf8 collate utf8_general_ci not null,
     `secret`    varchar(32) character set ascii collate ascii_general_ci not null,
     `attempts`  int(1) unsigned not null default 0
 );

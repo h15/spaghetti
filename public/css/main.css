@@ -217,3 +217,47 @@
         float:left;
         margin:0px 2px;
     }
+    
+    /*** Messages ***/
+
+    .done, .error, .info, .rounded
+    {
+        padding: 10px;
+        padding-right: 15px;
+        background:#F2F1F0;
+        border: 1px solid #ddd;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        -khtml-border-radius: 5px;
+    }
+
+    .done, .error, .info
+    {
+        text-align:center;
+        margin: 0px;
+    }
+
+    .info
+    {
+        background: #ffd;
+        border: 1px solid #fff7dd;
+    }
+
+    .error
+    {
+        background: #fee;
+        border: 1px solid #fcc;
+        margin: 0px auto;
+    }
+
+    .done
+    {
+        background: #efe;
+        border: 1px solid #cfc;
+    }
+
+    .hidden
+    {
+        display:none;
+    }
