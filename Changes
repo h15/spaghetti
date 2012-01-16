@@ -1,3 +1,21 @@
+commit 1c82cfb44e6802441981c8b6978405f22204ec34
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Tue Jan 17 00:16:17 2012 +0600
+
+    add login via mail actions
+
+commit 6719b0b92f6e70f773c1be3ed347a7cd01654b3a
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Tue Jan 17 00:12:40 2012 +0600
+
+    add Message plugin
+
+commit 3186107d1dca508eda8be89fae3b28a5601d8f16
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Mon Jan 16 22:32:53 2012 +0600
+
+    small fix in user helper (href=home when look at self)
+
 commit f6bd680fcd172141945797077514a6b77a1cf736
 Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
 Date:   Mon Jan 16 02:50:57 2012 +0600
