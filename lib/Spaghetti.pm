@@ -1,7 +1,7 @@
 package Spaghetti;
 use Mojo::Base 'Mojolicious';
     
-    our $VERSION = '0.000003';
+    our $VERSION = '0.000004';
     our $COMMIT  = '';
     
     use Pony::Stash;

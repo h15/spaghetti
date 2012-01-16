@@ -286,7 +286,7 @@ use Mojo::Base 'Mojolicious::Controller';
                         
                         Pony::Crud::MySQL
                                  ->new('mailConfirm')
-                                   ->delete({ mail => $mail->{mail} });
+                                   ->delete({ mail => $mail });
                                
                         Pony::Crud::MySQL
                           ->new('mailConfirm')
@@ -322,6 +322,8 @@ use Mojo::Base 'Mojolicious::Controller';
             my $model= new Pony::Crud::MySQL('mailConfirm');
                $mail = [ $model->list( { mail => $mail },
                                        undef,'mail',undef,0,1 ) ]->[0];
+                                       
+            my $userModel = new Pony::Crud::MySQL('user');
             
             # Mail does not used for confirm.
             #
@@ -358,20 +360,14 @@ use Mojo::Base 'Mojolicious::Controller';
             #
             else
             {
-                $model->update
-                ( { accessAt => time,
-                    attempts => 0 },
-                  { mail => $mail->{mail} } );
+                $model->update({attempts => 0}, {mail => $mail->{mail}});
+                $userModel->update({accessAt => time}, {mail => $mail->{mail}});
                 
-                my $user = Pony::Crud::MySQL
-                             ->new('user')
-                               ->read({ mail => $mail->{mail} }, ['id']);
+                my $user = $userModel->read({ mail => $mail->{mail} }, ['id']);
                 
                 if ( defined $user )
                 {
-                    Pony::Crud::MySQL
-                             ->new('mailConfirm')
-                               ->delete({ mail => $mail->{mail} });
+                    $model->delete({ mail => $mail->{mail} });
                     
                     $this->session( userId  => $user->{id} )
                          ->redirect_to('user_home');
