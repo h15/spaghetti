@@ -285,6 +285,10 @@ use Mojo::Base 'Mojolicious::Controller';
                         my $key = md5_hex(rand);
                         
                         Pony::Crud::MySQL
+                                 ->new('mailConfirm')
+                                   ->delete({ mail => $mail->{mail} });
+                               
+                        Pony::Crud::MySQL
                           ->new('mailConfirm')
                             ->create({ expair => time + $conf->{expairMail},
                                        mail   => $mail, secret => $key  });
@@ -316,7 +320,8 @@ use Mojo::Base 'Mojolicious::Controller';
             my $key  = $this->param('key');
             my $conf = Pony::Stash->get('user');
             my $model= new Pony::Crud::MySQL('mailConfirm');
-               $mail = $model->list({ mail => $mail },undef,'mail',undef,0,1);
+               $mail = [ $model->list( { mail => $mail },
+                                       undef,'mail',undef,0,1 ) ]->[0];
             
             # Mail does not used for confirm.
             #
@@ -334,7 +339,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             # Too slow.
             #
-            elsif ( $mail->{expair} > time )
+            elsif ( $mail->{expair} < time )
             {
                 $this->error("Time expaired");
             }
@@ -365,7 +370,7 @@ use Mojo::Base 'Mojolicious::Controller';
                 if ( defined $user )
                 {
                     Pony::Crud::MySQL
-                             ->new('user')
+                             ->new('mailConfirm')
                                ->delete({ mail => $mail->{mail} });
                     
                     $this->session( userId  => $user->{id} )
@@ -373,6 +378,9 @@ use Mojo::Base 'Mojolicious::Controller';
                 }
             }
             
+            my $form = new Spaghetti::Form::User::LoginViaMail;
+            
+            $this->stash( form => $form->render() );
             $this->render('user_loginViaMail');
         }
 
