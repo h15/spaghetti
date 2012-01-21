@@ -101,6 +101,7 @@
                 <acronym title="<%= $Spaghetti::COMMIT %>">
                     <%= $Spaghetti::VERSION %>
                 </acronym><br>
+                Built with <a href="http://perl.org/">Perl</a><br>
                 Powered by <a href="http://lorcode.org/">LorCode</a>
             </small>
     </footer>

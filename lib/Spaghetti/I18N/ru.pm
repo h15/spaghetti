@@ -1,6 +1,6 @@
 package Spaghetti::I18N::ru;
 use base 'Spaghetti::I18N';
-
+use Pony::View::Form::Translate;
 use Encode 'decode';
 
 our %Lexicon = (
@@ -97,9 +97,31 @@ our %Lexicon = (
     'Size'          => 'Размер',
     'Time'          => 'Время',
     'Tracker'       => 'Трекер',
+    'Login via mail'=> 'Войти через почту',
 );
 
 $Lexicon{$_} = decode('utf8', $Lexicon{$_}) for keys %Lexicon;
+
+my $t = new Pony::View::Form::Translate('ru');
+$t->Lexicon->{ru} = 
+    {
+        'Value must have %s like %s' => 'Значение должно содержать %s, например, %s',
+        'special chars' => 'специальные символы',
+        'digits' => 'цифры',
+        'latin chars in lower case' => 'латинские символы в нижнем регистре',
+        'latin chars in upper case' => 'латинские символы в верхнем регистре',
+        'Length must be between %d and %d' => 'Длина должна быть между %d и %d',
+        'Does not valid required format' => 'Неправильный формат',
+        'Password' => 'Пароль',
+        'Invalid mail or password' => 'Неправильный E-mail или пароль',
+        'Too much login attempts' => 'Слишком много неудачных попыток входа',
+        'Name' => 'Имя',
+        'Visible' => 'Показать',
+        'I`m not bot' => 'He бoт',
+    };
+
+$t->Lexicon->{ru}->{$_} =
+        decode('utf8', $t->Lexicon->{ru}->{$_}) for keys %{ $t->Lexicon->{ru} };
 
 1;
 

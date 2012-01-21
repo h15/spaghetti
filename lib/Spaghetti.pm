@@ -3,7 +3,7 @@ use Mojo::Base 'Mojolicious';
     
     our $VERSION = '0.000004';
     our $COMMIT  = '';
-    
+    use lib '../pony/lib';
     use Pony::Stash;
     use Pony::Crud::Dbh::MySQL;
     use Spaghetti::SQL;

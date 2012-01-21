@@ -1,6 +1,8 @@
 package Spaghetti::Form::Thread::Create;
 use Pony::Object qw/Pony::View::Form/;
 
+    use Spaghetti::Form::Decorator;
+
     has action => '/thread/create';
     has method => 'post';
     has id     => 'form-thread-create';
@@ -8,6 +10,7 @@ use Pony::Object qw/Pony::View::Form/;
     sub create
         {
             my $this = shift;
+               $this->decorator = new Spaghetti::Form::Decorator;
             
             $this->addElement
             (

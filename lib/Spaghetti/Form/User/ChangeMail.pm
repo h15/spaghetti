@@ -1,13 +1,16 @@
 package Spaghetti::Form::User::ChangeMail;
 use Pony::Object qw/Pony::View::Form/;
+    
+    use Spaghetti::Form::Decorator;
 
     has action => '/user/change/mail';
     has method => 'post';
     has id     => 'form-user-change-mail';
-
+    
     sub create
         {
             my $this = shift;
+               $this->decorator = new Spaghetti::Form::Decorator;
             
             $this->addElement
             (

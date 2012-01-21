@@ -263,3 +263,32 @@
     {
         display:none;
     }
+    
+    .pony-form .error
+    {
+        background:none;
+        padding:0px;
+        margin:0px;
+        color:#e88;
+        text-align:center;
+        width:280px;
+        font-size:11px;
+    }
+    
+    .pony-form ul.error
+    {
+        list-style:none;
+        text-align:center;
+        width:280px;
+        font-size:11px;
+    }
+    
+    .pony-form
+    {
+        width:280px;
+    }
+    
+    .pony-form input
+    {
+        float:right;
+    }

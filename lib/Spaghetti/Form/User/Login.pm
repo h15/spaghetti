@@ -1,5 +1,7 @@
 package Spaghetti::Form::User::Login;
 use Pony::Object qw/Pony::View::Form/;
+    
+    use Spaghetti::Form::Decorator;
 
     has action => '/user/login';
     has method => 'post';
@@ -8,6 +10,7 @@ use Pony::Object qw/Pony::View::Form/;
     sub create
         {
             my $this = shift;
+               $this->decorator = new Spaghetti::Form::Decorator;
             
             $this->addElement
             (
