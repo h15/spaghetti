@@ -1,3 +1,9 @@
+commit fa58a37fc5a14f3c025a68dd2deb42f8c33d407c
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sat Jan 21 17:27:55 2012 +0600
+
+    add custom decorator and forms` translation
+
 commit 85e91783cb83ff4f315f4858afc7f739a745b57d
 Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
 Date:   Tue Jan 17 02:01:19 2012 +0600
