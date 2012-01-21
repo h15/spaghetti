@@ -145,3 +145,12 @@ create table `tag`
     
     unique(`url`)
 );
+
+create table `news`
+(
+    `threadId`  int(11) unsigned not null,
+    `legend`    varchar(64) character set utf8 collate utf8_general_ci not null,
+    `author`    int(11) unsigned not null,
+    
+    FOREIGN KEY (`threadId`)  REFERENCES `thread`(`id`)
+);
