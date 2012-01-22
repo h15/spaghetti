@@ -105,19 +105,21 @@ $Lexicon{$_} = decode('utf8', $Lexicon{$_}) for keys %Lexicon;
 my $t = new Pony::View::Form::Translate('ru');
 $t->Lexicon->{ru} = 
     {
-        'Value must have %s like %s' => 'Значение должно содержать %s, например, %s',
+        'Value must have %s like %s'        => 'Значение должно содержать %s, например, %s',
+        'latin chars in lower case'         => 'латинские символы в нижнем регистре',
+        'latin chars in upper case'         => 'латинские символы в верхнем регистре',
+        'Length must be between %d and %d'  => 'Длина должна быть между %d и %d',
+        'Does not valid required format'    => 'Неправильный формат',
+        'Invalid mail or password'          => 'Неправильный E-mail или пароль',
+        'Too much login attempts'           => 'Слишком много неудачных попыток входа',
         'special chars' => 'специальные символы',
-        'digits' => 'цифры',
-        'latin chars in lower case' => 'латинские символы в нижнем регистре',
-        'latin chars in upper case' => 'латинские символы в верхнем регистре',
-        'Length must be between %d and %d' => 'Длина должна быть между %d и %d',
-        'Does not valid required format' => 'Неправильный формат',
-        'Password' => 'Пароль',
-        'Invalid mail or password' => 'Неправильный E-mail или пароль',
-        'Too much login attempts' => 'Слишком много неудачных попыток входа',
-        'Name' => 'Имя',
-        'Visible' => 'Показать',
-        'I`m not bot' => 'He бoт',
+        'digits'        => 'цифры',
+        'Password'      => 'Пароль',
+        'Name'          => 'Имя',
+        'Visible'       => 'Показать',
+        'I`m not bot'   => 'He бoт',
+        'Old password'  => 'Старый',
+        'New password'  => 'Новый',
     };
 
 $t->Lexicon->{ru}->{$_} =
@@ -129,7 +131,7 @@ __END__
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2011, Georgy Bazhukov.
+Copyright (C) 2011 - 2012, Georgy Bazhukov.
 
 This program is free software, you can redistribute it and/or modify it under
 the terms of the Artistic License version 2.0.

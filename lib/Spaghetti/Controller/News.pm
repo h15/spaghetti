@@ -97,6 +97,7 @@ use Mojo::Base 'Mojolicious::Controller';
                 $this->paginator( 'news_list_p', $page, $count, $conf->{size} ) );
             
             $this->stash( newsList => $news );
+            $this->render;
         }
 
 1;

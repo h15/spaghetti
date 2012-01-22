@@ -1,0 +1,4 @@
+% layout 'default';
+% title l('Create news from topic');
+
+%=b $form

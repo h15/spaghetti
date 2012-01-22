@@ -39,23 +39,12 @@
                               banId => $t->{banId} }) %>
         </div>
     
-        % if ( $t->{userId} == user->{id} )
-        % {
         <div class="controlls">
             <div class="editThread">
-    
-                % if ( defined $t->{title} )
-                % {
-                <a href="<%= url_for('topic_edit', id => $t->{id} )
+                <a href="<%= url_for('admin_thread_edit', id => $t->{id} )
                         %>"><%=l 'edit' %></a>
-                % }else {
-                <a href="<%= url_for('thread_edit', id => $t->{id} )
-                        %>"><%=l 'edit' %></a>
-                % }
-            
             </div>
         </div>
-        % }
         
         <div class=cb></div>
     </nav>

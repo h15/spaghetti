@@ -194,6 +194,29 @@ use Mojo::Base 'Mojolicious';
                 ->to('thread#show')
                   ->name('admin_thread_show');
             
+            # News
+            #
+            
+            $r->route('/news/:url')
+                ->to('news#show')
+                  ->name('news_show');
+            $r->route('/news/:url/page/:page', page => qr/\d*/)
+                ->to('news#show')
+                  ->name('news_show_p');
+            $r->route('/news/page/:page', page => qr/\d*/)
+                ->to('news#list')
+                  ->name('news_list');
+            $r->route('/news')
+                ->to('news#list')
+                  ->name('news_index');
+            
+            $a->route('/news/from/topic')
+                ->to('news#topicToNews')
+                  ->name('admin_news_topicToNews');
+            $a->route('/news/edit')
+                ->to('news#edit')
+                  ->name('admin_news_edit');
+            
             # Groups
             #
             

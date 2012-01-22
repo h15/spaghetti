@@ -1,0 +1,4 @@
+% layout 'default';
+% title l('Edit news');
+
+%=b $form

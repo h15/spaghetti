@@ -1,3 +1,9 @@
+commit c0c53ec543c5db4ea756814e805d0b784908e4ca
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Jan 22 01:10:36 2012 +0600
+
+    start News system
+
 commit ab540b23ceb953b500aa4b64ba78499bf30dd42d
 Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
 Date:   Sat Jan 21 17:51:35 2012 +0600

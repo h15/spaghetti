@@ -1,0 +1,140 @@
+package Spaghetti::Controller::Admin::News;
+use Mojo::Base 'Mojolicious::Controller';
+    
+    use Spaghetti::Form::Admin::News::FromTopic;
+    use Spaghetti::Form::Admin::News::Edit;
+    use Spaghetti::Util;
+    use Pony::Crud::Dbh::MySQL;
+    use Pony::Crud::MySQL;
+    use Pony::Stash;
+    
+    sub topicToNews
+        {
+            my $this = shift;
+            my $form = new Spaghetti::Form::Admin::News::FromTopic;
+            my $id   = $this->param('id');
+            
+            my $thModel = new Pony::Crud::MySQL('thread');
+            my $teModel = new Pony::Crud::MySQL('text');
+            my $toModel = new Pony::Crud::MySQL('topic');
+            
+            # Create news from thread.
+            #
+            if ( $this->req->method eq 'POST' )
+            {
+                $form->data->{$_} = $this->param($_) for keys %{$form->elements};
+                
+                if ( $form->isValid )
+                {
+                    my $title = $form->elements->{title} ->value;
+                    my $url   = $form->elements->{url}   ->value;
+                    my $legend= $form->elements->{legend}->value;
+                    
+                    my $thread = $thModel->read({id => $id});
+                    
+                    $thModel->update({ modify => time,
+                                       userId => $this->user->{id} },
+                                     { id => $id });
+                    $toModel->update({ title => $title,
+                                       url   => $url  },
+                                     { threadId => $id });
+                    
+                    Pony::Crud::MySQL->new('news')->create
+                    ({
+                        threadId => $id,
+                        legend   => $legend,
+                        author   => $thread->{userId}
+                    });
+                    
+                    $this->redirect_to( admin_news_edit => id => $id);
+                }
+            }
+            
+            # Fill form and show it.
+            #
+            my $thread = $thModel->read({id => $id});
+            my $text   = $teModel->read({id => $thread->{textId}});
+            my $topic  = [ $toModel->list
+                            ({threadId => $id},undef,'threadId',undef,0,1) ]->[0];
+            
+            %$thread = (%$text, %$topic, %$thread);
+            
+            $form->elements->{$_}->value = $thread->{$_} for keys %{$form->elements};
+            
+            $this->stash( form  => $form->render() );
+            $this->render('admin/news/topicToNews');
+        }
+    
+    sub edit
+        {
+            my $this = shift;
+            my $form = new Spaghetti::Form::Admin::News::Edit;
+            my $id   = $this->param('id');
+            
+            my $thModel = new Pony::Crud::MySQL('thread');
+            my $teModel = new Pony::Crud::MySQL('text');
+            my $toModel = new Pony::Crud::MySQL('topic');
+            my $neModel = new Pony::Crud::MySQL('news');
+            
+            if ( $this->req->method eq 'POST' )
+            {
+                $form->data->{$_} = $this->param($_) for keys %{$form->elements};
+                
+                if ( $form->isValid )
+                {
+                    my $title = $form->elements->{title} ->value;
+                    my $url   = $form->elements->{url}   ->value;
+                    my $legend= $form->elements->{legend}->value;
+                    my $text  = $form->elements->{text}  ->value;
+                    
+                    my $thread  = $thModel->read({id => $id});
+                    my $oldText = $teModel->read({id => $thread->{textId}});
+                    
+                    # If text changed - create new record.
+                    #
+                    my $textId = $oldText->{text} ne $text ?
+                                    $teModel->create
+                                    ({
+                                        text => Spaghetti::Util::escape($text),
+                                        threadId => $id
+                                    }):
+                                    $thread->{textId};
+                    
+                    $thModel->update({textId => $textId} => {id => $id});
+                    $neModel->update({legend => $legend} => {threadId => $id});
+                    
+                    $toModel->update({ title => $title, url => $url },
+                                     { threadId => $id });
+                    
+                    $this->redirect_to( news_show => url => $url );
+                }
+            }
+            
+            # Fill form and show it.
+            #
+            my $topic  =[$toModel->list({id => $id},undef,'threadId',undef,0,1)]->[0];
+            my $thread = $thModel->read({id => $topic->{threadId}});
+            my $text   = $teModel->read({id => $thread->{textId}});
+            my $news   = $neModel->read({id => $thread->{id}});
+            
+            %$thread = ( %$text, %$topic, $news, %$thread );
+            
+            $form->elements->{$_}->value = $thread->{$_} for keys %{$form->elements};
+            
+            $this->stash( form  => $form->render() );
+            $this->render('admin/news/edit');
+        }
+
+1;
+
+__END__
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2012, Georgy Bazhukov.
+
+This program is free software, you can redistribute it and/or modify it under
+the terms of the Artistic License version 2.0.
+
+=cut
+
