@@ -7,61 +7,6 @@ use Mojo::Base 'Mojolicious::Controller';
     use Pony::Crud::Dbh::MySQL;
     use Pony::Crud::MySQL;
     use Pony::Stash;
-    
-    sub show
-        {
-            my $this = shift;
-            my $url  = $this->param('url');
-            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
-            
-            # Paginator
-            #
-            
-            my $page = int ( $this->param('page') || 0 );
-               $page = 1 if $page < 1;
-            
-            my $conf = Pony::Stash->get('thread');
-            
-            # Get news and comments.
-            #
-            
-            my $sth = $dbh->prepare( $Spaghetti::SQL::news->{show} );
-               $sth->execute( $this->user->{id}, $url, $this->user->{id},
-                                     ($page-1) * $conf->{size}, $conf->{size} );
-            
-            my $comments = $sth->fetchall_hashref('id');
-            my ( $news ) = grep { $_->{url} eq $url } values %$comments;
-            
-            $this->redirect_to('404') unless defined $news;
-            
-            delete $comments->{ $news->{id} };
-            
-            # Get count of news' comments.
-            #
-            
-            $sth = $dbh->prepare( $Spaghetti::SQL::news->{count} );
-            $sth->execute( $news->{id}, $this->user->{id} );
-                                     
-            my $count = $sth->fetchrow_hashref();
-            
-            # Prepare to render.
-            #
-            
-            my $form = new Spaghetti::Form::Thread::Create;
-            my $topicForm = new Spaghetti::Form::Topic::Create;
-            
-            $this->stash( create => $this->access($news->{threadId}, 'c') );
-            
-            $this->stash( paginator =>
-                            $this->paginator( 'news_show_p', $page,
-                                $count->{count}, $conf->{size}, [ url => $url ] ) );
-            
-            $this->stash( comments  => $comments  );
-            $this->stash( news      => $news      );
-            $this->stash( form      => $form      );
-            $this->stash( topicForm => $topicForm );
-            $this->render;
-        }
 
     sub list
         {
@@ -82,7 +27,7 @@ use Mojo::Base 'Mojolicious::Controller';
             my $sth = $dbh->prepare( $Spaghetti::SQL::news->{list} );
                $sth->execute( ($page-1) * $conf->{size}, $conf->{size} );
                                      
-            my $news = $sth->fetchall_hashref('threadId');
+            my $news = $sth->fetchall_hashref('id');
             
             # Get size of news list.
             #

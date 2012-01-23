@@ -32,6 +32,9 @@
   <body>
     <nav class=overall>
         <div class="alignleft">
+            <a href="/news"><%=l 'News list' %></a>
+        </div>
+        <div class="alignleft">
             <a href="/thread"><%=l 'Forum' %></a>
         </div>
         <div class="alignleft">

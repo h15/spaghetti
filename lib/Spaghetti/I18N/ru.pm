@@ -98,6 +98,14 @@ our %Lexicon = (
     'Time'          => 'Время',
     'Tracker'       => 'Трекер',
     'Login via mail'=> 'Войти через почту',
+    'Responses to'  => 'Ответы на',
+    'News list'     => 'Новости',
+    'logout'        => 'выйти',
+    'Description'   => 'Описание',
+    'Change password' => 'Изменить пароль',
+    'Change mail'   => 'Изменить почту',
+    'Prioritet'     => 'Приоритет',
+    'Create new group' => 'Создать новую группу',
 );
 
 $Lexicon{$_} = decode('utf8', $Lexicon{$_}) for keys %Lexicon;

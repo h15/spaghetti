@@ -1,7 +1,7 @@
 package Spaghetti;
 use Mojo::Base 'Mojolicious';
     
-    our $VERSION = '0.000005';
+    our $VERSION = '0.000006';
     our $COMMIT  = '';
     #use lib '../pony/lib';
     use Pony::Stash;
@@ -45,6 +45,13 @@ use Mojo::Base 'Mojolicious';
             
             Pony::Stash->findOrCreate
             ( thread =>
+              {
+                size => 20,
+              }
+            );
+            
+            Pony::Stash->findOrCreate
+            ( news =>
               {
                 size => 20,
               }

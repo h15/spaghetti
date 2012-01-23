@@ -7,10 +7,10 @@
 %#
 
 %
-% if ( exists $threads->{$id} )
+% if ( defined $topic )
 % {
 
-%     my $t = $threads->{$id};
+%     my $t = $topic;
 
 <header class="topic" id="thread-<%= $t->{id} %>">
     <nav>
@@ -36,13 +36,13 @@
             % }
         </div>
         <div class="user">
-            <%= render_user({ id    => $t->{userId},
+            <%= render_user({ id    => $t->{author},
                               name  => $t->{name},
                               mail  => $t->{mail},
                               banId => $t->{banId} }) %>
         </div>
     
-        % if ( $t->{userId} == user->{id} || $t->{W} > 0 )
+        % if ( $t->{owner} == user->{id} || $t->{W} > 0 )
         % {
         <div class="controlls">
             <div class="editThread">
@@ -141,13 +141,13 @@
             % }
         </div>
         <div class="user">
-            <%= render_user({ id    => $t->{userId},
+            <%= render_user({ id    => $t->{author},
                               name  => $t->{name},
                               mail  => $t->{mail},
                               banId => $t->{banId} }) %>
         </div>
     
-        % if ( $t->{userId} == user->{id} || $t->{W} > 0 )
+        % if ( $t->{owner} == user->{id} || $t->{W} > 0 )
         % {
         <div class="controlls">
             <div class="editThread">

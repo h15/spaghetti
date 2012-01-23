@@ -97,14 +97,16 @@ create table `threadToDataType`
 create table `thread`
 (
     `id`        int(11) unsigned not null auto_increment primary key,
-    `userId`    int(11) unsigned not null default 0,
-    `createAt`  int(11) unsigned not null,
-    `modifyAt`  int(11) unsigned not null,
-    `parentId`  int(11) unsigned not null,
-    `topicId`   int(11) unsigned not null,
-    `textId`    int(11) unsigned not null,
+    `owner`     int(11) unsigned not null default 0,
+    `author`    int(11) unsigned not null default 0,
+    `createAt`  int(11) unsigned not null default 0,
+    `modifyAt`  int(11) unsigned not null default 0,
+    `parentId`  int(11) unsigned not null default 0,
+    `topicId`   int(11) unsigned not null default 0,
+    `textId`    int(11) unsigned not null default 0,
     
-    FOREIGN KEY (`userId`)   REFERENCES `user`(`id`),
+    FOREIGN KEY (`author`)   REFERENCES `user`(`id`),
+    FOREIGN KEY (`owner`)    REFERENCES `user`(`id`),
     FOREIGN KEY (`parentId`) REFERENCES `thread`(`id`),
     FOREIGN KEY (`topicId`)  REFERENCES `topic`(`id`),
     FOREIGN KEY (`textId`)   REFERENCES `text`(`id`)
@@ -150,7 +152,6 @@ create table `news`
 (
     `threadId`  int(11) unsigned not null,
     `legend`    varchar(140) character set utf8 collate utf8_general_ci not null,
-    `author`    int(11) unsigned not null,
     
     FOREIGN KEY (`threadId`)  REFERENCES `thread`(`id`)
 );

@@ -28,7 +28,7 @@
     <td>
         <%= render_user
             {
-                id    => $t->{userId},
+                id    => $t->{author},
                 name  => $t->{name},
                 mail  => $t->{mail},
                 banId => $t->{banId},

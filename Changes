@@ -1,3 +1,9 @@
+commit fecc7a6ad20fd2de9cdb76ceb99f2ef7b039c9d4
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Mon Jan 23 14:58:03 2012 +0600
+
+    What`s work: NewsFromTopic, EditNews, ShowNews (without comments)
+
 commit 0d50752fe16d540372ef25d52253d8ccacf85a48
 Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
 Date:   Sun Jan 22 22:31:29 2012 +0600

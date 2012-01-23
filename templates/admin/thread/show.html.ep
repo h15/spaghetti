@@ -43,7 +43,7 @@
         </div>
         
         <div class="user">
-            <%= render_user($thread->{userId}) %>
+            <%= render_user($thread->{author}) %>
         </div>
         
         <div class="controlls">

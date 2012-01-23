@@ -146,12 +146,12 @@ use Mojo::Base 'Mojolicious::Controller';
             #
             
             my $q = sprintf 'SELECT th.id, th.createAt, th.modifyAt, th.parentId,
-                                    th.topicId, th.userId, t.`text`, t1.title,
+                                    th.topicId, th.author, t.`text`, t1.title,
                                     t1.url, u.name, u.mail, u.banId
                                 FROM `thread` th
                                 LEFT OUTER JOIN `text`    t    ON ( th.textId    = t.id  )
                                 LEFT OUTER JOIN `topic`   t1   ON ( t1.threadId  = th.id )
-                                LEFT OUTER JOIN `user`    u    ON ( th.userId    = u.id  )
+                                LEFT OUTER JOIN `user`    u    ON ( th.author    = u.id  )
                                     ORDER BY t1.threadId, th.id ASC
                                     LIMIT %d, %d',
                                 ($page - 1) * $conf->{size}, $conf->{size};

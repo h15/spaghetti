@@ -1,0 +1,35 @@
+% layout 'default';
+%
+% title l('News list');
+
+%#
+%#  News list
+%#
+
+% for my $news ( sort { $b->{modifyAt} <=> $a->{modifyAt} } values %$newsList )
+% {
+
+<article class="news" id="thread-<%= $news->{id} %>">
+    <a href="<%= url_for('thread_show', url => $news->{url}) %>">
+        <div class="h3 alignleft"><%= $news->{title} %></div>
+        
+        <div class="alignright commentCount">
+            <span class=value><%= $news->{count} %></span>
+        </div>
+        
+        <div class="alignright">
+                <acronym title="<%= format_datetime($news->{createAt}) %>">
+                    <%= render_datetime($news->{modifyAt}) %>
+                </acronym>
+        </div>
+        
+        <div class="cb"></div>
+    </a>
+    <div class="postContent">
+        <%=b $news->{legend} %>
+    </div>
+</article>
+
+% }
+
+%=b $paginator

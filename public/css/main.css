@@ -3,6 +3,8 @@
         padding:0px;
         margin:0px;
         font-style:"DejaVu Sans", Helvetica, Arial, Sans;
+        color:#222;
+        font-size:16px;
     }
     
     html
@@ -140,6 +142,7 @@
     .alignleft   { float:left; margin:0px 5px;  }
     .alignright  { float:right; margin:0px 5px; }
     .aligncenter { margin:0px auto }
+    .cb { clear:both; }
     
     nav.overall
     {
@@ -320,4 +323,38 @@
 	    -webkit-border-radius:5px;
 	    border-radius:5px;
 	    -khtml-border-radius:5px;
+    }
+    
+    article.news
+    {
+        padding:10px;
+	    -moz-border-radius:5px;
+	    -webkit-border-radius:5px;
+	    border-radius:5px;
+	    -khtml-border-radius:5px;
+        background:#eee;
+        margin:10px 0px;
+    }
+    
+    .h3
+    {
+        font-size:20px;
+    }
+    
+    .commentCount
+    {
+        background:url('/pic/dialog.png') center center no-repeat;
+        height:28px;
+        width:28px;
+        text-align:center;
+        position:relative;
+        top:-2px;
+        right:-2px
+    }
+    
+    .commentCount .value
+    {
+        position:relative;
+        top:2px;
+        font-size:12px;
     }

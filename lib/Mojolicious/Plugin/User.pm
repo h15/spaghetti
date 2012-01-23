@@ -100,8 +100,8 @@ use Pony::Object 'Mojolicious::Plugin';
                     return new Mojo::ByteStream
                     (
                         sprintf '<a href="%s" class="%s">%s%s</a>',
-                            $url, ($user->{banId} ? 'banned' : 'active'),
-                            $pic, $user->{name}
+                            ($url||''), ($user->{banId} ? 'banned' : 'active'),
+                            ($pic||''), ($user->{name}||'')
                     );
                 }
             );

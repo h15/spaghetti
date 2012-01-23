@@ -5,7 +5,7 @@ use Pony::Object 'Mojolicious::Plugin';
     use Pony::Crud::MySQL;
     
     has sql => '
-                    SELECT `id`, t.`userId` FROM `thread` AS t WHERE `id`=%d AND `id` IN
+                    SELECT `id`, t.`owner` FROM `thread` AS t WHERE `id`=%d AND `id` IN
                     (
                         SELECT `threadId` FROM `threadToDataType`
                         WHERE `dataTypeId` IN
@@ -53,11 +53,11 @@ use Pony::Object 'Mojolicious::Plugin';
                     
                     # Allow write action for owner.
                     #
-                    my $t = $model->read({id => $tid}, ['userId']);
+                    my $t = $model->read({id => $tid}, ['owner']);
                     
-                    return 0 unless defined $t;
+                    return 1 if defined $t;
                     
-                    return 1 if $right eq 'w' && $uid == $t->{userId};
+                    return 1 if $right eq 'w' && $uid == $t->{owner};
                     
                     # Allow for admin.
                     #

@@ -34,7 +34,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     my $thread = $thModel->read({id => $id});
                     
                     $thModel->update({ modifyAt => time,
-                                       userId   => $this->user->{id} },
+                                       owner    => $this->user->{id} },
                                      { id => $id });
                     $toModel->update({ title => $title,
                                        url   => $url  },
@@ -43,8 +43,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     Pony::Crud::MySQL->new('news')->create
                     ({
                         threadId => $id,
-                        legend   => $legend,
-                        author   => $thread->{userId}
+                        legend   => $legend
                     });
                     
                     $this->redirect_to( admin_news_edit => id => $id);
@@ -108,7 +107,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     $toModel->update({ title => $title, url => $url },
                                      { threadId => $id });
                     
-                    $this->redirect_to( news_show => url => $url );
+                    $this->redirect_to( thread_show => url => $url );
                 }
             }
             

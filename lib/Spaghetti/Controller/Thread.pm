@@ -38,6 +38,9 @@ use Mojo::Base 'Mojolicious::Controller';
                                      ($page-1) * $conf->{size}, $conf->{size} );
             
             my $threads = $sth->fetchall_hashref('id');
+            my ($topic) = grep { $_->{id} eq $id } values %$threads;
+            
+            delete $threads->{ $topic->{id} } if defined $topic;
             
             $this->redirect_to('404') unless $threads;
             
@@ -61,11 +64,14 @@ use Mojo::Base 'Mojolicious::Controller';
                             $this->paginator( 'thread_show_p', $page,
                                 $count->{count}, $conf->{size}, [ url => $id ] ) );
             
+            $this->stash( topic     => $topic     );
             $this->stash( threads   => $threads   );
             $this->stash( id        => $id        );
             $this->stash( form      => $form      );
             $this->stash( topicForm => $topicForm );
-            $this->render;
+            
+            defined $topic->{legend} ?
+                $this->render('news/show') : $this->render;
         }
     
     sub create
@@ -97,7 +103,8 @@ use Mojo::Base 'Mojolicious::Controller';
                     
                     my $thId = $threadModel->create
                                ({
-                                    userId      => $userId,
+                                    author      => $userId,
+                                    owner       => $userId,
                                     createAt    => time,
                                     modifyAt    => time,
                                     parentId    => $parent,
@@ -164,7 +171,8 @@ use Mojo::Base 'Mojolicious::Controller';
                     
                     my $thId = $threadModel->create
                                ({
-                                    userId      => $userId,
+                                    author      => $userId,
+                                    owner       => $userId,
                                     createAt    => time,
                                     modifyAt    => time,
                                     parentId    => $parent,
