@@ -50,7 +50,7 @@ use Mojo::Base 'Mojolicious::Controller';
             my $id   = $this->param('id');
             Pony::Crud::MySQL->new('user')->delete({id => $id});
             
-            $this->redirect_to('admin_user_delete', id => $id);
+            $this->redirect_to('admin_user_list');
         }
 
     sub addGroup

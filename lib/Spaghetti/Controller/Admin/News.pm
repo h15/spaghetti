@@ -11,8 +11,9 @@ use Mojo::Base 'Mojolicious::Controller';
     sub topicToNews
         {
             my $this = shift;
-            my $form = new Spaghetti::Form::Admin::News::FromTopic;
             my $id   = $this->param('id');
+            my $form = new Spaghetti::Form::Admin::News::FromTopic;
+               $form->action = $this->url_for('admin_news_topicToNews', id => $id);
             
             my $thModel = new Pony::Crud::MySQL('thread');
             my $teModel = new Pony::Crud::MySQL('text');
@@ -32,8 +33,8 @@ use Mojo::Base 'Mojolicious::Controller';
                     
                     my $thread = $thModel->read({id => $id});
                     
-                    $thModel->update({ modify => time,
-                                       userId => $this->user->{id} },
+                    $thModel->update({ modifyAt => time,
+                                       userId   => $this->user->{id} },
                                      { id => $id });
                     $toModel->update({ title => $title,
                                        url   => $url  },
@@ -68,8 +69,9 @@ use Mojo::Base 'Mojolicious::Controller';
     sub edit
         {
             my $this = shift;
-            my $form = new Spaghetti::Form::Admin::News::Edit;
             my $id   = $this->param('id');
+            my $form = new Spaghetti::Form::Admin::News::Edit;
+               $form->action = $this->url_for('admin_news_edit', id => $id);
             
             my $thModel = new Pony::Crud::MySQL('thread');
             my $teModel = new Pony::Crud::MySQL('text');
@@ -112,12 +114,12 @@ use Mojo::Base 'Mojolicious::Controller';
             
             # Fill form and show it.
             #
-            my $topic  =[$toModel->list({id => $id},undef,'threadId',undef,0,1)]->[0];
+            my $topic  =[$toModel->list({threadId => $id},undef,'threadId',undef,0,1)]->[0];
             my $thread = $thModel->read({id => $topic->{threadId}});
             my $text   = $teModel->read({id => $thread->{textId}});
-            my $news   = $neModel->read({id => $thread->{id}});
+            my $news   =[$neModel->list({threadId => $id},undef,'threadId',undef,0,1)]->[0];
             
-            %$thread = ( %$text, %$topic, $news, %$thread );
+            %$thread = ( %$text, %$topic, %$news, %$thread );
             
             $form->elements->{$_}->value = $thread->{$_} for keys %{$form->elements};
             

@@ -1,0 +1,174 @@
+% layout 'default';
+%
+% title $news->{title};
+
+%#
+%#  News
+%#
+
+<header class="news" id="thread-<%= $news->{id} %>">
+    <div class="postContent">
+        <div class=legend>
+            <b><%=b $news->{legend} %></b>
+        </div>
+        <%=b $news->{text} %>
+    </div>
+    
+    <nav>
+        <div class="parents">
+            <a href="<%= url_for('thread_show', url => $news->{parentId}) %>">&uarr;</a>
+            <a href="<%= url_for('thread_show', url => $news->{topicId}) %>">&uArr;</a>
+        </div>
+        <div class="time">
+                <acronym title="<%= format_datetime($news->{createAt}) %>">
+                    <%= render_datetime($news->{modifyAt}) %>
+                </acronym>
+        </div>
+        <div class="user">
+            <%= render_user({ id    => $news->{author},
+                              name  => $news->{name},
+                              mail  => $news->{mail},
+                              banId => $news->{banId} }) %>
+        </div>
+    
+        % if ( $news->{userId} == user->{id} || $news->{W} > 0 )
+        % {
+        <div class="controlls">
+            <div class="editThread">
+                <a href="<%= url_for('admin_news_edit', id => $news->{id} )
+                        %>"><%=l 'edit' %></a>
+            </div>
+        </div>
+        % }
+        
+        <div class=cb></div>
+    </nav>
+    
+    %   if ( $create )
+    %   {
+            <a href="#" class=showButton id="showButton-<%= $news->{id} %>"><%=l 'response' %></a>
+            <a href="#" class="hidden hideButton" id="hideButton-<%= $news->{id} %>"><%=l 'hide' %></a>
+            
+            <a href="#" class=showButton id="showButton-createTopic<%= $news->{id} %>"><%=l 'create topic' %></a>
+            <a href="#" class="hidden hideButton" id="hideButton-createTopic<%= $news->{id} %>"><%=l 'hide' %></a>
+            
+            <div class=hidden id="hiddenArea-<%= $news->{id} %>">
+                % $form->elements->{parentId}->value = $news->{id};
+                % $form->elements->{topicId}->value  = $news->{id};
+            
+                %=b $form->render
+            </div>
+            
+            <div class=hidden id="hiddenArea-createTopic<%= $news->{id} %>">
+                % $topicForm->elements->{parentId}->value = $news->{id};
+                % $topicForm->elements->{topicId}->value  = $news->{id};
+                
+                %=b $topicForm->render
+            </div>
+    %   }
+</header>
+
+%#
+%#  Comments
+%#
+
+% for my $k ( sort keys %$comments )
+% {
+%     my $t = $comments->{$k};
+
+<article class="post" id="thread-<%= $t->{id} %>">
+    <nav>
+        <div class="sefl">
+            <a href="<%= url_for('thread_show', url => ( $t->{url} ? $t->{url} : $t->{id} ) )
+                    %>"><%= ( defined $t->{title} && length $t->{title} ) ? $t->{title} : '#' %></a>
+        </div>
+        <div class="parents">
+            <a href="<%= url_for('thread_show', url => $t->{parentId}) %>">&uarr;</a>
+            <a href="<%= url_for('thread_show', url => $t->{topicId}) %>">&uArr;</a>
+        </div>
+        <div class="time">
+            % if ( $t->{modifyAt} == $t->{createAt} ) {
+            %
+                <%= render_datetime($t->{modifyAt}) %>
+            %
+            % } else {
+            %
+                <acronym title="<%= format_datetime($t->{createAt}) %>">
+                    <%= render_datetime($t->{modifyAt}) %>
+                </acronym>
+            %
+            % }
+        </div>
+        <div class="user">
+            <%= render_user({ id    => $t->{userId},
+                              name  => $t->{name},
+                              mail  => $t->{mail},
+                              banId => $t->{banId} }) %>
+        </div>
+    
+        % if ( $t->{userId} == user->{id} || $t->{W} > 0 )
+        % {
+        <div class="controlls">
+            <div class="editThread">
+    
+                % if ( defined $t->{title} )
+                % {
+                <a href="<%= url_for('topic_edit', id => $t->{id} )
+                        %>"><%=l 'edit' %></a>
+                % }else {
+                <a href="<%= url_for('thread_edit', id => $t->{id} )
+                        %>"><%=l 'edit' %></a>
+                % }
+            
+            </div>
+        </div>
+        % }
+        
+        <div class=cb></div>
+    </nav>
+    
+    <div class="postContent">
+        <%=b $t->{text} %>
+    </div>
+
+    %   if ( $create )
+    %   {
+            <a href="#" class=showButton id="showButton-<%= $t->{id} %>"><%=l 'response' %></a>
+            <a href="#" class="hidden hideButton" id="hideButton-<%= $t->{id} %>"><%=l 'hide' %></a>
+            
+            <a href="#" class=showButton id="showButton-createTopic<%= $t->{id} %>"><%=l 'create topic' %></a>
+            <a href="#" class="hidden hideButton" id="hideButton-createTopic<%= $t->{id} %>"><%=l 'hide' %></a>
+            
+            <div class=hidden id="hiddenArea-<%= $t->{id} %>">
+                % $form->elements->{parentId}->value = $t->{id};
+                
+                % if ( defined $t->{title} )
+                % {
+                    % $form->elements->{topicId}->value  = $t->{id};
+                % }else {
+                    % $form->elements->{topicId}->value  = $t->{topicId};
+                % }
+            
+                %
+                %=b $form->render
+            </div>
+            
+            <div class=hidden id="hiddenArea-createTopic<%= $t->{id} %>">
+                % $topicForm->elements->{parentId}->value = $t->{id};
+                
+                % if ( defined $t->{title} )
+                % {
+                    % $topicForm->elements->{topicId}->value  = $t->{id};
+                % }else {
+                    % $topicForm->elements->{topicId}->value  = $t->{topicId};
+                % }
+                
+                %
+                %=b $topicForm->render
+            </div>
+    %   }
+</article>
+
+% }
+
+%=b $paginator

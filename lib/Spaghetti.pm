@@ -210,10 +210,10 @@ use Mojo::Base 'Mojolicious';
                 ->to('news#list')
                   ->name('news_index');
             
-            $a->route('/news/from/topic')
+            $a->route('/news/from/topic/:id', id => qr/\d+/)
                 ->to('news#topicToNews')
                   ->name('admin_news_topicToNews');
-            $a->route('/news/edit')
+            $a->route('/news/edit/:id', id => qr/\d+/)
                 ->to('news#edit')
                   ->name('admin_news_edit');
             

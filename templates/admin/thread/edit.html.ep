@@ -5,9 +5,8 @@
     <a href="<%= url_for( 'thread_show', url => $id ) %>"><%=l 'Go to thread' %></a>
     
     <div class="controls alignright">
-        <form method=post action="<%= url_for 'admin_news_topicToNews' %>">
-            <input type=hidden name=id value='<%= $id %>'>
-            <input type=submit value="<%=l 'make news' %>">
+        <a href="<%= url_for 'admin_news_topicToNews', id => $id %>">
+            <%=l 'make news' %></a>
         </form>
     </div>
 </div>

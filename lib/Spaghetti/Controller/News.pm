@@ -13,7 +13,6 @@ use Mojo::Base 'Mojolicious::Controller';
             my $this = shift;
             my $url  = $this->param('url');
             my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
-               $url  = $dbh->quote($url);
             
             # Paginator
             #
@@ -29,7 +28,7 @@ use Mojo::Base 'Mojolicious::Controller';
             my $sth = $dbh->prepare( $Spaghetti::SQL::news->{show} );
                $sth->execute( $this->user->{id}, $url, $this->user->{id},
                                      ($page-1) * $conf->{size}, $conf->{size} );
-                                     
+            
             my $comments = $sth->fetchall_hashref('id');
             my ( $news ) = grep { $_->{url} eq $url } values %$comments;
             
@@ -40,8 +39,8 @@ use Mojo::Base 'Mojolicious::Controller';
             # Get count of news' comments.
             #
             
-            my $sth = $dbh->prepare( $Spaghetti::SQL::news->{count} );
-               $sth->execute( $news->{id}, $this->user->{id} );
+            $sth = $dbh->prepare( $Spaghetti::SQL::news->{count} );
+            $sth->execute( $news->{id}, $this->user->{id} );
                                      
             my $count = $sth->fetchrow_hashref();
             
@@ -51,7 +50,7 @@ use Mojo::Base 'Mojolicious::Controller';
             my $form = new Spaghetti::Form::Thread::Create;
             my $topicForm = new Spaghetti::Form::Topic::Create;
             
-            $this->stash( create => $this->access($id, 'c') );
+            $this->stash( create => $this->access($news->{threadId}, 'c') );
             
             $this->stash( paginator =>
                             $this->paginator( 'news_show_p', $page,

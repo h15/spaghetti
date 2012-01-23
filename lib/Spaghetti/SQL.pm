@@ -113,7 +113,7 @@ our $news =
     q{
         SELECT th.id, th.createAt, th.modifyAt, th.parentId,
                 th.userId, t.`text`, t1.title,
-                t1.url, n.legeng, n.author, u.name, u.mail, u.banId,
+                t1.url, n.legend, n.author, u.name, u.mail, u.banId,
                 ( SELECT COUNT(*) FROM `thread` a 
                     WHERE ( a.id = th.id )
                         AND a.id IN
@@ -135,7 +135,7 @@ our $news =
             LEFT OUTER JOIN `topic`   t1   ON ( t1.threadId  = th.id )
             LEFT OUTER JOIN `user`    u    ON ( th.userId    = u.id  )
             LEFT OUTER JOIN `news`    n    ON ( n.threadId   = th.id )
-                WHERE ( t1.url = ? OR th.topicId = t1.id )
+                WHERE ( t1.url = ? OR th.topicId = t1.threadId )
                     AND th.id IN
                     (
                         SELECT `threadId` FROM `threadToDataType`
@@ -149,6 +149,8 @@ our $news =
                             )
                         )
                     )
+                ORDER BY th.id DESC
+                LIMIT ?, ?
     },
     
     count =>

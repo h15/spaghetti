@@ -1,3 +1,9 @@
+commit 0d50752fe16d540372ef25d52253d8ccacf85a48
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Jan 22 22:31:29 2012 +0600
+
+    new code for News and News Admin
+
 commit c0c53ec543c5db4ea756814e805d0b784908e4ca
 Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
 Date:   Sun Jan 22 01:10:36 2012 +0600

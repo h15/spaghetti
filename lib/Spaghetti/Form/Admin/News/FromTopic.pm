@@ -17,7 +17,7 @@ use Pony::Object qw/Pony::View::Form/;
                 title => text =>
                 {
                     required    => 1,
-                    label       => 'Title:',
+                    label       => 'Title',
                     validators  => { Length => [4, 64] }
                 }
             );
@@ -27,7 +27,7 @@ use Pony::Object qw/Pony::View::Form/;
                 url => text =>
                 {
                     required    => 1,
-                    label       => 'Url:',
+                    label       => 'Url',
                     validators  => { Length => [0, 64] }
                 }
             );
@@ -48,16 +48,6 @@ use Pony::Object qw/Pony::View::Form/;
                 {
                     required    => 1,
                     label       => 'Text',
-                }
-            );
-            
-            $this->addElement
-            (
-                id => hidden =>
-                {
-                    required    => 1,
-                    label       => 'Id',
-                    validators  => { Like => qr/\d+/ }
                 }
             );
             

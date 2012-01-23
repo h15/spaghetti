@@ -71,25 +71,25 @@
     </nav>
     
 <div class=wrap>
-
-    <header class=overall>
-      <h1><%= title %></h1>
-    </header>
-    
-    % my $messageType = stash('messageType');
-    % my $message     = stash('message');
-    %
-    % if ( defined $messageType )
-    % {
-        <div class="<%= $messageType %>">
-            <%=l $message %>
-        </div>
-    % }
-    
-    <article class=content>
-        <%= content %>
-    </article>
-    
+    <div class=contentWrap>
+        <header class=overall>
+          <h1><%= title %></h1>
+        </header>
+        
+        % my $messageType = stash('messageType');
+        % my $message     = stash('message');
+        %
+        % if ( defined $messageType )
+        % {
+            <div class="<%= $messageType %>">
+                <%=l $message %>
+            </div>
+        % }
+        
+        <article class=content>
+            <%= content %>
+        </article>
+    </div>
 </div>
 
 <div class=overallFooter>
