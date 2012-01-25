@@ -83,6 +83,7 @@ use Mojo::Base 'Mojolicious';
             $this->plugin('access');
             $this->plugin('message');
             $this->plugin('mail');
+            $this->plugin('thread');
             
             ##
             ##  Routes

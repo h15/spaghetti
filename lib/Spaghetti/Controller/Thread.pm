@@ -52,6 +52,23 @@ use Mojo::Base 'Mojolicious::Controller';
             
             my $count = $sth->fetchrow_hashref();
             
+            # make tree view
+            #
+            
+            my @roots;
+            
+            for my $t ( sort {$a->{id} <=> $b->{id}} values %$threads )
+            {
+                if ( exists $threads->{ $t->{parentId} } )
+                {
+                    push @{ $threads->{ $t->{parentId} }->{childs} }, $t->{id};
+                }
+                else
+                {
+                    push @roots, $t->{id};
+                }
+            }
+            
             # Prepare to render.
             #
             
@@ -64,6 +81,7 @@ use Mojo::Base 'Mojolicious::Controller';
                             $this->paginator( 'thread_show_p', $page,
                                 $count->{count}, $conf->{size}, [ url => $id ] ) );
             
+            $this->stash( roots     => \@roots    );
             $this->stash( topic     => $topic     );
             $this->stash( threads   => $threads   );
             $this->stash( id        => $id        );

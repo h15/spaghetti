@@ -3,7 +3,7 @@
 
 <table class=homeUser>
 
-% for my $k ( qw/name mail createAt modifyAt accessAt/ ) {
+% for my $k ( qw/name createAt modifyAt accessAt/ ) {
 %
 %   $user->{$k} = render_datetime($user->{$k}) if $k =~ /At$/;
 %

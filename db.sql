@@ -97,8 +97,8 @@ create table `threadToDataType`
 create table `thread`
 (
     `id`        int(11) unsigned not null auto_increment primary key,
-    `owner`     int(11) unsigned not null default 0,
-    `author`    int(11) unsigned not null default 0,
+    `owner`     int(11) unsigned not null default 1,
+    `author`    int(11) unsigned not null default 1,
     `createAt`  int(11) unsigned not null default 0,
     `modifyAt`  int(11) unsigned not null default 0,
     `parentId`  int(11) unsigned not null default 0,

@@ -44,7 +44,6 @@ use utf8;
     sub escape
         {
             my $s = shift;
-               $s =~ s/&/&amp;/g;
                $s =~ s/</&lt;/g;
                $s =~ s/>/&gt;/g;
                $s =~ s/'/&#39;/g;

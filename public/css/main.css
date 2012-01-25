@@ -45,7 +45,6 @@
 	    -khtml-border-radius:5px;
 	    
         margin:5px 0px 5px 0px;
-        background:#F1F2F2;
         border:1px solid #E8E9EB;
     }
     
@@ -104,7 +103,7 @@
 	    border-radius:5px;
 	    -khtml-border-radius:5px;
 	    
-        padding:4px;
+        padding:10px;
     }
     
     .showButton, .hideButton
