@@ -74,6 +74,13 @@ use Mojo::Base 'Mojolicious';
               }
             );
             
+            Pony::Stash->findOrCreate
+            ( defaultUserConf =>
+              {
+                isTreeView  => 0,
+              }
+            );
+            
             ##
             ##  Plugins
             ##
@@ -131,6 +138,9 @@ use Mojo::Base 'Mojolicious';
             $r->route('/user/change/mail')
                 ->to('user#changeMail')
                   ->name('user_change_mail');
+            $r->route('/user/config')
+                ->to('user#config')
+                  ->name('user_config');
             
             $a->route('/user')
                 ->to('user#list')

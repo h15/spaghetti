@@ -22,6 +22,15 @@ create table `user`
 INSERT INTO `user` (`id`, `mail`, `password`, `name`, `createAt`, `modifyAt`, `accessAt`, `banId`, `banTime`) VALUES(0,'anonymous@lorcode.org','','anonymous',0,0,0,0,0),
 (1,'admin@lorcode.org','eaf959d9e23b7a07bf6364f50efd6007','admin',0,0,0,0,0);
 
+create table `userInfo`
+(
+    `id`        int(11) unsigned not null default 0,
+    `desc`      varchar(9999) character set utf8 collate utf8_general_ci not null,
+    `conf`      blob,
+    
+    FOREIGN KEY (`id`)  REFERENCES `user`(`id`)
+);
+
 create table `mailConfirm`
 (
     `expair`    int(11) unsigned not null default 0,

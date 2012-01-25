@@ -28,14 +28,15 @@ use Mojo::Base 'Mojolicious::Controller';
             my $page = int ( $this->param('page') || 0 );
                $page = 1 if $page < 1;
             
-            my $conf = Pony::Stash->get('thread');
+            my $size = Pony::Stash->get('thread')->{size};
+               $size = 100_000 if $this->user->{conf}->{isTreeView};
             
             # Get thread list.
             #
             
             my $sth = $dbh->prepare( $Spaghetti::SQL::thread->{show} );
                $sth->execute( $this->user->{id}, $id, $id, $this->user->{id},
-                                     ($page-1) * $conf->{size}, $conf->{size} );
+                                     ($page-1) * $size, $size );
             
             my $threads = $sth->fetchall_hashref('id');
             my ($topic) = grep { $_->{id} eq $id } values %$threads;
@@ -44,29 +45,34 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->redirect_to('404') unless $threads;
             
-            # Get thread count.
-            #
-            
-            $sth = $dbh->prepare( $Spaghetti::SQL::thread->{showCount} );
-            $sth->execute( $id, $id, $this->user->{id} );
-            
-            my $count = $sth->fetchrow_hashref();
-            
-            # make tree view
-            #
-            
             my @roots;
+            my $count;
             
-            for my $t ( sort {$a->{id} <=> $b->{id}} values %$threads )
+            # TREE VIEW
+            #
+            if ( $this->user->{conf}->{isTreeView} )
             {
-                if ( exists $threads->{ $t->{parentId} } )
+                for my $t ( sort {$a->{id} <=> $b->{id}} values %$threads )
                 {
-                    push @{ $threads->{ $t->{parentId} }->{childs} }, $t->{id};
+                    if ( exists $threads->{ $t->{parentId} } )
+                    {
+                        push @{ $threads->{ $t->{parentId} }->{childs} }, $t->{id};
+                    }
+                    else
+                    {
+                        push @roots, $t->{id};
+                    }
                 }
-                else
-                {
-                    push @roots, $t->{id};
-                }
+            }
+            else
+            {
+                # Get thread count.
+                #
+                
+                $sth = $dbh->prepare( $Spaghetti::SQL::thread->{showCount} );
+                $sth->execute( $id, $id, $this->user->{id} );
+                
+                $count = $sth->fetchrow_hashref();
             }
             
             # Prepare to render.
@@ -79,7 +85,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->stash( paginator =>
                             $this->paginator( 'thread_show_p', $page,
-                                $count->{count}, $conf->{size}, [ url => $id ] ) );
+                                $count->{count}, $size, [ url => $id ] ) );
             
             $this->stash( roots     => \@roots    );
             $this->stash( topic     => $topic     );

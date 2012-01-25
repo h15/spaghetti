@@ -7,10 +7,11 @@ use Pony::Object 'Mojolicious::Plugin';
 
     use Digest::MD5 "md5_hex";
     use URI::Escape qw(uri_escape);
+    use Storable qw(thaw freeze);
     use Pony::Stash;
     use Pony::Crud::MySQL;
 
-    our $VERSION = '0.000006';
+    our $VERSION = '0.000007';
 
     sub register
         {
@@ -30,6 +31,9 @@ use Pony::Object 'Mojolicious::Plugin';
                                     salt        => 'some random string',
                                     enable_registration => 1,
                               });
+                    
+            my $default = Pony::Stash->get('defaultUserConf');
+            %$anonymous = ( conf => $default, %$anonymous );
             
             # Configure session.
             #
@@ -46,6 +50,7 @@ use Pony::Object 'Mojolicious::Plugin';
                 {
                     my $self = shift;
                     my $id   = $self->session('userId');
+                    my $conf = $self->session('conf');
                     
                     if ( $id )
                     {
@@ -54,6 +59,30 @@ use Pony::Object 'Mojolicious::Plugin';
                                             ['groupId'],'groupId',undef,0,99);
                         
                         $user->{groups} = [ map { $_->{groupId} } @groups ];
+                        
+                        # Get config
+                        #
+                        unless ( defined $conf )
+                        {
+                            $conf = Pony::Crud::MySQL
+                                      ->new('userInfo')
+                                        ->read({id => $id}, ['conf']);
+                            
+                            if ( defined $conf )
+                            {
+                                $conf = $conf->{conf};
+                                $self->session( conf => $conf );
+                            }
+                        }
+                            
+                        $conf = ( defined $conf ? thaw $conf : {} );
+                        
+                        for my $k ( keys %$default )
+                        {
+                            $conf->{$k} = $default->{$k} if defined $conf->{$k};
+                        }
+                        
+                        %$user = ( conf => $conf, %$user );
                     }
                     else
                     {

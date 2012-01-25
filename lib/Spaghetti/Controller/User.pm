@@ -9,6 +9,7 @@ use Mojo::Base 'Mojolicious::Controller';
     use Pony::Crud::MySQL;
     use Pony::Stash;
     use Digest::MD5 "md5_hex";
+    use Storable qw(thaw freeze);
 
     sub login
         {
@@ -49,7 +50,7 @@ use Mojo::Base 'Mojolicious::Controller';
                                 attempts => 0     },
                               { id => $user->{id} } );
                             
-                            $this->session( userId  => $user->{id} )
+                            $this->session( userId => $user->{id} )
                                  ->redirect_to('user_home');
                         }
                         else
@@ -128,13 +129,74 @@ use Mojo::Base 'Mojolicious::Controller';
     sub home
         {
             my $this = shift;
+               $this->redirect_to('404') unless $this->user->{id};
+            
             my $formPass = new Spaghetti::Form::User::ChangePassword;
             my $formMail = new Spaghetti::Form::User::ChangeMail;
+            
+            # Get config
+            #
+            
+            my $default = Pony::Stash->get('defaultUserConf');
+            my $conf = Pony::Crud::MySQL
+                         ->new('userInfo')
+                           ->read({id => $this->user->{id}}, ['conf']);
+            
+            if ( defined $conf )
+            {
+                $conf = thaw $conf->{conf};
+                
+                for my $k ( keys %$default )
+                {
+                    $conf->{$k} = $default->{$k} unless exists $conf->{$k};
+                }
+            }
+            else
+            {
+                $conf = $default;
+            }
+            
+            $this->stash( conf => $conf );
             
             $this->stash( formPass => $formPass->render() );
             $this->stash( formMail => $formMail->render() );
             $this->stash( user => $this->user );
             $this->render;
+        }
+    
+    sub config
+        {
+            my $this = shift;
+               $this->redirect_to('404') unless $this->user->{id};
+            
+            if ( $this->req->method eq 'POST' )
+            {
+                my $default = Pony::Stash->get('defaultUserConf');
+                my $data;
+                my $model = new Pony::Crud::MySQL('userInfo');
+                
+                for my $k ( keys %$default )
+                {
+                    $data->{$k} = $this->param($k);
+                }
+                
+                my $id = $model->read({id => $this->user->{id}}, ['id']);
+                
+                if ( defined $id )
+                {
+                    $model->update({ conf => freeze($data) },
+                                   { id   => $this->user->{id} });
+                }
+                else
+                {
+                    $model->create({ conf => freeze($data),
+                                     id   => $this->user->{id} });
+                }
+                
+                $this->session( conf => freeze($data) );
+            }
+                
+            $this->redirect_to('user_home');
         }
     
     sub profile
@@ -159,6 +221,8 @@ use Mojo::Base 'Mojolicious::Controller';
     sub changePassword
         {
             my $this = shift;
+               $this->redirect_to('404') unless $this->user->{id};
+            
             my $form = new Spaghetti::Form::User::ChangePassword;
             
             if ( $this->req->method eq 'POST' )
@@ -205,6 +269,8 @@ use Mojo::Base 'Mojolicious::Controller';
     sub changeMail
         {
             my $this = shift;
+               $this->redirect_to('404') unless $this->user->{id};
+            
             my $form = new Spaghetti::Form::User::ChangeMail;
             
             if ( $this->req->method eq 'POST' )
