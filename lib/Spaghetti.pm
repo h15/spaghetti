@@ -293,7 +293,7 @@ use Mojo::Base 'Mojolicious';
                     my ( $self, $urlName, $cur, $count, $size, $params ) = @_;
                     my $html = '';
                     
-                    return '' if $count <= $size;
+                    return '' if not defined $count or $count <= $size;
                     
                     my $last = int ( $count / $size );
                      ++$last if $count % $size;

@@ -186,8 +186,8 @@
     % }
 </article>
 
-%=b $paginator
-
 % }
+
+%=b $paginator
 
 % }

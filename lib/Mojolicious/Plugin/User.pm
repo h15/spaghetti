@@ -79,7 +79,7 @@ use Pony::Object 'Mojolicious::Plugin';
                         
                         for my $k ( keys %$default )
                         {
-                            $conf->{$k} = $default->{$k} if defined $conf->{$k};
+                            $conf->{$k} = $default->{$k} unless exists $conf->{$k};
                         }
                         
                         %$user = ( conf => $conf, %$user );
