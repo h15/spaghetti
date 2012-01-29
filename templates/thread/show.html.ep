@@ -116,7 +116,7 @@
 % {
 %   my $t = $threads->{$k};
 
-<article class="post" id="thread-<%= $t->{id} %>">
+<article class="post <%= $t->{modifyAt} + 3600 > time ? 'hot' : '' %>" id="thread-<%= $t->{id} %>">
     <nav>
         <div class="sefl">
             <a href="<%= url_for('thread_show', url => ( $t->{url} ? $t->{url} : $t->{id} ) )

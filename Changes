@@ -1,3 +1,9 @@
+commit e8b587d323d90859ba27dc85767e5f59e41c98da
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Mon Jan 30 02:58:39 2012 +0600
+
+    fix redirect after create thread
+
 commit 0e31a62986f843e0e475554dcbb1da391f22a523
 Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
 Date:   Mon Jan 30 02:09:54 2012 +0600

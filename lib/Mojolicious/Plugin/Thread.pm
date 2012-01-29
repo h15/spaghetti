@@ -33,7 +33,7 @@ use Pony::Object 'Mojolicious::Plugin';
             {
                 my $t = $threads->{$id};
                 
-                $html .= sprintf qq{<article class="tree-post" id="thread-%d">
+                $html .= sprintf qq{<article class="tree-post %s" id="thread-%d">
                                     <a name="thread-%d"></a>
                                     <nav>
                                         <div class="sefl">
@@ -45,6 +45,8 @@ use Pony::Object 'Mojolicious::Plugin';
                                             <a href="%s">&uArr;</a>
                                         </div>
                                         <div class="time">},
+                            
+                            ( $t->{modifyAt} + 3600 > time ? 'hot' : '' ),
                             
                             $t->{id},
                             $t->{id},
