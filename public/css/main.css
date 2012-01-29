@@ -108,7 +108,7 @@
     
     .showButton, .hideButton
     {
-        padding-left:4px;
+        padding-left:10px;
         font-size:12px;
     }
     
@@ -356,4 +356,44 @@
         position:relative;
         top:2px;
         font-size:12px;
+    }
+    
+    
+    article.tree-post
+    {   
+	    -moz-border-radius:5px 0px 0px 0px;
+	    -webkit-border-radius:5px 0px 0px 0px;
+	    border-radius:5px 0px 0px 0px;
+	    -khtml-border-radius:5px 0px 0px 0px;
+	    
+        margin: 10px 0px;
+        border-left: 1px solid #f0f0f4;
+    }
+    
+    article.tree-post:nth-child(2n)
+    {
+    }
+    
+    article.tree-post nav .user .userpic_small
+    {
+        float: right;
+        position: relative;
+        left:2px;
+    }
+    
+    article.tree-post nav, header.tree-post nav
+    {
+	    -moz-border-radius:5px 0px 0px 0px;
+	    -webkit-border-radius:5px 0px 0px 0px;
+	    border-radius:5px 0px 0px 0px;
+	    -khtml-border-radius:5px 0px 0px 0px;
+	    
+        padding:0px 0px 0px 4px;
+	    font-size:14px;
+        background:#f0f0f4;
+    }
+    
+    article.tree-post:nth-child(2n) nav
+    {
+        /*background:#E8E9EB;*/
     }

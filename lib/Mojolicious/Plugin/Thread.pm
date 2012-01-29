@@ -33,7 +33,7 @@ use Pony::Object 'Mojolicious::Plugin';
             {
                 my $t = $threads->{$id};
                 
-                $html .= sprintf qq{<article class="post" id="thread-%d">
+                $html .= sprintf qq{<article class="tree-post" id="thread-%d">
                                     <a name="thread-%d"></a>
                                     <nav>
                                         <div class="sefl">
@@ -115,7 +115,7 @@ use Pony::Object 'Mojolicious::Plugin';
                 
                 if ( defined $t->{childs} && @{ $t->{childs} })
                 {
-                    $html .= sprintf qq{<div style="margin:5px 5px 5px 20px">%s</div>},
+                    $html .= sprintf qq{<div style="margin:5px 0px 5px 20px">%s</div>},
                              subTree($this, $t->{childs}, $threads, $topicForm, $form, $create);
                 }
                 

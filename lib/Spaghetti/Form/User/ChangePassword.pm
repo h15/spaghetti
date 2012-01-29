@@ -16,7 +16,6 @@ use Pony::Object qw/Pony::View::Form/;
             (
                 oldPassword => password =>
                 {
-                    required    => 1,
                     label       => 'Old password',
                     validators  =>
                     {
@@ -29,12 +28,27 @@ use Pony::Object qw/Pony::View::Form/;
             (
                 newPassword => password =>
                 {
-                    required    => 1,
                     label       => 'New password',
                     validators  =>
                     {
                         Length  => [ 8, 32 ],
                     }
+                }
+            );
+            
+            $this->addElement
+            (
+                flush => checkbox =>
+                {
+                    label => 'Flush password',
+                }
+            );
+            
+            $this->addElement
+            (
+                generate => checkbox =>
+                {
+                    label => 'Generate password',
                 }
             );
             

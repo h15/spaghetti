@@ -229,6 +229,12 @@ use Mojo::Base 'Mojolicious::Controller';
             {
                 $form->data->{$_} = $this->param($_) for keys %{$form->elements};
                 
+                my $flush   = $form->data->{flush};
+                my $generate= $form->data->{generate};
+                
+                return $this->genPassword   if $generate;
+                return $this->flushPassword if $flush;
+                
                 if ( $form->isValid )
                 {
                     my $oldPass = $form->elements->{oldPassword}->value;
@@ -264,6 +270,37 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->stash( form => $form->render() );
             $this->render;
+        }
+    
+    sub flushPassword
+        {
+            my $this  = shift;
+            my $model = new Pony::Crud::MySQL('user');
+            
+            $model->update({ password => '',
+                             modifyAt => time },
+                           { id       => $this->user->{id} });
+            
+            $this->redirect_to('user_home');
+        }
+    
+    sub genPassword
+        {
+            my $this  = shift;
+            my $model = new Pony::Crud::MySQL('user');
+            my $pass  = md5_hex( rand );
+            my $mail  = $this->user->{mail};
+            
+            $model->update({ password => md5_hex($mail.$pass),
+                             modifyAt => time },
+                           { id       => $this->user->{id} });
+            
+            # Send mail.
+            #
+            $this->mail( new_password => $mail =>
+                         'New password' => { password => $pass } );
+            
+            $this->redirect_to('user_home');
         }
 
     sub changeMail
