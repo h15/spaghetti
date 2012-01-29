@@ -1,3 +1,15 @@
+commit 0e31a62986f843e0e475554dcbb1da391f22a523
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Mon Jan 30 02:09:54 2012 +0600
+
+    add generate/flush password
+
+commit 396148ded35ceaeb4fb98a3e3c332f3870698398
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Wed Jan 25 23:37:47 2012 +0600
+
+    fix user config
+
 commit aa2452d201bddc1745ae1f8ba80209c578a59449
 Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
 Date:   Wed Jan 25 23:11:06 2012 +0600

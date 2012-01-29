@@ -155,7 +155,36 @@ use Mojo::Base 'Mojolicious::Controller';
                     
                     Pony::Crud::Dbh::MySQL->new->dbh->do( $q . join(',', @v) );
                     
-                    $this->redirect_to('thread_show', url => $topic);
+                    # Redirect
+                    #
+                    if ( $this->user->{conf}->{isTreeView} )
+                    {
+                        $this->redirect_to
+                        (
+                            $this->url_for('thread_show', url => $topic)
+                            . '#thread-' . $thId
+                        );
+                    }
+                    else
+                    {
+                        # Get page.
+                        #
+                        my $dbh = Pony::Crud::Dbh::MySQL->new->dbh;
+                        
+                        my $sth = $dbh->prepare( $Spaghetti::SQL::thread->{showCount} );
+                           $sth->execute( $topic, $topic, $this->user->{id} );
+                        my $count = $sth->fetchrow_hashref()->{count};
+                        my $size  = Pony::Stash->get('thread')->{size};
+                        
+                        my $page = int($count / $size);
+                         ++$page if $count % $size;
+                        
+                        $this->redirect_to
+                        (
+                            $this->url_for('thread_show_p', url=>$topic, page=>$page)
+                            . '#thread-' . $thId
+                        );
+                    }
                 }
             }
             
