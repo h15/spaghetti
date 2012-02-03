@@ -12,11 +12,13 @@ create table `user`
     `banId`     int(11) not null default 0,
     `banTime`   int(11) not null default 0,
     `attempts`  int(1)  unsigned not null default 0,
+    `threadId`  int(11) unsigned not null,
     
     unique (`mail`),
     unique (`name`),
     
-    FOREIGN KEY (`banId`)  REFERENCES `ban`(`id`)
+    FOREIGN KEY (`threadId`) REFERENCES `thread`(`id`),
+    FOREIGN KEY (`banId`)    REFERENCES `ban`(`id`)
 );
 
 INSERT INTO `user` (`id`, `mail`, `password`, `name`, `createAt`, `modifyAt`, `accessAt`, `banId`, `banTime`) VALUES(0,'anonymous@lorcode.org','','anonymous',0,0,0,0,0),
@@ -27,6 +29,7 @@ create table `userInfo`
     `id`        int(11) unsigned not null default 0,
     `desc`      varchar(9999) character set utf8 collate utf8_general_ci not null,
     `conf`      blob,
+    `responses` tinyint(4) unsigned not null default 0,
     
     FOREIGN KEY (`id`)  REFERENCES `user`(`id`)
 );

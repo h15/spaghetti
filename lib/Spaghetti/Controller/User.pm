@@ -100,15 +100,56 @@ use Mojo::Base 'Mojolicious::Controller';
                     {
                         # All fine.
                         #
-                        my $id = $model->create({ 
-                                    name      => $name,
-                                    mail      => $mail,
-                                    createAt  => time,
-                                    accessAt  => time,
-                                    modifyAt  => time,
-                                    password  => md5_hex( $mail . $pass )
+                        my $time = time;
+                        
+                        # Create user's private thread.
+                        #
+                        
+                        my $threadModel= new Pony::Crud::MySQL('thread');
+                        my $topicModel = new Pony::Crud::MySQL('topic');
+                        my $textModel  = new Pony::Crud::MySQL('text');
+                        
+                        my $thId = $threadModel->create
+                                   ({
+                                        author   => 1,
+                                        owner    => 1,
+                                        createAt => $time,
+                                        modifyAt => $time,
+                                        parentId => 0,
+                                        topicId  => 0,
+                                   });
+                        
+                        $topicModel->create
+                        ({
+                            threadId => $thId,
+                            title    => $name.' — '.$this->l('personal thread'),
+                            url      => $thId,
+                        });
+                                   
+                        my $teId = $textModel->create
+                                   ({
+                                        threadId => $thId,
+                                        text     => '',
+                                   });
+                        
+                        $threadModel->update( { textId => $teId },
+                                              { id     => $thId } );
+                        
+                        # Create user.
+                        #
+                        my $id = $model->create
+                                 ({ 
+                                     name     => $name,
+                                     mail     => $mail,
+                                     createAt => $time,
+                                     accessAt => $time,
+                                     modifyAt => $time,
+                                     password => md5_hex( $mail . $pass ),
+                                     threadId => $thId,
                                  });
                         
+                        # Add user to default group.
+                        #
                         my $u2gModel = new Pony::Crud::MySQL('userToGroup');
                         
                         # Default group.
@@ -124,6 +165,93 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->stash( form => $form->render() );
             $this->render;
+        }
+    
+    sub createPrivateThread
+        {
+            my $this = shift;
+            
+            my $model = new Pony::Crud::MySQL('user');
+            my $threadModel= new Pony::Crud::MySQL('thread');
+            my $topicModel = new Pony::Crud::MySQL('topic');
+            my $textModel  = new Pony::Crud::MySQL('text');
+            
+            my $name = $this->user->{name};
+            my $time = time;
+            
+            my $thId = $threadModel->create
+                       ({
+                            author   => 1,
+                            owner    => 1,
+                            createAt => $time,
+                            modifyAt => $time,
+                            parentId => 0,
+                            topicId  => 0,
+                       });
+            
+            $topicModel->create
+            ({
+                threadId => $thId,
+                title    => $name.' — '.$this->l('personal thread'),
+                url      => $thId,
+            });
+                       
+            my $teId = $textModel->create
+                       ({
+                            threadId => $thId,
+                            text     => '',
+                       });
+            
+            $threadModel->update( { textId => $teId },
+                                  { id     => $thId } );
+            
+            $model->update( { threadId => $thId },
+                            { id => $this->user->{id} } );
+        
+            $this->redirect_to('user_home');
+        }
+    
+    sub thread
+        {
+            my $this = shift;
+               $this->redirect_to('404') unless $this->user->{id};
+            
+            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
+            
+            # Paginator
+            #
+            
+            my $page = int ( $this->param('page') || 0 );
+               $page = 1 if $page < 1;
+            
+            my $size = Pony::Stash->get('thread')->{size};
+            
+            # Get personal threads.
+            #
+            
+            my $user = Pony::Crud::MySQL->new('user')
+                           ->read({ id => $this->user->{id} });
+            
+            my $sth = $dbh->prepare($Spaghetti::SQL::user->{private_thread});
+               $sth->execute( $user->{threadId}, $user->{threadId}, ($page - 1) * $size, $size );
+            my $threads = $sth->fetchall_hashref('id');
+            
+            $sth = $dbh->prepare($Spaghetti::SQL::user->{private_thread_count});
+            $sth->execute( $user->{threadId}, $user->{threadId} );
+            my $count = $sth->fetchrow_hashref()->{count};
+            
+            # Flush response count.
+            #
+            Pony::Crud::MySQL->new('userInfo')
+                ->update({ responses => 0 }, { id => $user->{id} });
+            
+            # Prepare to render.
+            #
+            
+            $this->stash( paginator =>
+                      $this->paginator('user_thread', $page, $count, $size) );
+            
+            $this->stash( threads => $threads );
         }
     
     sub home

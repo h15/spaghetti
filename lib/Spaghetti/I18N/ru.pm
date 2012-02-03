@@ -106,6 +106,16 @@ our %Lexicon = (
     'Change mail'   => 'Изменить почту',
     'Prioritet'     => 'Приоритет',
     'Create new group' => 'Создать новую группу',
+    'Private thread' => 'Личная страница',
+    'personal thread' => 'личная страница',
+    'Create private thread' => 'Создать личную страницу',
+    'You have a response to' => 'Вы получили ответ на',
+    'Flush password' => 'Сбросить',
+    'Generate password' => 'Сгенерировать',
+    'Config' => 'Настройка',
+    'make news' => 'Создать новость',
+    'Create news from topic' => 'Создать новость из темы',
+    'You have a response in topic' => 'Вы получили ответ в теме'
 );
 
 $Lexicon{$_} = decode('utf8', $Lexicon{$_}) for keys %Lexicon;
@@ -128,6 +138,11 @@ $t->Lexicon->{ru} =
         'I`m not bot'   => 'He бoт',
         'Old password'  => 'Старый',
         'New password'  => 'Новый',
+        'Title'         => 'Заголовок',
+        'Legend'        => 'Описание',
+        'Text'          => 'Текст',
+        'Parent'        => 'Родитель',
+        'Topic'         => 'Тема',
     };
 
 $t->Lexicon->{ru}->{$_} =

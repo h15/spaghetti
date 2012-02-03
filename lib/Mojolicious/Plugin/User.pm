@@ -60,6 +60,11 @@ use Pony::Object 'Mojolicious::Plugin';
                         
                         $user->{groups} = [ map { $_->{groupId} } @groups ];
                         
+                        my $responses = Pony::Crud::MySQL->new('userInfo')
+                                            ->read({id => $id}, ['responses']);
+                        
+                        $user->{responses} = $responses->{responses} || 0;
+                        
                         # Get config
                         #
                         unless ( defined $conf )

@@ -1,7 +1,7 @@
 package Spaghetti;
 use Mojo::Base 'Mojolicious';
     
-    our $VERSION = '0.000006';
+    our $VERSION = '0.000007';
     our $COMMIT  = '';
     #use lib '../pony/lib';
     use Pony::Stash;
@@ -114,6 +114,12 @@ use Mojo::Base 'Mojolicious';
             $r->route('/user/home')
               ->to('user#home')
                 ->name('user_home');
+            $r->route('/user/home/thread')
+              ->to('user#thread')
+                ->name('user_thread');
+            $r->route('/user/createPrivateThread')
+              ->to('user#createPrivateThread')
+                ->name('user_createPrivateThread');
             $r->route('/user/profile/:id', id => qr/\d+/)
                 ->to('user#profile')
                   ->name('user_profile');

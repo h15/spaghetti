@@ -68,4 +68,15 @@
             </form>
 
     </div>
+
+    <div>
+
+% if ( user->{threadId} )
+% {
+    <a href="<%= url_for 'user_thread' %>"><%=l 'Private thread' %></a>
+% } else {
+    <a href="<%= url_for 'user_createPrivateThread' %>"><%=l 'Create private thread' %></a>
+% }
+    </div>
+    
 </div>

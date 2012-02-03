@@ -142,4 +142,31 @@ our $news =
     },
 };
 
+our $user =
+{
+    private_thread =>
+    q{
+        SELECT th.id, th.createAt, th.modifyAt, th.parentId,
+            th.topicId, th.author, t.`text`, t1.title, t1.url
+        FROM `thread` th
+        LEFT OUTER JOIN `text`    t    ON ( th.textId    = t.id  )
+        LEFT OUTER JOIN `topic`   t1   ON ( t1.threadId  = th.id )
+            WHERE ( th.topicId = ? or th.id = ? )
+            ORDER BY t1.threadId, th.id DESC
+            LIMIT ?, ?
+    },
+    
+    private_thread_count =>
+    q{
+        SELECT COUNT(*) AS count
+        FROM `thread` th
+            WHERE th.topicId = ? or th.id = ?
+    },
+    
+    inc_responses =>
+    q{
+        UPDATE `userInfo` SET `responses` = `responses` + 1 WHERE `id` = ?
+    },
+};
+
 1;

@@ -45,6 +45,12 @@
         % {
         
             <div class="alignright">
+                <a href="<%= url_for 'user_thread' %>">
+                    <div class="alignleft <%= user->{responses} ? 'hot-responses' : 'responses' %>">
+                        <%= user->{responses} %>
+                    </div>
+                </a>
+                
                 <%= render_user(user) %>
             </div>
         

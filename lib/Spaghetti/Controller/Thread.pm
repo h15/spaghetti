@@ -123,26 +123,67 @@ use Mojo::Base 'Mojolicious::Controller';
                     my $userId= $this->user->{id};
                     
                     my $threadModel= new Pony::Crud::MySQL('thread');
+                    my $topicModel = new Pony::Crud::MySQL('topic');
                     my $textModel  = new Pony::Crud::MySQL('text');
+                    my $userModel  = new Pony::Crud::MySQL('user');
                     
                     my $thId = $threadModel->create
                                ({
-                                    author      => $userId,
-                                    owner       => $userId,
-                                    createAt    => time,
-                                    modifyAt    => time,
-                                    parentId    => $parent,
-                                    topicId     => $topic,
+                                    author   => $userId,
+                                    owner    => $userId,
+                                    createAt => time,
+                                    modifyAt => time,
+                                    parentId => $parent,
+                                    topicId  => $topic,
                                });
                                
                     my $teId = $textModel->create
                                ({
-                                    threadId    => $thId,
-                                    text        => Spaghetti::Util::escape($text),
+                                    threadId => $thId,
+                                    text     => Spaghetti::Util::escape($text),
                                });
                     
-                    $threadModel->update( { textId  => $teId },
-                                          { id      => $thId } );
+                    $threadModel->update( { textId => $teId },
+                                          { id     => $thId } );
+                    
+                    # Add notification to private thread
+                    # of user, who is an author of parent thread.
+                    
+                    {
+                        my $thread = $threadModel->read({id => $parent});
+                        my $user   = $userModel  ->read({ id => $thread->{author} });
+                        
+                        $thread  = $threadModel->read({id => $topic});
+                        my $topic= $topicModel ->read({threadId => $topic});
+                        
+                        my $thId = $threadModel->create
+                                   ({
+                                        author   => 1,
+                                        owner    => 1,
+                                        createAt => time,
+                                        modifyAt => time,
+                                        parentId => $user->{threadId},
+                                        topicId  => $user->{threadId},
+                                   });
+                        
+                        my $text = $this->l('You have a response in topic') .
+                                   ( sprintf ' "<a href="%s">%s</a>".',
+                                     $this->url_for('thread_show', url => $thread->{id}),
+                                     $topic->{title} );
+                        
+                        my $teId = $textModel->create
+                                   ({
+                                        threadId => $thId,
+                                        text     => $text,
+                                   });
+                        
+                        $threadModel->update( { textId => $teId },
+                                              { id     => $thId } );
+                        
+                        my $dbh = Pony::Crud::Dbh::MySQL->new->dbh;
+                           $dbh->prepare($Spaghetti::SQL::user->{inc_responses})
+                               ->execute( $user->{id} );
+                    }
                     
                     # Inheritance of groups
                     #
