@@ -1,3 +1,21 @@
+commit c3340ab1937b661d06966252c6ed7f72a906e381
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Fri Feb 3 22:18:00 2012 +0600
+
+    add last thread user to tracker && deny wcd access to anonymous
+
+commit e24d2fe3f8ed54c2e4bbd25b20dee90d38f9c983
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Fri Feb 3 09:56:33 2012 +0600
+
+    add notification
+
+commit 7380535ad4bc0cbb9e67cdbda08d8f79a18f76fd
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Mon Jan 30 03:15:46 2012 +0600
+
+    Highlight threads with modifyAt < hour
+
 commit e8b587d323d90859ba27dc85767e5f59e41c98da
 Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
 Date:   Mon Jan 30 02:58:39 2012 +0600
