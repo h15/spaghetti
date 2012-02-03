@@ -5,9 +5,8 @@
 <table class="tracker list">
     <tr>
         <th><%=l 'Topic' %></th>
-        <th><%=l 'Size' %></th>
-        <th><%=l 'Time' %></th>
         <th></th>
+        <th><%=l 'Time' %></th>
     </tr>
     
 % for my $k ( sort { $threads->{$b}->{latest} <=> $threads->{$a}->{latest} } keys %$threads )
@@ -18,22 +17,27 @@
     
     <td>
             <a href="<%= url_for thread_show => url => $t->{url} %>"><%= $t->{title} %></a>
+            
+            <div class="alignright">
+                <%= render_user
+                    {
+                        id    => $t->{author},
+                        name  => $t->{name},
+                        mail  => $t->{mail},
+                        banId => $t->{banId},
+                    }
+                %>
+            </div>
     </td>
-    <td>
+    <td class=count>
         <%= $t->{count} %>
     </td>
     <td>
         <%= render_datetime $t->{latest} %>
-    </td>
-    <td>
-        <%= render_user
-            {
-                id    => $t->{author},
-                name  => $t->{name},
-                mail  => $t->{mail},
-                banId => $t->{banId},
-            }
-        %>
+        
+        <div class="alignright">
+            <%= $t->{lname} %>
+        </div>
     </td>
 
 </tr>

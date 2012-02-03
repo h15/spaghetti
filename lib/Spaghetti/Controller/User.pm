@@ -122,7 +122,7 @@ use Mojo::Base 'Mojolicious::Controller';
                         $topicModel->create
                         ({
                             threadId => $thId,
-                            title    => $name.' — '.$this->l('personal thread'),
+                            title    => $name.' - '.$this->l('personal thread'),
                             url      => $thId,
                         });
                                    
@@ -192,7 +192,7 @@ use Mojo::Base 'Mojolicious::Controller';
             $topicModel->create
             ({
                 threadId => $thId,
-                title    => $name.' — '.$this->l('personal thread'),
+                title    => $name.' - '.$this->l('personal thread'),
                 url      => $thId,
             });
                        
@@ -231,6 +231,8 @@ use Mojo::Base 'Mojolicious::Controller';
             
             my $user = Pony::Crud::MySQL->new('user')
                            ->read({ id => $this->user->{id} });
+            
+            $this->redirect_to('404') if $user->{threadId} == 0;
             
             my $sth = $dbh->prepare($Spaghetti::SQL::user->{private_thread});
                $sth->execute( $user->{threadId}, $user->{threadId}, ($page - 1) * $size, $size );

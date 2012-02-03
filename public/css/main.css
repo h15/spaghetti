@@ -219,7 +219,7 @@
     
     table.list td
     {
-        padding:2px 5px;
+        padding:2px;
         margin:0px;
     }
     
@@ -228,7 +228,7 @@
         width:20px;
         height:20px;
         float:left;
-        margin:0px 2px;
+        margin:0px 2px 0px 2px;
     }
     
     /*** Messages ***/
@@ -421,4 +421,15 @@
     {
         background:#d99;
         color:#844;
+    }
+    
+    .tracker .userpic_small
+    {
+        float:right;
+    }
+    
+    .tracker .post .count
+    {
+        padding:0px 4px 0px 4px;
+        text-align:center;
     }

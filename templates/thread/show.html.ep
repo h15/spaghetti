@@ -146,7 +146,7 @@
                               banId => $t->{banId} }) %>
         </div>
     
-        % if ( $t->{owner} == user->{id} || $t->{W} > 0 )
+        % if ( user->{id} && ($t->{owner} == user->{id} || $t->{W} > 0) )
         % {
         <div class="controlls">
             <div class="editThread">

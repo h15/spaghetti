@@ -68,7 +68,11 @@ our $thread =
                 t1.url, u.name, u.mail, u.banId,
                 ( SELECT COUNT(thr.id)     FROM `thread`AS thr WHERE thr.topicId = th.id ) as count,
                 ( SELECT MAX(thr.modifyAt) FROM `thread`AS thr
-                    WHERE thr.topicId = th.id OR thr.id = th.id ) as latest
+                    WHERE thr.topicId = th.id OR thr.id = th.id ) AS latest,
+                ( SELECT u.name FROM `thread` AS last
+                    INNER JOIN `user` AS u ON ( last.author = u.id  )
+                        WHERE last.topicId = th.id OR last.id = th.id
+                        ORDER BY last.id DESC LIMIT 1 ) AS lname
             FROM `thread` AS th
             INNER JOIN `topic` AS t1   ON ( t1.threadId  = th.id )
             INNER JOIN `user`  AS u    ON ( th.author    = u.id  )

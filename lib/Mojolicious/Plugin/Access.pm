@@ -41,6 +41,11 @@ use Pony::Object 'Mojolicious::Plugin';
                     
                     $tid = 0 unless defined $tid;
                     
+                    # Deny access for anonymous.
+                    #
+                    
+                    return 0 unless $uid;
+                    
                     # Allow by database record.
                     #
                     
