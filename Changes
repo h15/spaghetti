@@ -1,3 +1,21 @@
+commit 1ac74aa82e2d046e0882ea81eedc1515ea82c00e
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Feb 5 04:12:59 2012 +0600
+
+    add admin config && install param for script
+
+commit c036477126609efb3e1fe1ca5f70c78982b38755
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Feb 5 01:53:19 2012 +0600
+
+    add vertical menu to admin panel
+
+commit d02ce33ca08a19ba3d96ac687bf604fdc4adb1d9
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sat Feb 4 20:49:19 2012 +0600
+
+    fix vertical menu in user home
+
 commit f8203c7a5e62fe167b5ad298ce0f9162a27833d3
 Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
 Date:   Sat Feb 4 20:03:30 2012 +0600
