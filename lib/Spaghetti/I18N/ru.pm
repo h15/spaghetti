@@ -54,6 +54,12 @@ our %Lexicon = (
     'modifyAt'      => 'время изменения',
     'accessAt'      => 'последнее посещение',
     
+    'Users'         => 'Пользователи',
+    'Threads'       => 'Треды',
+    'Groups'        => 'Группы',
+    'Types'         => 'Типы данных',
+    'Configure user'=> 'Настройка пользователя',
+    
     'a few seconds ago' => 'несколько секунд назад',
     'Your public key'   => 'Ваш публичный ключ',
     'Create new repo'   => 'Создать новый репозиторий',
@@ -98,7 +104,7 @@ our %Lexicon = (
     'Login via mail'    => 'Войти через почту',
     'Responses to'      => 'Ответы на',
     'News list'         => 'Новости',
-    'logout'            => 'выйти',
+    'logout'            => 'Выйти',
     'Description'       => 'Описание',
     'Change password'   => 'Изменить пароль',
     'Change mail'       => 'Изменить почту',
@@ -116,6 +122,7 @@ our %Lexicon = (
     'You have a response to'        => 'Вы получили ответ на',
     'Create new data type'          => 'Создать новый тип данных',
     'Configure special params for'  => 'Настройка специальных параметров для',
+    'Yes, I want to exit from this site' => 'Да, я хочу выйти из этого сайта',
 );
 
 $Lexicon{$_} = decode('utf8', $Lexicon{$_}) for keys %Lexicon;

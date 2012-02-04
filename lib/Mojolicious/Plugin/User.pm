@@ -119,11 +119,11 @@ use Pony::Object 'Mojolicious::Plugin';
                     $user = Pony::Crud::MySQL->new('user')->read({id => $user})
                                                 unless ( ref $user eq 'HASH' );
                     
-                    my $default = sprintf 'http://%s:%s/pic/userpic.png',
+                    my $default = sprintf 'http://%s:%s/pic/userpic20.png',
                                           $self->req->url->base->host,
                                           $self->req->url->base->port;
                     my $pic = sprintf '<img class=userpic_small src="http://www.gravatar.com/avatar/%s?d=%s&s=%s">',
-                                      md5_hex(lc $user->{mail}), uri_escape($default), 64;
+                                      md5_hex(lc $user->{mail}), uri_escape($default), 20;
                     my $url =
                         (
                             $user->{id} != $self->user->{id} ?
@@ -146,7 +146,7 @@ use Pony::Object 'Mojolicious::Plugin';
                 {
                     my ( $self, $mail, $size ) = @_;
                     
-                    my $default = sprintf 'http://%s:%s/pic/userpic.png',
+                    my $default = sprintf 'http://%s:%s/pic/userpic96.png',
                                           $self->req->url->base->host,
                                           $self->req->url->base->port;
                     

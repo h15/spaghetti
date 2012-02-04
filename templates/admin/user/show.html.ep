@@ -1,5 +1,8 @@
 % layout 'default';
 % title l('Configure user') . ' ' . $user->{name};
+%
+% stash(tab => 'user');
+% include 'admin/vertical_nav';
 
 % for my $g ( @$groups )
 % {
@@ -49,4 +52,6 @@
     </tr>
 </table>
 
-<a class=red href="<%= url_for(admin_user_delete => id => $user->{id}) %>"><%=l 'Delete user' %></a>
+<form method=post action="<%= url_for(admin_user_delete => id => $user->{id}) %>">
+    <input class="red" type="submit" value="<%=l 'Delete user' %>">
+</form>

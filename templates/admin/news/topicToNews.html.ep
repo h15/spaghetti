@@ -1,4 +1,6 @@
 % layout 'default';
 % title l('Create news from topic');
+%
+% include 'admin/vertical_nav';
 
 %=b $form

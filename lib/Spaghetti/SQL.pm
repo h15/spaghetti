@@ -43,6 +43,17 @@ our $thread =
                         )
                 ORDER BY th.id ASC
                 LIMIT ?, ?},
+    
+    show_admin => q{SELECT th.id, th.createAt, th.modifyAt, th.parentId,
+                        th.topicId, th.author, t.`text`, t1.title,
+                        t1.url, u.name, u.mail, u.banId
+                    FROM `thread` th
+                    LEFT OUTER JOIN `text`    t    ON ( th.textId    = t.id  )
+                    LEFT OUTER JOIN `topic`   t1   ON ( t1.threadId  = th.id )
+                    LEFT OUTER JOIN `user`    u    ON ( th.author    = u.id  )
+                        ORDER BY t1.threadId, th.id DESC
+                        LIMIT ?, ?},
+    
     showCount =>
     q{
         SELECT COUNT(*) AS count FROM `thread` th

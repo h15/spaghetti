@@ -1,4 +1,7 @@
 % layout 'default';
 % title l('Edit group') . ' ' . $group->{name};
+%
+% stash(tab => 'group');
+% include 'admin/vertical_nav';
 
 <%=b $form %>

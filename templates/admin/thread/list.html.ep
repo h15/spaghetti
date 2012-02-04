@@ -1,5 +1,8 @@
 % layout 'default';
 % title l 'Thread list';
+%
+% stash(tab => 'thread');
+% include 'admin/vertical_nav';
 
 <a href="<%= url_for('thread_createTopic') %>">
     <div class="button"><%=l 'Add root thread' %></div>
@@ -7,8 +10,9 @@
 
 %= $paginator
 
-% for my $t ( reverse @$threads )
+% for my $k ( sort { $b <=> $a } keys %$threads )
 % {
+%   my $t = $threads->{$k};
 
 <article class="post" id="thread-<%= $t->{id} %>">
     <nav>

@@ -1,5 +1,8 @@
 % layout 'default';
 % title l('Configure special params for') . ' ' . $thread->{title};
+%
+% stash(tab => 'thread');
+% include 'admin/vertical_nav';
 
 % for my $t ( @$types )
 % {

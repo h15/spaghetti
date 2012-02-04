@@ -1,4 +1,7 @@
 % layout 'default';
 % title l('Create new group');
+%
+% stash(tab => 'group');
+% include 'admin/vertical_nav';
 
 <%=b $form %>

@@ -340,8 +340,11 @@ use Mojo::Base 'Mojolicious::Controller';
         {
             my $this = shift;
             
-            $this->session( userId  => 0 )
-                 ->redirect_to('thread_index');
+            if ( $this->req->method eq 'POST' )
+            {
+                $this->session( userId  => 0 )
+                     ->redirect_to('thread_index');
+            }
         }
 
     sub changePassword

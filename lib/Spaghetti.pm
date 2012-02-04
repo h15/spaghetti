@@ -208,12 +208,12 @@ use Mojo::Base 'Mojolicious';
             $a->route('/thread/:id/type/:type/remove')
                 ->to('thread#removeType')
                   ->name('admin_thread_removeType');
-            $a->route('/thread/:page', page => qr/\d+/)
-                ->to('thread#list')
-                  ->name('admin_thread_list');
             $a->route('/thread')
                 ->to('thread#list')
                   ->name('admin_thread_list');
+            $a->route('/thread/:page', page => qr/\d+/)
+                ->to('thread#list')
+                  ->name('admin_thread_list_p');
             $a->route('/thread/show/:id')
                 ->to('thread#show')
                   ->name('admin_thread_show');

@@ -1,5 +1,8 @@
 % layout 'default';
 % title l('Admin panel');
+%
+% stash(tab => 'index');
+% include 'admin/vertical_nav';
 
 <div class=item>
     <a href="<%= url_for('admin_user_list') %>"><%=l 'User list' %></a>

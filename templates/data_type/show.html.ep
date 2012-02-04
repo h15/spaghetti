@@ -1,5 +1,8 @@
 % layout 'default';
 % title l('Data type') . ' ' . $type->{name};
+%
+% stash(tab => 'type');
+% include 'admin/vertical_nav';
 
 <table>
     <tr>

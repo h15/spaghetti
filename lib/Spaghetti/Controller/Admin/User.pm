@@ -48,7 +48,11 @@ use Mojo::Base 'Mojolicious::Controller';
         {
             my $this = shift;
             my $id   = $this->param('id');
-            Pony::Crud::MySQL->new('user')->delete({id => $id});
+            
+            if ( $this->req->method eq 'POST' )
+            {
+                Pony::Crud::MySQL->new('user')->delete({id => $id});
+            }
             
             $this->redirect_to('admin_user_list');
         }

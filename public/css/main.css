@@ -398,19 +398,19 @@
         /*background:#E8E9EB;*/
     }
     
-    article.hot nav
+    article.other>nav
+    {
+        background:#f0f0f8;
+    }
+    
+    article.hot>nav
     {
         background:#f8f0f0;
     }
     
-    article.me nav
+    article.me>nav
     {
         background:#f0f8f0;
-    }
-    
-    article.other nav
-    {
-        background:#f0f0f8;
     }
     
     .responses, .hot-responses
@@ -444,9 +444,10 @@
         text-align:center;
     }
     
-    .red
+    input.red
     {
-        background: #f8f0f0;
+        color:#a00;
+        font-weight:600;
     }
     
 /*******************
@@ -455,9 +456,9 @@
 
     nav.vertical
     {
-        position:absolute;
+        position:fixed;
         right:50%;
-        top:20px;
+        top:45px;
         text-align:left;
         width:103px;
     }
@@ -473,10 +474,10 @@
         right:20px;
         border:1px solid #C8C9CB;
         border-right:0px;
-        -moz-border-radius:     5px 0px 0px 5px;
-        -webkit-border-radius:  5px 0px 0px 5px;
-        border-radius:          5px 0px 0px 5px;
-        -khtml-border-radius:   5px 0px 0px 5px;
+        -moz-border-radius:     4px 0px 0px 4px;
+        -webkit-border-radius:  4px 0px 0px 4px;
+        border-radius:          4px 0px 0px 4px;
+        -khtml-border-radius:   4px 0px 0px 4px;
         background:#F2F3F7;
         /*height:20px;*/
         font-size:12px;
@@ -515,4 +516,19 @@
     nav.vertical div.selected
     {
         background:#fff;
+    }
+    
+    nav.vertical div.red
+    {
+        background: #fee;
+    }
+    
+    nav.vertical div.red a
+    {
+        color:#d77;
+    }
+    
+    nav.vertical div.red:hover
+    {
+        background:#faa;
     }

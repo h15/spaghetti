@@ -1,9 +1,12 @@
 % layout 'default';
 % title l 'User list';
+%
+% stash(tab => 'user');
+% include 'admin/vertical_nav';
 
 %= $paginator
 
-<table class="user">
+<table class="user list">
     <tr>
         <th><%=l 'name'     %></th>
         <th><%=l 'mail'     %></th>

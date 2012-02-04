@@ -1,4 +1,7 @@
 % layout 'default';
 % title l('Create new data type');
+%
+% stash(tab => 'type');
+% include 'admin/vertical_nav';
 
 <%=b $form %>

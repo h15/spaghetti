@@ -1,5 +1,8 @@
 % layout 'default';
 % title l('Edit post');
+%
+% stash(tab => 'thread');
+% include 'admin/vertical_nav';
 
 <div>
     <a href="<%= url_for( 'thread_show', url => $id ) %>"><%=l 'Go to thread' %></a>

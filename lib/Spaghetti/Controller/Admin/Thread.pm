@@ -140,28 +140,23 @@ use Mojo::Base 'Mojolicious::Controller';
             my $page = int ( $this->param('page') || 0 );
                $page = 1 if $page < 1;
             
-            my $conf = Pony::Stash->get('thread');
-            
-            # Quick and dirty :)
+            # Get data
             #
             
-            my $q = sprintf 'SELECT th.id, th.createAt, th.modifyAt, th.parentId,
-                                    th.topicId, th.author, t.`text`, t1.title,
-                                    t1.url, u.name, u.mail, u.banId
-                                FROM `thread` th
-                                LEFT OUTER JOIN `text`    t    ON ( th.textId    = t.id  )
-                                LEFT OUTER JOIN `topic`   t1   ON ( t1.threadId  = th.id )
-                                LEFT OUTER JOIN `user`    u    ON ( th.author    = u.id  )
-                                    ORDER BY t1.threadId, th.id ASC
-                                    LIMIT %d, %d',
-                                ($page - 1) * $conf->{size}, $conf->{size};
+            my $size = Pony::Stash->get('thread')->{size};
             
-            my @threads = Pony::Crud::MySQL->new('thread')->raw( $q );
+            my $dbh = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $sth = $dbh->prepare( $Spaghetti::SQL::thread->{show_admin} );
+               $sth->execute(($page-1)*$size, $size);
+            my $threads = $sth->fetchall_hashref('id');
             my $count = Pony::Crud::MySQL->new('thread')->count;
             
+            # Prepare render
+            #
+            
             $this->stash( paginator => $this->paginator
-                          ('admin_thread_list', $page, $count, $conf->{size}) );
-            $this->stash( threads => \@threads );
+                            ('admin_thread_list_p', $page, $count, $size) );
+            $this->stash( threads => $threads );
             $this->render('admin/thread/list');
         }
     

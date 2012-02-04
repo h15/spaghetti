@@ -1,4 +1,7 @@
 % layout 'default';
 % title l('Edit data type') . ' ' . $type->{name};
+%
+% stash(tab => 'type');
+% include 'admin/vertical_nav';
 
 <%=b $form %>

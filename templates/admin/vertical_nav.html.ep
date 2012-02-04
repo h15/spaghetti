@@ -1,0 +1,25 @@
+% content_for vertical_nav => begin
+%
+% my $tab = stash('tab');
+
+<div class="item red <%= 'selected' if $tab eq 'index' %>">
+    <a href="<%= url_for 'admin_admin_index' %>"><%=l 'Admin panel' %></a>
+</div>
+
+<div class="item <%= 'selected' if $tab eq 'user' %>">
+    <a href="<%= url_for 'admin_user_list' %>"><%=l 'Users' %></a>
+</div>
+
+<div class="item <%= 'selected' if $tab eq 'thread' %>">
+    <a href="<%= url_for 'admin_thread_list' %>"><%=l 'Threads' %></a>
+</div>
+
+<div class="item <%= 'selected' if $tab eq 'group' %>">
+    <a href="<%= url_for 'admin_group_list' %>"><%=l 'Groups' %></a>
+</div>
+
+<div class="item <%= 'selected' if $tab eq 'type' %>">
+    <a href="<%= url_for 'admin_dataType_list' %>"><%=l 'Types' %></a>
+</div>
+    
+% end
