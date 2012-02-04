@@ -85,6 +85,10 @@
           <h1><%= title %></h1>
         </header>
         
+        <nav class=vertical>
+%= content_for 'vertical_nav';
+        </nav>
+        
         % my $messageType = stash('messageType');
         % my $message     = stash('message');
         %
@@ -96,7 +100,7 @@
         % }
         
         <article class=content>
-            <%= content %>
+%= content
         </article>
     </div>
 </div>

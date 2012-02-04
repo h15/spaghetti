@@ -1,7 +1,8 @@
-    /**
-     *  Show / hide some area.
-     */
+
     $(document).ready(function(){
+        /**
+         *  Show / hide some area.
+         */
         $('.showButton').click(function(){
             var id = $(this).attr('id').split('-').pop();
             
@@ -21,4 +22,10 @@
             
             return false;
         });
+        
+        /**
+         *  Fix vertical nav position.
+         */
+        var left = $("nav.vertical").position().left;
+        $("nav.vertical").css( 'left', left - 436 );
     });

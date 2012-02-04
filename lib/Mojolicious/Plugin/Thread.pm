@@ -33,11 +33,15 @@ use Pony::Object 'Mojolicious::Plugin';
             {
                 my $t = $threads->{$id};
                 
-                $html .= sprintf qq{<article class="tree-post %s" id="thread-%d">
+                my $class = 'other';
+                   $class = 'hot' if $t->{modifyAt} + 3600 > time;
+                   $class = 'me'  if $this->user->{id} && $t->{author} == $this->user->{id};
+                
+                $html .= sprintf qq{<article class="tree-post $class" id="thread-%d">
                                     <a name="thread-%d"></a>
                                     <nav>
                                         <div class="sefl">
-                                            <a href="%s#thread-%d">#</a>
+                                            <a href="#thread-%d">#</a>
                                             <a href="%s">%s</a>
                                         </div>
                                         <div class="parents">
@@ -46,11 +50,9 @@ use Pony::Object 'Mojolicious::Plugin';
                                         </div>
                                         <div class="time">},
                             
-                            ( $t->{modifyAt} + 3600 > time ? 'hot' : '' ),
-                            
                             $t->{id},
                             $t->{id},
-                            $this->url_for('thread_show', url => $t->{topicId} ), $t->{id},
+                            $t->{id},
                             ($this->url_for('thread_show', url => ( $t->{url} ? $t->{url} : $t->{id} ) )), ($t->{title} || '&rarr;'),
                             $this->url_for('thread_show', url => $t->{parentId}),
                             $this->url_for('thread_show', url => $t->{topicId});

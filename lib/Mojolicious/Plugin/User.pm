@@ -139,6 +139,21 @@ use Pony::Object 'Mojolicious::Plugin';
                     );
                 }
             );
+            
+            $app->helper
+            (
+                render_userpic => sub
+                {
+                    my ( $self, $mail, $size ) = @_;
+                    
+                    my $default = sprintf 'http://%s:%s/pic/userpic.png',
+                                          $self->req->url->base->host,
+                                          $self->req->url->base->port;
+                    
+                    return( sprintf '<img class=userpic_big src="http://www.gravatar.com/avatar/%s?d=%s&s=%s">',
+                                   md5_hex(lc $mail), uri_escape($default), $size );
+                }
+            );
         }
 
 1;

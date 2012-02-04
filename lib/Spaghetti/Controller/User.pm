@@ -264,32 +264,6 @@ use Mojo::Base 'Mojolicious::Controller';
             my $formPass = new Spaghetti::Form::User::ChangePassword;
             my $formMail = new Spaghetti::Form::User::ChangeMail;
             
-            # Get config
-            #
-            
-            my $default = Pony::Stash->get('defaultUserConf');
-            my $conf = Pony::Crud::MySQL
-                         ->new('userInfo')
-                           ->read({id => $this->user->{id}}, ['conf']);
-            
-            if ( defined $conf )
-            {
-                $conf = thaw $conf->{conf};
-                
-                for my $k ( keys %$default )
-                {
-                    $conf->{$k} = $default->{$k} unless exists $conf->{$k};
-                }
-            }
-            else
-            {
-                $conf = $default;
-            }
-            
-            $this->stash( conf => $conf );
-            
-            $this->stash( formPass => $formPass->render() );
-            $this->stash( formMail => $formMail->render() );
             $this->stash( user => $this->user );
             $this->render;
         }
@@ -325,8 +299,30 @@ use Mojo::Base 'Mojolicious::Controller';
                 
                 $this->session( conf => freeze($data) );
             }
+            
+            # Get config
+            #
+            
+            my $default = Pony::Stash->get('defaultUserConf');
+            my $conf = Pony::Crud::MySQL
+                         ->new('userInfo')
+                           ->read({id => $this->user->{id}}, ['conf']);
+            
+            if ( defined $conf )
+            {
+                $conf = thaw $conf->{conf};
                 
-            $this->redirect_to('user_home');
+                for my $k ( keys %$default )
+                {
+                    $conf->{$k} = $default->{$k} unless exists $conf->{$k};
+                }
+            }
+            else
+            {
+                $conf = $default;
+            }
+            
+            $this->stash( conf => $conf );
         }
     
     sub profile

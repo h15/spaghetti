@@ -390,7 +390,7 @@
 	    
         padding:0px 0px 0px 4px;
 	    font-size:14px;
-        background:#f0f0f4;
+        background:#f0f0f8;
     }
     
     article.tree-post:nth-child(2n) nav
@@ -400,7 +400,17 @@
     
     article.hot nav
     {
-        background:#f4f0f0;
+        background:#f8f0f0;
+    }
+    
+    article.me nav
+    {
+        background:#f0f8f0;
+    }
+    
+    article.other nav
+    {
+        background:#f0f0f8;
     }
     
     .responses, .hot-responses
@@ -432,4 +442,72 @@
     {
         padding:0px 4px 0px 4px;
         text-align:center;
+    }
+    
+    .red
+    {
+        background: #f8f0f0;
+    }
+    
+/*******************
+ *   Vertical nav  *
+ *******************/
+
+    nav.vertical
+    {
+        position:absolute;
+        right:50%;
+        top:20px;
+        text-align:left;
+        width:103px;
+    }
+    
+    nav.vertical div div
+    {
+        width:9999px;
+    }
+    
+    nav.vertical div.item
+    {
+        border:1px solid #C8C9CB;
+        border-right:0px;
+        -moz-border-radius:     5px 0px 0px 5px;
+        -webkit-border-radius:  5px 0px 0px 5px;
+        border-radius:          5px 0px 0px 5px;
+        -khtml-border-radius:   5px 0px 0px 5px;
+        background:#F2F3F7;
+        /*height:20px;*/
+        font-size:14px;
+        padding:5px;
+        width:108px;
+        overflow:hidden;
+        margin:5px 0px 5px 0px;
+        float:left;
+    }
+    
+    nav.vertical div.item a
+    {
+        text-decoration:none;
+    }
+    
+    nav.vertical div.selected
+    {
+        background:#fff;
+    }
+
+    nav.vertical div.save
+    {
+        -moz-border-radius:10px;
+        -webkit-border-radius:10px;
+        border-radius:10px;
+        -khtml-border-radius:10px;
+        width:80px;
+        text-align:center;
+        padding:5px;
+        background: #fee;
+    }
+
+    nav.vertical div.selected
+    {
+        background:#fff;
     }
