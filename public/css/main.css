@@ -469,6 +469,8 @@
     
     nav.vertical div.item
     {
+        position:relative;
+        right:20px;
         border:1px solid #C8C9CB;
         border-right:0px;
         -moz-border-radius:     5px 0px 0px 5px;
@@ -477,12 +479,14 @@
         -khtml-border-radius:   5px 0px 0px 5px;
         background:#F2F3F7;
         /*height:20px;*/
-        font-size:14px;
+        font-size:12px;
         padding:5px;
-        width:108px;
+        width:128px;
         overflow:hidden;
         margin:5px 0px 5px 0px;
         float:left;
+        box-shadow: inset -10px 0 10px -10px rgba(0,0,0,0.5),
+                          -4px 0 4px 0px rgba(0,0,0,0.2);
     }
     
     nav.vertical div.item a
@@ -493,6 +497,7 @@
     nav.vertical div.selected
     {
         background:#fff;
+        box-shadow:-4px 0 4px 0px rgba(0,0,0,0.2);
     }
 
     nav.vertical div.save

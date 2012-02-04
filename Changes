@@ -1,3 +1,9 @@
+commit f8203c7a5e62fe167b5ad298ce0f9162a27833d3
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sat Feb 4 20:03:30 2012 +0600
+
+    add vertical menu in user home
+
 commit a937b7321be33ac60dac4beb1511b5537ffcf398
 Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
 Date:   Fri Feb 3 22:18:43 2012 +0600

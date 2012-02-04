@@ -9,7 +9,7 @@
     
     <div class="item">
         <div>
-            <%=l 'Profile' %>
+            <a href="<%= url_for 'user_home' %>"><%=l 'Profile' %></a>
         </div>
     </div>
 
