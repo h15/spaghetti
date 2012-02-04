@@ -14,6 +14,27 @@ Please visit http://mojolicio.us for detailed installation instructions.
 
 EOF
 
+# ./script/spaghetti install host=localhost dbname=gitty \
+# user=gitty password=secret
+
+if ( $ARGV[0] eq 'install' )
+{
+    use Pony::Stash;
+    
+    my $stash = Pony::Stash->new('./resources/stash.dat');
+    my %conf;
+    
+    for my $conf ( @ARGV[1..4] )
+    {
+        %conf = ( %conf, split('=', $conf) );
+    }
+    
+    $stash->set( database => \%conf );
+    $stash->save;
+
+    exit;
+}
+
 # Application
 $ENV{MOJO_APP} ||= 'Spaghetti';
 

@@ -1,0 +1,39 @@
+% layout 'default';
+% title l('Config');
+%
+% stash(tab => 'config');
+% include 'admin/vertical_nav';
+
+<form method="post" action="<%= url_for 'admin_config_edit' %>">
+
+% for my $key ( sort keys %$conf )
+% {
+
+<h2><%= $key %></h2>
+<table class=list style="width:400px;">
+    <tr>
+        <th>key</th>
+        <th style="width:180px;">value</th>
+    </tr>
+
+%     for my $jay ( sort keys %{ $conf->{$key} } )
+%     {
+
+    <tr>
+        <td><%= $jay %></td>
+        <td><input name="<%= $key . ' ' . $jay %>"
+                   value="<%= $conf->{$key}->{$jay} %>"></td>
+    </tr>
+
+%     }
+
+</table>
+
+% }
+
+    <input type=submit>
+</form>
+
+<form method="post" action="<%= url_for 'admin_config_save' %>">
+    <input type=submit value="<%=l 'save' %>">
+</form>

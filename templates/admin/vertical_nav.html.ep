@@ -21,5 +21,9 @@
 <div class="item <%= 'selected' if $tab eq 'type' %>">
     <a href="<%= url_for 'admin_dataType_list' %>"><%=l 'Types' %></a>
 </div>
+
+<div class="item <%= 'selected' if $tab eq 'config' %>">
+    <a href="<%= url_for 'admin_config_edit' %>"><%=l 'Config' %></a>
+</div>
     
 % end

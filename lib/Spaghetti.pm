@@ -3,7 +3,7 @@ use Mojo::Base 'Mojolicious';
     
     our $VERSION = '0.000007';
     our $COMMIT  = '';
-    #use lib '../pony/lib';
+    
     use Pony::Stash;
     use Pony::Crud::Dbh::MySQL;
     use Spaghetti::SQL;
@@ -27,16 +27,6 @@ use Mojo::Base 'Mojolicious';
             ##
             ##  Configs
             ##
-            
-            # Database
-            #
-            
-            Pony::Crud::Dbh::MySQL->new({
-                host     => 'localhost',
-                dbname   => 'pony',
-                user     => 'pony',
-                password => 'pony secret'
-            });
             
             # Init configs in stash if they did not define.
             #
@@ -81,6 +71,13 @@ use Mojo::Base 'Mojolicious';
               }
             );
             
+            # Database
+            #
+            
+            my $db = Pony::Stash->get('database');
+            
+            Pony::Crud::Dbh::MySQL->new($db);
+            
             ##
             ##  Plugins
             ##
@@ -107,6 +104,16 @@ use Mojo::Base 'Mojolicious';
             $r->route('/404')
                 ->to('#notFound')
                   ->name('404');
+            
+            # Config
+            #
+            
+            $a->route('/config/edit')
+                ->to('config#edit')
+                  ->name('admin_config_edit');
+            $a->route('/config/save')
+                ->to('config#save')
+                  ->name('admin_config_save');
             
             # User
             #
