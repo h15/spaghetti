@@ -22,10 +22,4 @@
             
             return false;
         });
-        
-        /**
-         *  Fix vertical nav position.
-         */
-        var left = $("nav.vertical").position().left;
-        $("nav.vertical").css( 'left', left - 436 );
     });

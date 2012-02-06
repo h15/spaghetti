@@ -80,29 +80,48 @@
     </nav>
     
 <div class=wrap>
-    <div class=contentWrap>
-        <header class=overall>
-          <h1><%= title %></h1>
-        </header>
+
         
-        <nav class=vertical>
-%= content_for 'vertical_nav';
-        </nav>
-        
-        % my $messageType = stash('messageType');
-        % my $message     = stash('message');
-        %
-        % if ( defined $messageType )
-        % {
-            <div class="<%= $messageType %>">
-                <%=l $message %>
-            </div>
-        % }
-        
-        <article class=content>
-%= content
-        </article>
-    </div>
+    <table style="width:100%">
+        <tr valign=top>
+            <td style="width:50%">
+                
+                <div class=verticalWrap>
+                    <nav class=vertical>
+        %= content_for 'vertical_nav';
+                    </nav>
+                </div>
+            
+            </td>
+            <td style="width:800px">
+
+                <div class=contentWrap>
+                    <header class=overall>
+                      <h1><%= title %></h1>
+                    </header>
+                            
+                            % my $messageType = stash('messageType');
+                            % my $message     = stash('message');
+                            %
+                            % if ( defined $messageType )
+                            % {
+                                <div class="<%= $messageType %>">
+                                    <%=l $message %>
+                                </div>
+                            % }
+                    
+                    <article class=content>
+                        <%= content %>
+                    </article>
+                    
+                </div>
+            
+            </td>
+            <td style="width:50%">
+            </td>
+        </tr>
+    </table>
+
 </div>
 
 <div class=overallFooter>

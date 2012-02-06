@@ -1,6 +1,14 @@
 % layout 'default';
 % title l('Profile') . ' ' . $user->{name};
 
+% content_for vertical_nav => begin
+
+    <div style="margin-bottom:10px;">
+        %=b render_userpic( $user->{mail}, 96 );
+    </div>
+    
+% end
+
 <table class=homeUser>
 
 % for my $k ( qw/name createAt modifyAt accessAt/ ) {

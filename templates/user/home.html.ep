@@ -50,9 +50,6 @@
     
 % end
 
-
-
-
 <table class=homeUser>
 
 % for my $k ( qw/name mail createAt modifyAt accessAt/ ) {

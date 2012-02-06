@@ -22,7 +22,7 @@
     
     .contentWrap
     {
-        width:800px;
+        width:760px;
         margin:0px auto;
         padding:10px 20px;
         min-height:400px;
@@ -453,14 +453,21 @@
 /*******************
  *   Vertical nav  *
  *******************/
-
-    nav.vertical
+    
+    .verticalWrap
     {
         position:fixed;
-        right:50%;
-        top:45px;
+        width:50%;
+    }
+    
+    nav.vertical
+    {
+        position:relative;
+        right:400px;
+        padding-top:16px;
+        float:right;
         text-align:left;
-        width:103px;
+        width:135px;
     }
     
     nav.vertical div div
@@ -470,8 +477,6 @@
     
     nav.vertical div.item
     {
-        position:relative;
-        right:20px;
         border:1px solid #C8C9CB;
         border-right:0px;
         -moz-border-radius:     4px 0px 0px 4px;
@@ -482,12 +487,11 @@
         /*height:20px;*/
         font-size:12px;
         padding:5px;
-        width:128px;
+        width:121px;
         overflow:hidden;
         margin:5px 0px 5px 0px;
         float:left;
-        box-shadow: inset -10px 0 10px -10px rgba(0,0,0,0.5),
-                          -4px 0 4px 0px rgba(0,0,0,0.2);
+        box-shadow: -4px 0 4px 0px rgba(0,0,0,0.2);
     }
     
     nav.vertical div.item a
@@ -498,7 +502,6 @@
     nav.vertical div.selected
     {
         background:#fff;
-        box-shadow:-4px 0 4px 0px rgba(0,0,0,0.2);
     }
 
     nav.vertical div.save
@@ -515,7 +518,9 @@
 
     nav.vertical div.selected
     {
+        position:relative;
         background:#fff;
+        z-index:999;
     }
     
     nav.vertical div.red
@@ -531,4 +536,10 @@
     nav.vertical div.red:hover
     {
         background:#faa;
+    }
+    
+    nav.vertical .userpic_big
+    {
+        position:relative;
+        left:15px;
     }
