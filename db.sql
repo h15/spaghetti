@@ -64,6 +64,7 @@ create table `group`
 INSERT INTO `group` (`id`, `name`, `desc`, `prioritet`) VALUES
 (0,'Anonymous','',0),
 (1,'Admin','',0),
+(998, 'Project leader', '', 100),
 (999, 'User', 'Simple user', 9999);
 
 create table `userToGroup`
@@ -166,4 +167,55 @@ create table `news`
     `legend`    varchar(140) character set utf8 collate utf8_general_ci not null,
     
     FOREIGN KEY (`threadId`)  REFERENCES `thread`(`id`)
+);
+
+create table `project`
+(
+    `id`        int(11) unsigned not null,
+    `url`       varchar(128) character set ascii collate ascii_general_ci not null,
+    `name`      varchar(256) character set utf8 collate utf8_general_ci not null,
+    `desc`      varchar(60000) character set utf8 collate utf8_general_ci not null,
+    `repos`     int(11) unsigned not null default 0,
+    `owner`     int(11) unsigned not null,
+    
+    UNIQUE(`url`),
+    FOREIGN KEY (`id`)    REFERENCES `thread`(`id`),
+    FOREIGN KEY (`owner`) REFERENCES `user`  (`id`)
+);
+
+create table `repo`
+(
+    `id`        int(11) unsigned not null,
+    `name`      varchar(256) character set utf8 collate utf8_general_ci not null,
+    `desc`      varchar(1024) character set utf8 collate utf8_general_ci not null,
+    `owner`     int(11) unsigned not null,
+    
+    FOREIGN KEY (`id`)    REFERENCES `thread`(`id`),
+    FOREIGN KEY (`owner`) REFERENCES `user`  (`id`)
+);
+
+create table `repoGroup`
+(
+    `id`        int(11) unsigned not null auto_increment primary key,
+    `name`      varchar(256) character set utf8 collate utf8_general_ci not null,
+    `desc`      varchar(1024) character set utf8 collate utf8_general_ci not null
+);
+
+create table `repoRights`
+(
+    `repoId`    int(11)     unsigned not null,
+    `groupId`   int(11)     unsigned not null,
+    `rwpcd`     tinyint(4)  unsigned not null default 0,
+    
+    FOREIGN KEY (`repoId`)  REFERENCES `repo`(`id`),
+    FOREIGN KEY (`groupId`) REFERENCES `repoGroup`(`id`)
+);
+
+create table `userToRepoGroup`
+(
+    `userId`    int(11) unsigned not null,
+    `groupId`   int(11) unsigned not null,
+    
+    FOREIGN KEY (`userId`)  REFERENCES `user`(`id`),
+    FOREIGN KEY (`groupId`) REFERENCES `repoGroup`(`id`)
 );
