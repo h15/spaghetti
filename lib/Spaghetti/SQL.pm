@@ -184,4 +184,31 @@ our $user =
     },
 };
 
+our $project =
+{
+    show =>
+    q{
+        SELECT p.id, p.name, p.repos, th.createAt, th.modifyAt, th.parentId,
+               th.topicId, th.owner, th.author, tx.text
+        FROM `project` AS p
+            INNER JOIN `thread` AS th ON ( p.id = th.id )
+            INNER JOIN `text`   AS tx ON ( th.textId = tx.id )
+        WHERE p.url = ?
+    },
+};
+
+our $repo =
+{
+    list =>
+    q{
+        SELECT th.id, th.modifyAt, th.createAt, th.owner, th.author, tx.text,
+               r.title, r.repoUrl
+        FROM `repo` AS r
+            INNER JOIN `thread` AS th ON ( r.id = th.id )
+            INNER JOIN `text`   AS tx ON ( th.textId = tx.id )
+        WHERE th.parentId = ?
+        ORDER BY th.modifyAt DESC
+    };
+};
+
 1;

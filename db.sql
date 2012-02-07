@@ -173,7 +173,7 @@ create table `project`
 (
     `id`        int(11) unsigned not null,
     `url`       varchar(128) character set ascii collate ascii_general_ci not null,
-    `name`      varchar(256) character set utf8 collate utf8_general_ci not null,
+    `title`     varchar(256) character set utf8 collate utf8_general_ci not null,
     `repos`     int(11) unsigned not null default 0,
     
     UNIQUE(`url`),
@@ -184,8 +184,7 @@ create table `project`
 create table `repo`
 (
     `id`        int(11) unsigned not null,
-    `name`      varchar(256) character set utf8 collate utf8_general_ci not null,
-    `desc`      varchar(1024) character set utf8 collate utf8_general_ci not null,
+    `title`     varchar(256) character set utf8 collate utf8_general_ci not null,
     `repoUrl`   varchar(128) character set ascii collate ascii_general_ci not null,
     
     UNIQUE(`repoUrl`),
