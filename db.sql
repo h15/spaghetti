@@ -174,9 +174,7 @@ create table `project`
     `id`        int(11) unsigned not null,
     `url`       varchar(128) character set ascii collate ascii_general_ci not null,
     `name`      varchar(256) character set utf8 collate utf8_general_ci not null,
-    `desc`      varchar(60000) character set utf8 collate utf8_general_ci not null,
     `repos`     int(11) unsigned not null default 0,
-    `owner`     int(11) unsigned not null,
     
     UNIQUE(`url`),
     FOREIGN KEY (`id`)    REFERENCES `thread`(`id`),
@@ -188,8 +186,9 @@ create table `repo`
     `id`        int(11) unsigned not null,
     `name`      varchar(256) character set utf8 collate utf8_general_ci not null,
     `desc`      varchar(1024) character set utf8 collate utf8_general_ci not null,
-    `owner`     int(11) unsigned not null,
+    `repoUrl`   varchar(128) character set ascii collate ascii_general_ci not null,
     
+    UNIQUE(`repoUrl`),
     FOREIGN KEY (`id`)    REFERENCES `thread`(`id`),
     FOREIGN KEY (`owner`) REFERENCES `user`  (`id`)
 );
@@ -209,6 +208,16 @@ create table `repoRights`
     
     FOREIGN KEY (`repoId`)  REFERENCES `repo`(`id`),
     FOREIGN KEY (`groupId`) REFERENCES `repoGroup`(`id`)
+);
+
+create table `repoRightsViaUser`
+(
+    `repoId`    int(11)     unsigned not null,
+    `userId`    int(11)     unsigned not null,
+    `rwpcd`     tinyint(4)  unsigned not null default 0,
+    
+    FOREIGN KEY (`repoId`) REFERENCES `repo`(`id`),
+    FOREIGN KEY (`userId`) REFERENCES `user`(`id`)
 );
 
 create table `userToRepoGroup`
