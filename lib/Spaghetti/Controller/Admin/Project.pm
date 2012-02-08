@@ -68,7 +68,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     # All is done - let's see that!
                     #
                     
-                    $this->redirect_to( admin_project_edit => id => $id );
+                    return $this->redirect_to(admin_project_edit => id => $id);
                 }
             }
             
@@ -109,6 +109,7 @@ use Mojo::Base 'Mojolicious::Controller';
         {
             my $this = shift;
             my $id   = int $this->param('id');
+            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
             
             # Get project info
             # and get project's repos list.
@@ -126,7 +127,132 @@ use Mojo::Base 'Mojolicious::Controller';
             $this->stash( project => $project );
             $this->stash( repos   => $repos   );
         }
-
+    
+    sub edit
+        {
+            my $this = shift;
+            my $id   = int $this->param('id');
+            my $form = new Spaghetti::Form::Admin::Project::Create;
+               $form->action = $this->url_for(admin_project_edit => id => $id);
+            
+            # Prepare models.
+            #
+            
+            my $thModel = new Pony::Crud::MySQL('thread');
+            my $teModel = new Pony::Crud::MySQL('text');
+            my $prModel = new Pony::Crud::MySQL('project');
+            
+            # Get project
+            #
+            
+            my $thread  = $thModel->read({id => $id});
+            my $text    = $teModel->read({id => $id});
+            my $project = $prModel->read({id => $id});
+            
+            %$project = ( %$thread, %$text, %$project );
+            
+            if ( $this->req->method eq 'POST' )
+            {
+                $form->data->{$_} = $this->param($_) for keys %{$form->elements};
+                
+                if ( $form->isValid )
+                {
+                    # Get data from form.
+                    #
+                    
+                    my $title = $form->elements->{title} ->value;
+                    my $url   = $form->elements->{url}   ->value;
+                    my $text  = $form->elements->{text}  ->value;
+                    my $owner = $form->elements->{owner} ->value;
+                    my $parent= $form->elements->{parent}->value;
+                    my $topic = $form->elements->{topic} ->value;
+                    
+                    # Update project records.
+                    #
+                    
+                    $thModel->update
+                    ({
+                        author   => $owner,
+                        owner    => $owner,
+                        parentId => $parent,
+                        topicId  => $topic,
+                    },
+                    { id => $id });
+                    
+                    if ( $project->{text} ne $text )
+                    {
+                        $teModel->update
+                        ({
+                            text => Spaghetti::Util::escape($text),
+                        },
+                        { id => $project->{textId} });
+                    }
+                    
+                    $prModel->update
+                    ({
+                        url   => $url,
+                        title => $title
+                    },
+                    { id => $id });
+                    
+                    # Done!
+                    #
+                    
+                    return $this->redirect_to(admin_project_edit => id => $id);
+                }
+            }
+            
+            # Fill form fields.
+            #
+            
+            for my $k ( keys %{$form->elements} )
+            {
+                $form->elements->{$k}->value = $project->{$k} if exists $project->{$k};
+            }
+            
+            # Prepare to render.
+            #
+            
+            $this->stash( id => $id );
+            $this->stash( form => $form->render );
+            $this->render('admin/project/edit');
+        }
+        
+    sub delete
+        {
+            my $this = shift;
+            my $id   = int $this->param('id');
+            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
+            
+            # Prepare models.
+            #
+            
+            my $thModel = new Pony::Crud::MySQL('thread');
+            my $prModel = new Pony::Crud::MySQL('project');
+            
+            if ( $this->req->method eq 'POST' )
+            {
+                # Does project is empty?
+                #
+                
+                my $sth = $dbh->prepare( $Spaghetti::SQL::repo->{list} );
+                   $sth->execute($id);
+                
+                my $repos = $sth->fetchall_hashref('id');
+                
+                return $this->redirect_to(admin_project_read => id => $id) if keys %$repos;
+                
+                # Delete. Thread will stay.
+                # May be it has many comments or smth else.
+                
+                $prModel->delete({id => $id});
+                
+                return $this->redirect_to('admin_project_list');
+            }
+            
+            return $this->redirect_to(admin_project_read => id => $id);
+        }
+    
 1;
 
 __END__
