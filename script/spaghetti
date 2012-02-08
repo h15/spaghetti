@@ -21,6 +21,11 @@ if ( $ARGV[0] eq 'install' )
 {
     use Pony::Stash;
     
+    # touch
+    open F, '>./resources/stash.dat';
+    print F '';
+    close F;
+    
     my $stash = Pony::Stash->new('./resources/stash.dat');
     my %conf;
     

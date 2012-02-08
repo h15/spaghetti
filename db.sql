@@ -177,8 +177,7 @@ create table `project`
     `repos`     int(11) unsigned not null default 0,
     
     UNIQUE(`url`),
-    FOREIGN KEY (`id`)    REFERENCES `thread`(`id`),
-    FOREIGN KEY (`owner`) REFERENCES `user`  (`id`)
+    FOREIGN KEY (`id`)    REFERENCES `thread`(`id`)
 );
 
 create table `repo`
@@ -188,8 +187,7 @@ create table `repo`
     `repoUrl`   varchar(128) character set ascii collate ascii_general_ci not null,
     
     UNIQUE(`repoUrl`),
-    FOREIGN KEY (`id`)    REFERENCES `thread`(`id`),
-    FOREIGN KEY (`owner`) REFERENCES `user`  (`id`)
+    FOREIGN KEY (`id`)    REFERENCES `thread`(`id`)
 );
 
 create table `repoGroup`

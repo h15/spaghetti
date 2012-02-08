@@ -1,0 +1,7 @@
+% layout 'default';
+% title l('Create project');
+%
+% stash(tab => 'project');
+% include 'admin/vertical_nav';
+
+%=b $form

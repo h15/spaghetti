@@ -295,6 +295,28 @@ use Mojo::Base 'Mojolicious';
                 ->to('data_type#delete')
                   ->name('admin_dataType_delete');
             
+            # Projects
+            #
+            
+            $a->route('/project')
+                ->to('project#list')
+                  ->name('admin_project_list');
+            $a->route('/project/:page', page => qr/\d+/)
+                ->to('project#list')
+                  ->name('admin_project_list');
+            $a->route('/project/read/:id', id => qr/\d+/)
+                ->to('project#read')
+                  ->name('admin_project_read');
+            $a->route('/project/edit/:id', id => qr/\d+/)
+                ->to('project#edit')
+                  ->name('admin_project_edit');
+            $a->route('/project/delete/:id', id => qr/\d+/)
+                ->to('project#delete')
+                  ->name('admin_project_delete');
+            $a->route('/project/create')
+                ->to('project#create')
+                  ->name('admin_project_create');
+            
             ##
             ##  Helpers
             ##

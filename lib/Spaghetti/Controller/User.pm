@@ -36,8 +36,8 @@ use Mojo::Base 'Mojolicious::Controller';
                     }
                     else
                     {
-                        my $where= { 'mail' => $mail,
-                                     'password' => md5_hex( $mail . $pass ) };
+                        my $where = { 'mail' => $mail,
+                                      'password' => md5_hex( $mail . $pass ) };
                                      
                         $user = $model->read( $where, ['id'] );
                     

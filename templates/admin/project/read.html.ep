@@ -1,0 +1,86 @@
+% layout 'default';
+% title l('Project') . ' ' . $project->{title};
+%
+% stash(tab => 'project');
+% include 'admin/vertical_nav';
+
+<a href="<%= url_for admin_project_edit => id => $project->{id} %>">
+    <%=l 'edit' %>
+</a>
+
+<dl>
+    <dt><%=l 'owner' %></dt>
+    <dd><%= render_user $project->{owner} %></dd>
+</dl>
+<dl>
+    <dt><%=l 'author' %></dt>
+    <dd><%= render_user $project->{author} %></dd>
+</dl>
+<dl>
+    <dt><%=l 'createAt' %></dt>
+    <dd><%= render_datetime $project->{createAt} %></dd>
+</dl>
+<dl>
+    <dt><%=l 'modifyAt' %></dt>
+    <dd><%= render_datetime $project->{modifyAt} %></dd>
+</dl>
+<dl>
+    <dt>Url</dt>
+    <dd><%= $project->{url} %></dd>
+</dl>
+
+<h3><%=l 'Description' %></h3>
+<div>
+    <%=b $project->{text} %>
+</div>
+
+<h2><%=l 'Repositories' %> (<%= $project->{repos} %>)</h2>
+
+<table class=list>
+    <tr>
+        <th>
+            #
+        </th>
+        <th>
+            <%=l 'name' %>
+        </th>
+        <th>
+            <%=l 'date' %>
+        </th>
+        <th>
+            <%=l 'owner' %> / <%=l 'author' %>
+        </th>
+        <th>
+            <%=l 'edit' %>
+        </th>
+    </tr>
+
+% for my $key ( sort {$b <=> $a} keys %$repos )
+% {
+%
+%   my $r = $repos->{$key};
+
+    <tr>
+        <td>
+            <%= $key %>
+        </td>
+        <td>
+            <%= $r->{title} %>
+        </td>
+        <td>
+             <%= render_datetime $r->{modifyAt} %>
+            (<%= render_datetime $r->{createAt} %>)
+        </td>
+        <td>
+            <%= render_user $r->{owner} %> /
+            <%= render_user $r->{author} %>
+        </td>
+        <td>
+            <%= url_for admin_repos_edit => id => $key %>
+        </td>
+    </tr>
+
+% }
+
+</table>
+

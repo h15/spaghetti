@@ -3,9 +3,9 @@ use Mojo::Base 'Mojolicious::Controller';
     
     use Pony::Stash;
     use Pony::Crud::MySQL;
-    use Pony::Crud::MySQL::Dbh;
+    use Pony::Crud::Dbh::MySQL;
     use Spaghetti::Form::Admin::Project::Create;
-    use Spaghetti::Util::escape;
+    use Spaghetti::Util;
     
     sub create
         {
@@ -21,12 +21,12 @@ use Mojo::Base 'Mojolicious::Controller';
                     # Get data from form.
                     #
                     
-                    my $title = $form->elements->{title} ->value;
-                    my $url   = $form->elements->{url}   ->value;
-                    my $text  = $form->elements->{text}  ->value;
-                    my $owner = $form->elements->{owner} ->value;
-                    my $parent= $form->elements->{parent}->value;
-                    my $topic = $form->elements->{topic} ->value;
+                    my $title = $form->elements->{title}   ->value;
+                    my $url   = $form->elements->{url}     ->value;
+                    my $text  = $form->elements->{text}    ->value;
+                    my $owner = $form->elements->{owner}   ->value;
+                    my $parent= $form->elements->{parentId}->value;
+                    my $topic = $form->elements->{topicid} ->value;
                     
                     # Prepare models.
                     #
@@ -68,7 +68,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     # All is done - let's see that!
                     #
                     
-                    return $this->redirect_to(admin_project_edit => id => $id);
+                    return $this->redirect_to(admin_project_edit => id => $thId);
                 }
             }
             
@@ -91,7 +91,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             my $size = Pony::Stash->get('thread')->{size};
             
-            my $projects = Pony::Crud::MySQL->new('project')
+            my @projects = Pony::Crud::MySQL->new('project')
                              ->list( undef, undef, undef, undef,
                                         ($page - 1) * $size, $size );
             
@@ -100,9 +100,11 @@ use Mojo::Base 'Mojolicious::Controller';
             # Prepare to render
             #
             
-            $this->stash( projects => $projects );
+            $this->stash( projects => \@projects );
             $this->stash( paginator =>
                 $this->paginator('admin_project_list', $page, $count, $size) );
+            
+            $this->render('admin/project/list');
         }
     
     sub read
@@ -115,6 +117,11 @@ use Mojo::Base 'Mojolicious::Controller';
             # and get project's repos list.
             
             my $project = Pony::Crud::MySQL->new('project')->read({id => $id});
+            my $thread  = Pony::Crud::MySQL->new('thread') ->read({id => $id});
+            my $text    = Pony::Crud::MySQL->new('text')
+                            ->read({id => $thread->{textId} });
+            
+            %$project = ( %$text, %$thread, %$project );
             
             my $sth = $dbh->prepare( $Spaghetti::SQL::repo->{list} );
                $sth->execute( $project->{id} );
@@ -126,6 +133,8 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->stash( project => $project );
             $this->stash( repos   => $repos   );
+            
+            $this->render('admin/project/read');
         }
     
     sub edit
@@ -160,12 +169,12 @@ use Mojo::Base 'Mojolicious::Controller';
                     # Get data from form.
                     #
                     
-                    my $title = $form->elements->{title} ->value;
-                    my $url   = $form->elements->{url}   ->value;
-                    my $text  = $form->elements->{text}  ->value;
-                    my $owner = $form->elements->{owner} ->value;
-                    my $parent= $form->elements->{parent}->value;
-                    my $topic = $form->elements->{topic} ->value;
+                    my $title = $form->elements->{title}   ->value;
+                    my $url   = $form->elements->{url}     ->value;
+                    my $text  = $form->elements->{text}    ->value;
+                    my $owner = $form->elements->{owner}   ->value;
+                    my $parent= $form->elements->{parentId}->value;
+                    my $topic = $form->elements->{topicId} ->value;
                     
                     # Update project records.
                     #

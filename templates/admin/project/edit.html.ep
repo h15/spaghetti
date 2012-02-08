@@ -1,0 +1,13 @@
+% layout 'default';
+% title l('Edit project');
+%
+% stash(tab => 'project');
+% include 'admin/vertical_nav';
+
+%=b $form
+
+<div>
+    <form method="post" action="<%= url_for admin_project_delete => id => $id %>">
+        <input type="submit" value="<%=l 'Delete' %>">
+    </form>
+</div>

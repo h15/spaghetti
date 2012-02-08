@@ -208,7 +208,7 @@ our $repo =
             INNER JOIN `text`   AS tx ON ( th.textId = tx.id )
         WHERE th.parentId = ?
         ORDER BY th.modifyAt DESC
-    };
+    },
 };
 
 1;
