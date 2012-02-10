@@ -3,7 +3,7 @@ use Mojo::Base 'Mojolicious::Controller';
     
     use Pony::Stash;
     use Pony::Crud::MySQL;
-    use Pony::Crud::MySQL::Dbh;
+    use Pony::Crud::Dbh::MySQL;
     
     sub read
         {
@@ -16,7 +16,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             my $sth = $dbh->prepare( $Spaghetti::SQL::project->{read} );
                $sth->execute( $url );
-                                     
+               
             my $project = $sth->fetchrow_hashref();
             
             return $this->redirect_to('/404') unless $project;
@@ -24,8 +24,8 @@ use Mojo::Base 'Mojolicious::Controller';
             # Get project's repos
             #
             
-            my $sth = $dbh->prepare( $Spaghetti::SQL::repo->{list} );
-               $sth->execute( $project->{id} );
+            $sth = $dbh->prepare( $Spaghetti::SQL::repo->{list} );
+            $sth->execute( $project->{id} );
             
             my $repos = $sth->fetchall_hashref('id');
             
@@ -34,7 +34,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->stash( project => $project );
             $this->stash( repos   => $repos   );
-        }
+        }	
 
 1;
 

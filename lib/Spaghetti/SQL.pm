@@ -185,7 +185,8 @@ our $user =
     
     my_projects =>
     q{
-        SELECT p.id, p.title, p.repos, th.createAt, th.modifyAt, th.parentId,
+        SELECT p.id, p.title, p.repos, p.url,
+               th.createAt, th.modifyAt, th.parentId,
                th.topicId, th.owner, th.author
         FROM `project` AS p
         INNER JOIN `thread` AS th ON ( p.id = th.id )
@@ -196,13 +197,16 @@ our $user =
 
 our $project =
 {
-    show =>
+    read =>
     q{
-        SELECT p.id, p.title, p.repos, th.createAt, th.modifyAt, th.parentId,
-               th.topicId, th.owner, th.author, tx.text
+        SELECT p.id, p.title, p.repos, p.url,
+               th.createAt, th.modifyAt, th.parentId,
+               th.topicId, th.owner, th.author, tx.text,
+               u.name, u.mail, u.banId
         FROM `project` AS p
             INNER JOIN `thread` AS th ON ( p.id = th.id )
             INNER JOIN `text`   AS tx ON ( th.textId = tx.id )
+            INNER JOIN `user`   AS u  ON ( u.id = th.owner )
         WHERE p.url = ?
     },
 };
@@ -211,11 +215,14 @@ our $repo =
 {
     list =>
     q{
-        SELECT th.id, th.modifyAt, th.createAt, th.owner, th.author, tx.text,
-               r.title, r.repoUrl
+        SELECT th.id, th.modifyAt, th.createAt, th.owner, th.author,
+               tx.text,
+               r.title, r.repoUrl,
+               u.name, u.mail, u.banId
         FROM `repo` AS r
             INNER JOIN `thread` AS th ON ( r.id = th.id )
             INNER JOIN `text`   AS tx ON ( th.textId = tx.id )
+            INNER JOIN `user`   AS u  ON ( u.id = th.owner )
         WHERE th.parentId = ?
         ORDER BY th.modifyAt DESC
     },

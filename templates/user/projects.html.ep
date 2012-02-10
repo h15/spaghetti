@@ -14,7 +14,7 @@
     % for my $p ( values %$projects )
     % {
         <div class="item">
-            <a href="<%= url_for project_read => url => $p->{url} %>">
+            <a href="<%= url_for(project_read => url => $p->{url}) %>">
                 <%= $p->{title} %></a>
             (<%= $p->{repos} %>)
                 

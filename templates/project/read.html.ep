@@ -1,0 +1,66 @@
+% layout 'default';
+%
+% title $project->{title};
+
+<!--
+    Project
+-->
+
+<article>
+    <dl>
+        <dt><%=l 'Owner' %></dt>
+        <dd><%= render_user {
+                                id    => $project->{owner},
+                                name  => $project->{name},
+                                mail  => $project->{mail},
+                                banId => $project->{banId},
+                            } %>
+        </dd>
+    </dl>
+    
+    <dl>
+        <dt><%=l 'modifyAt' %></dt>
+        <dd><%= render_datetime $project->{modifyAt} %>
+        </dd>
+    </dl>
+    
+    <dl>
+        <dt><%=l 'createAt' %></dt>
+        <dd><%= render_datetime $project->{createAt} %>
+        </dd>
+    </dl>
+    
+    <div>
+        <%=b $project->{text} %>
+    </div>
+</article>
+
+<!--
+    Repositories
+-->
+
+<h2><%= 'Repositories' %> (<%= $project->{repos} %>)</h2>
+
+% if ( keys %$repos )
+% {
+<div class="repoList">
+    
+    % for my $r ( values %$repos )
+    % {
+        <div class="item">
+            <a href="<%= url_for repo_read => url => $r->{repoUrl} %>">
+                <%= $r->{title} %></a>
+            (<%= render_datetime $r->{modifyAt} %>
+             <%= render_user {
+                                id    => $r->{owner},
+                                name  => $r->{name},
+                                mail  => $r->{mail},
+                                banId => $r->{banId},
+                             } %>)
+            
+        </div>
+    % }
+    
+</div>
+% }
+
