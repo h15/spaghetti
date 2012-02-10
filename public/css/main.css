@@ -2,7 +2,7 @@
     {
         padding:0px;
         margin:0px;
-        font-style:"DejaVu Sans", Helvetica, Arial, Sans;
+        font-family:"DejaVu Sans", Helvetica, Arial, Sans;
         color:#222;
         font-size:16px;
     }
@@ -298,9 +298,14 @@
         font-size:11px;
     }
     
-    .pony-form
+    .pony-form td:first-child
     {
-        width:280px;
+        width:100px;
+    }
+    
+    .required
+    {
+        color:#a00;
     }
     
     .pony-form input

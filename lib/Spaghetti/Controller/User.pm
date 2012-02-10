@@ -261,9 +261,6 @@ use Mojo::Base 'Mojolicious::Controller';
             my $this = shift;
                $this->redirect_to('404') unless $this->user->{id};
             
-            my $formPass = new Spaghetti::Form::User::ChangePassword;
-            my $formMail = new Spaghetti::Form::User::ChangeMail;
-            
             $this->stash( user => $this->user );
             $this->render;
         }
@@ -613,6 +610,20 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->stash( form => $form->render() );
             $this->render('user_loginViaMail');
+        }
+    
+    sub projects
+        {
+            my $this = shift;
+               $this->redirect_to('404') unless $this->user->{id};
+               
+            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
+            
+            my $sth = $dbh->prepare($Spaghetti::SQL::user->{my_projects});
+               $sth->execute( $this->user->{id} );
+            my $projects = $sth->fetchall_hashref('id');
+            
+            $this->stash( projects => $projects );
         }
 
 1;

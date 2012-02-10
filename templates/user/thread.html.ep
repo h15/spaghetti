@@ -1,56 +1,9 @@
 % layout 'default';
 %
 % title l('Private thread');
-
-% content_for vertical_nav => begin
-
-    <div style="margin-bottom:10px;">
-        %=b render_userpic( user->{mail}, 96 );
-    </div>
-    
-    <div class="item">
-        <div>
-            <a href="<%= url_for 'user_home' %>"><%=l 'Profile' %></a>
-        </div>
-    </div>
-
-    <div class="item selected">
-        <div>
-% if ( user->{threadId} )
-% {
-    <a href="<%= url_for 'user_thread' %>"><%=l 'Private thread' %></a>
-% } else {
-    <a href="<%= url_for 'user_createPrivateThread' %>"><%=l 'Create private thread' %></a>
-% }
-        </div>
-    </div>
-    
-    <div class="item">
-        <div>
-            <a href="<%= url_for 'user_change_mail' %>"><%=l 'Change mail' %></a>
-        </div>
-    </div>
-    
-    <div class="item">
-        <div>
-            <a href="<%= url_for 'user_change_password' %>"><%=l 'Change password' %></a>
-        </div>
-    </div>
-    
-    <div class="item">
-        <div>
-            <a href="<%= url_for 'user_config' %>"><%=l 'Config' %></a>
-        </div>
-    </div>
-    
-    <div class="item red">
-        <div>
-            <a href="<%= url_for 'user_logout' %>"><%=l 'logout' %></a>
-        </div>
-    </div>
-    
-% end
-
+%
+% stash(tab => 'thread');
+% include 'user/vertical_nav';
 
 %=b $paginator
 

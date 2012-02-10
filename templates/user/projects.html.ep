@@ -1,0 +1,45 @@
+% layout 'default';
+%
+% title l('My projects');
+%
+% stash(tab => 'projects');
+% include 'user/vertical_nav';
+
+% if ( keys %$projects )
+% {
+
+<h2><%=l 'My own projects' %></h2>
+
+<div class="projectList">
+    % for my $p ( values %$projects )
+    % {
+        <div class="item">
+            <a href="<%= url_for project_read => url => $p->{url} %>">
+                <%= $p->{title} %></a>
+            (<%= $p->{repos} %>)
+                
+                <dl>
+                    <dt><%=l 'modifyAt' %></dt>
+                    <dd><%= render_datetime $p->{modifyAt} %></dd>
+                </dl>
+                
+                <dl>
+                    <dt><%=l 'createAt' %></dt>
+                    <dd><%= render_datetime $p->{createAt} %></dd>
+                </dl>
+        </div>
+    % }
+</div>
+% }
+% else
+% {
+    <p>
+        <%= 'List is empty' %>.
+    </p>
+    <p>
+        <a href="<%= url_for 'project_list' %>">
+            <%=l 'To global project list' %>.
+        </a>
+    </p>
+% }
+

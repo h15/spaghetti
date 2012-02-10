@@ -182,13 +182,23 @@ our $user =
     q{
         UPDATE `userInfo` SET `responses` = `responses` + 1 WHERE `id` = ?
     },
+    
+    my_projects =>
+    q{
+        SELECT p.id, p.title, p.repos, th.createAt, th.modifyAt, th.parentId,
+               th.topicId, th.owner, th.author
+        FROM `project` AS p
+        INNER JOIN `thread` AS th ON ( p.id = th.id )
+        WHERE th.owner = ?
+        ORDER BY th.modifyAt DESC
+    },
 };
 
 our $project =
 {
     show =>
     q{
-        SELECT p.id, p.name, p.repos, th.createAt, th.modifyAt, th.parentId,
+        SELECT p.id, p.title, p.repos, th.createAt, th.modifyAt, th.parentId,
                th.topicId, th.owner, th.author, tx.text
         FROM `project` AS p
             INNER JOIN `thread` AS th ON ( p.id = th.id )

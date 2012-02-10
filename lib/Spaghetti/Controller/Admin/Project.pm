@@ -26,7 +26,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     my $text  = $form->elements->{text}    ->value;
                     my $owner = $form->elements->{owner}   ->value;
                     my $parent= $form->elements->{parentId}->value;
-                    my $topic = $form->elements->{topicid} ->value;
+                    my $topic = $form->elements->{topicId} ->value;
                     
                     # Prepare models.
                     #

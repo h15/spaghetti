@@ -124,6 +124,9 @@ use Mojo::Base 'Mojolicious';
             $r->route('/user/home/thread')
               ->to('user#thread')
                 ->name('user_thread');
+            $r->route('/user/home/projects')
+              ->to('user#projects')
+                ->name('user_projects');
             $r->route('/user/createPrivateThread')
               ->to('user#createPrivateThread')
                 ->name('user_createPrivateThread');
@@ -316,6 +319,10 @@ use Mojo::Base 'Mojolicious';
             $a->route('/project/create')
                 ->to('project#create')
                   ->name('admin_project_create');
+            
+            $r->route('/project/read/:url')
+                ->to('project#read')
+                  ->name('project_read');
             
             ##
             ##  Helpers
