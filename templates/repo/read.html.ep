@@ -1,0 +1,37 @@
+% layout 'default';
+%
+% title $repo->{title};
+
+<!--
+    Repo
+-->
+
+<article>
+    <dl>
+        <dt><%=l 'Owner' %></dt>
+        <dd><%= render_user {
+                                id    => $repo->{owner},
+                                name  => $repo->{name},
+                                mail  => $repo->{mail},
+                                banId => $repo->{banId},
+                            } %>
+        </dd>
+    </dl>
+    
+    <dl>
+        <dt><%=l 'modifyAt' %></dt>
+        <dd><%= render_datetime $repo->{modifyAt} %>
+        </dd>
+    </dl>
+    
+    <dl>
+        <dt><%=l 'createAt' %></dt>
+        <dd><%= render_datetime $repo->{createAt} %>
+        </dd>
+    </dl>
+    
+    <div>
+        <%=b $repo->{text} %>
+    </div>
+</article>
+

@@ -10,6 +10,7 @@ use Mojo::Base 'Mojolicious::Controller';
             my $this = shift;
             my $url  = $this->param('url');
             my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $conf = Pony::Stash->get('project');
             
             # Get project
             #
@@ -32,6 +33,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Prepare to render
             #
             
+            $this->stash( conf    => $conf    );
             $this->stash( project => $project );
             $this->stash( repos   => $repos   );
         }	

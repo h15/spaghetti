@@ -217,7 +217,7 @@ our $repo =
     q{
         SELECT th.id, th.modifyAt, th.createAt, th.owner, th.author,
                tx.text,
-               r.title, r.repoUrl,
+               r.title, r.url,
                u.name, u.mail, u.banId
         FROM `repo` AS r
             INNER JOIN `thread` AS th ON ( r.id = th.id )
@@ -225,6 +225,20 @@ our $repo =
             INNER JOIN `user`   AS u  ON ( u.id = th.owner )
         WHERE th.parentId = ?
         ORDER BY th.modifyAt DESC
+    },
+    
+    read =>
+    q{
+        SELECT r.id, r.title, r.url,
+               th.createAt, th.modifyAt, th.parentId,
+               th.topicId, th.owner, th.author,
+               tx.text,
+               u.name, u.mail, u.banId
+        FROM `repo` AS r
+            INNER JOIN `thread` AS th ON ( r.id = th.id )
+            INNER JOIN `text`   AS tx ON ( th.textId = tx.id )
+            INNER JOIN `user`   AS u  ON ( u.id = th.owner )
+        WHERE r.url = ?
     },
 };
 

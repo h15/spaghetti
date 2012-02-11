@@ -71,6 +71,13 @@ use Mojo::Base 'Mojolicious';
               }
             );
             
+            Pony::Stash->findOrCreate
+            ( project =>
+              {
+                repos => 10,
+              }
+            );
+            
             # Database
             #
             
@@ -323,6 +330,16 @@ use Mojo::Base 'Mojolicious';
             $r->route('/project/read/:url')
                 ->to('project#read')
                   ->name('project_read');
+            
+            # Repos
+            #
+            
+            $r->route('/repo/read/:url')
+                ->to('repo#read')
+                  ->name('repo_read');
+            $r->route('/repo/create/:id', id => qr/\d+/)
+                ->to('repo#create')
+                  ->name('repo_create');
             
             ##
             ##  Helpers

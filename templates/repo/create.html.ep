@@ -1,0 +1,6 @@
+% layout 'default';
+%
+% title l('Create new repository');
+
+%=b $form
+

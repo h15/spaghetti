@@ -41,6 +41,15 @@
 
 <h2><%= 'Repositories' %> (<%= $project->{repos} %>)</h2>
 
+% if ( $project->{owner} == user->{id} && $conf->{repos} >= $project->{repos} )
+% {
+
+<form method=get action="<%= url_for( 'repo_create', id => $project->{id} ) %>">
+    <input type=submit value="Create">
+</form>
+
+% }
+
 % if ( keys %$repos )
 % {
 <div class="repoList">
@@ -48,16 +57,18 @@
     % for my $r ( values %$repos )
     % {
         <div class="item">
-            <a href="<%= url_for repo_read => url => $r->{repoUrl} %>">
+            <a href="<%= url_for repo_read => url => $r->{url} %>">
                 <%= $r->{title} %></a>
-            (<%= render_datetime $r->{modifyAt} %>
-             <%= render_user {
-                                id    => $r->{owner},
-                                name  => $r->{name},
-                                mail  => $r->{mail},
-                                banId => $r->{banId},
-                             } %>)
+            (<%= render_datetime $r->{modifyAt} %>)
             
+                <div style="float:right">
+                    <%= render_user {
+                                       id    => $r->{owner},
+                                       name  => $r->{name},
+                                       mail  => $r->{mail},
+                                       banId => $r->{banId},
+                                    } %>
+                </div>
         </div>
     % }
     
