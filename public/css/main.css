@@ -543,6 +543,20 @@
         background:#faa;
     }
     
+    nav.vertical div.green
+    {
+        background: #efe;
+    }
+    
+    nav.vertical div.green a
+    {
+        color:#7d7;
+    }
+    
+    nav.vertical div.green:hover
+    {
+        background:#afa;
+    }
     nav.vertical .userpic_big
     {
         position:relative;

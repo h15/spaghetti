@@ -233,11 +233,13 @@ our $repo =
                th.createAt, th.modifyAt, th.parentId,
                th.topicId, th.textId, th.owner, th.author,
                tx.text,
+               p.url AS projectUrl,
                u.name, u.mail, u.banId
         FROM `repo` AS r
             INNER JOIN `thread` AS th ON ( r.id = th.id )
             INNER JOIN `text`   AS tx ON ( th.textId = tx.id )
             INNER JOIN `user`   AS u  ON ( u.id = th.owner )
+            INNER JOIN `project`AS p  ON ( p.id = th.topicId )
         WHERE r.url = ?
     },
 };

@@ -1,17 +1,12 @@
 % layout 'default';
 %
 % title $repo->{title};
+% stash ( tab => 'read' );
+% include 'repo/vertical_nav';
 
 <!--
     Repo
 -->
-
-% if ( $pm == user->{id} || $repo->{owner} == user->{id} )
-% {
-    <form method=get action="<%= url_for( repo_update => url => $repo->{url} ) %>">
-        <input type="submit" value="<%=l 'Edit' %>">
-    </form>
-% }
 
 <article>
     <dl>

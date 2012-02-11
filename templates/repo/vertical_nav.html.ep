@@ -1,0 +1,23 @@
+% content_for vertical_nav => begin
+%
+% my $tab  = stash('tab' );
+% my $repo = stash('repo');
+% my $pm   = stash('pm') || -1;
+
+<div class="item">
+    <a href="<%= url_for('project_read', url => $repo->{projectUrl}) %>"><%=l 'Project' %></a>
+</div>
+
+<div class="item <%= 'selected' if $tab eq 'read' %>">
+    <a href="<%= url_for('repo_read', url => $repo->{url}) %>"><%=l 'Repository' %></a>
+</div>
+
+    % if ( $pm == user->{id} || $repo->{owner} == user->{id} )
+    % {
+        <div class="item green <%= 'selected' if $tab eq 'edit' %>">
+            <a href="<%= url_for('repo_update', url => $repo->{url}) %>"><%=l 'Edit' %></a>
+        </div>
+    % }
+
+% end
+

@@ -1,6 +1,8 @@
 % layout 'default';
 %
 % title l('Edit repository') . ' ' . $repo->{title};
+% stash ( tab => 'edit' );
+% include 'repo/vertical_nav';
 
 %=b $form
 
