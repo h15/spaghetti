@@ -340,6 +340,9 @@ use Mojo::Base 'Mojolicious';
             $r->route('/repo/create/:id', id => qr/\d+/)
                 ->to('repo#create')
                   ->name('repo_create');
+            $r->route('/repo/edit/:url')
+                ->to('repo#update')
+                  ->name('repo_update');
             
             ##
             ##  Helpers

@@ -231,7 +231,7 @@ our $repo =
     q{
         SELECT r.id, r.title, r.url,
                th.createAt, th.modifyAt, th.parentId,
-               th.topicId, th.owner, th.author,
+               th.topicId, th.textId, th.owner, th.author,
                tx.text,
                u.name, u.mail, u.banId
         FROM `repo` AS r
