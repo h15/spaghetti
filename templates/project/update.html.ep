@@ -1,0 +1,8 @@
+% layout 'default';
+%
+% title l('Edit project') . ' ' . $project->{title};
+% stash ( tab => 'edit' );
+% include 'project/vertical_nav';
+
+%=b $form
+

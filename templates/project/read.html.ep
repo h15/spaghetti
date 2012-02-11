@@ -1,6 +1,8 @@
 % layout 'default';
 %
 % title $project->{title};
+% stash ( tab => 'read' );
+% include 'project/vertical_nav';
 
 <!--
     Project
@@ -40,15 +42,6 @@
 -->
 
 <h2><%= 'Repositories' %> (<%= $project->{repos} %>)</h2>
-
-% if ( $project->{owner} == user->{id} && $conf->{repos} >= $project->{repos} )
-% {
-
-<form method=get action="<%= url_for( 'repo_create', id => $project->{id} ) %>">
-    <input type=submit value="Create">
-</form>
-
-% }
 
 % if ( keys %$repos )
 % {

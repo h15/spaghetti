@@ -75,6 +75,7 @@ use Mojo::Base 'Mojolicious';
             ( project =>
               {
                 repos => 10,
+                topic => 1,
               }
             );
             
@@ -330,6 +331,9 @@ use Mojo::Base 'Mojolicious';
             $r->route('/project/read/:url')
                 ->to('project#read')
                   ->name('project_read');
+            $r->route('/project/edit/:url')
+                ->to('project#update')
+                  ->name('project_update');
             
             # Repos
             #

@@ -1,0 +1,26 @@
+% content_for vertical_nav => begin
+%
+% my $tab     = stash('tab');
+% my $project = stash('project');
+%
+% use Pony::Stash;
+
+<div class="item <%= 'selected' if $tab eq 'read' %>">
+    <a href="<%= url_for('project_read', url => $project->{url}) %>"><%=l 'Project' %></a>
+</div>
+
+% if ( user->{id} == $project->{owner} && Pony::Stash->get('project')->{repos} >= $project->{repos} )
+% {
+
+    <div class="item green <%= 'selected' if $tab eq 'edit' %>">
+        <a href="<%= url_for('project_update', id => $project->{id}) %>"><%=l 'Edit' %></a>
+    </div>
+
+    <div class="item green <%= 'selected' if $tab eq 'create repo' %>">
+        <a href="<%= url_for('repo_create', id => $project->{id}) %>">+ <%=l 'Repository' %></a>
+    </div>
+
+% }
+
+% end
+
