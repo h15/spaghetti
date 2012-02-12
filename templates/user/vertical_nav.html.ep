@@ -8,7 +8,7 @@
 
 
 
-<div class="item red <%= 'selected' if $tab eq 'home' %>">
+<div class="item <%= 'selected' if $tab eq 'home' %>">
     <a href="<%= url_for 'user_home' %>"><%=l 'Profile' %></a>
 </div>
 
@@ -37,7 +37,7 @@
     <a href="<%= url_for 'user_config' %>"><%=l 'Config' %></a>
 </div>
 
-<div class="item <%= 'selected' if $tab eq 'project' %>">
+<div class="item red <%= 'selected' if $tab eq 'project' %>">
     <a href="<%= url_for 'user_logout' %>"><%=l 'logout' %></a>
 </div>
     

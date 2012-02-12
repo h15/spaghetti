@@ -27,14 +27,12 @@ use Mojo::Base 'Mojolicious::Controller';
             %$proj = ( %$thread, %$proj );
             $form->action = $this->url_for('repo_create', id => $proj->{id});
             
-            my $repos = Pony::Stash->get('project')->{repos};
-            
             # Check: does user is owner of this project
             #        and does limit reached.
             
             return $this->redirect_to( $this->req->headers->referrer )
                 unless $proj->{owner} == $this->user->{id}
-                       && $repos >= $proj->{repos};
+                       && $proj->{maxRepo} >= $proj->{repos};
             
             # Create repo on POST request.
             # Show create form in other case.
@@ -277,31 +275,37 @@ use Mojo::Base 'Mojolicious::Controller';
             {
                 my $user = $this->param('user');
             
-                my $r = 1 if $this->param('r');
-                my $w = 1 if $this->param('w');
-                my $p = 1 if $this->param('p');
-                my $c = 1 if $this->param('c');
-                my $d = 1 if $this->param('d');
+                my $r = ( $this->param('r') ? 1 : 0 );
+                my $w = ( $this->param('w') ? 1 : 0 );
+                my $p = ( $this->param('p') ? 1 : 0 );
+                my $c = ( $this->param('c') ? 1 : 0 );
+                my $d = ( $this->param('d') ? 1 : 0 );
                 
                 my $access = 16*$d + 8*$c + 4*$p + 2*$w + $r;
                 
                 my $model = new Pony::Crud::MySQL('repoRightsViaUser');
                 my $where = { repoId => $id, userId => $user };
                 
-                if ( $model->read($where) )
+                if ( $access != 1 )
                 {
-                    $model->update
-                    (
-                        { rwpcd => $access },
-                        $where
-                    );
+                    if ( $model->read($where) )
+                    {
+                        $model->update
+                        (
+                            { rwpcd => $access },
+                            $where
+                        );
+                    }
+                    else
+                    {
+                        $model->create({ %$where, rwpcd => $access });
+                    }
                 }
                 else
                 {
-                    $model->create({ %$where, rwpcd => $access });
+                    $model->delete($where);
                 }
                 
-                return $this->redirect_to( $this->req->headers->referrer );
             }
             
             # Get access list

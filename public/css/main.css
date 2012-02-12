@@ -557,6 +557,22 @@
     {
         background:#afa;
     }
+        
+    nav.vertical div.off
+    {
+        background: #eee;
+    }
+    
+    nav.vertical div.off a
+    {
+        color:#777;
+    }
+    
+    nav.vertical div.off:hover
+    {
+        background:#ddd;
+    }
+    
     nav.vertical .userpic_big
     {
         position:relative;

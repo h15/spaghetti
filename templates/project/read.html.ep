@@ -41,7 +41,7 @@
     Repositories
 -->
 
-<h2><%= 'Repositories' %> (<%= $project->{repos} %>)</h2>
+<h2><%= 'Repositories' %> (<%= $project->{repos} %>/<%= $project->{maxRepo} %>)</h2>
 
 % if ( keys %$repos )
 % {

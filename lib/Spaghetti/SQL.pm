@@ -199,7 +199,7 @@ our $project =
 {
     read =>
     q{
-        SELECT p.id, p.title, p.repos, p.url,
+        SELECT p.id, p.title, p.repos, p.maxRepo, p.url,
                th.createAt, th.modifyAt, th.parentId,
                th.topicId, th.owner, th.author, tx.text,
                u.name, u.mail, u.banId
