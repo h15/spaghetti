@@ -242,6 +242,16 @@ our $repo =
             INNER JOIN `project`AS p  ON ( p.id = th.topicId )
         WHERE r.url = ?
     },
+    
+    userAccessList =>
+    q{
+        SELECT a.rwpcd, a.userId,
+               u.`name`, u.mail, u.banId, u.id
+        FROM `repoRightsViaUser` AS a
+            INNER JOIN `user` AS u ON ( u.id = a.userId )
+        WHERE a.repoId = ?
+            ORDER BY u.`name`
+    },
 };
 
 1;

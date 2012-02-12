@@ -133,7 +133,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Prepare to render
             #
             
-            $this->stash( pm   => $pm   );
+            $this->stash( pm => $pm );
             $this->stash( repo => $repo );
         }
     
@@ -234,6 +234,87 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->stash( repo => $repo );
             $this->stash( form => $form->render );
+        }
+    
+    sub changeAccess
+        {
+            my $this = shift;
+            my $url  = $this->param('url');
+            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
+            
+            # Get repo
+            #
+            
+            my $sth = $dbh->prepare( $Spaghetti::SQL::repo->{read} );
+               $sth->execute( $url );
+            
+            my $repo = $sth->fetchrow_hashref();
+            my $id   = $repo->{id};
+            
+            return $this->redirect_to(repo_read => url => $url) unless $repo;
+            
+            # Get project owner (project manager)
+            #
+            
+            my $pm = Pony::Crud::MySQL->new('thread')
+                       ->read({ id => $repo->{topicId} }, ['owner']);
+            
+            return $this->redirect_to(repo_read => url => $url) unless $pm;
+            
+            $pm = $pm->{owner};
+            
+            # Allow access only for
+            # owner and project owner.
+            
+            return $this->redirect_to( $this->req->headers->referrer )
+                unless $repo->{owner} == $this->user->{id}
+                       || $pm == $this->user->{id};
+            
+            # Edit repo on POST request.
+            # Show edit form in other case.
+            
+            if ( $this->req->method eq 'POST' )
+            {
+                my $user = $this->param('user');
+            
+                my $r = 1 if $this->param('r');
+                my $w = 1 if $this->param('w');
+                my $p = 1 if $this->param('p');
+                my $c = 1 if $this->param('c');
+                my $d = 1 if $this->param('d');
+                
+                my $access = 16*$d + 8*$c + 4*$p + 2*$w + $r;
+                
+                my $model = new Pony::Crud::MySQL('repoRightsViaUser');
+                my $where = { repoId => $id, userId => $user };
+                
+                if ( $model->read($where) )
+                {
+                    $model->update
+                    (
+                        { rwpcd => $access },
+                        $where
+                    );
+                }
+                else
+                {
+                    $model->create({ %$where, rwpcd => $access });
+                }
+                
+                return $this->redirect_to( $this->req->headers->referrer );
+            }
+            
+            # Get access list
+            #
+            
+            $sth = $dbh->prepare( $Spaghetti::SQL::repo->{userAccessList} );
+            $sth->execute( $repo->{id} );
+            
+            my $accessList = $sth->fetchall_hashref('id');
+            
+            $this->stash( repo => $repo );
+            $this->stash( url => $url );
+            $this->stash( accessList => $accessList );
         }
 
 1;

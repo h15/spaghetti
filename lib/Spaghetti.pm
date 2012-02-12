@@ -347,6 +347,9 @@ use Mojo::Base 'Mojolicious';
             $r->route('/repo/edit/:url')
                 ->to('repo#update')
                   ->name('repo_update');
+            $r->route('/repo/access/:url')
+                ->to('repo#changeAccess')
+                  ->name('repo_changeAccess');
             
             ##
             ##  Helpers

@@ -17,6 +17,11 @@
         <div class="item green <%= 'selected' if $tab eq 'edit' %>">
             <a href="<%= url_for('repo_update', url => $repo->{url}) %>"><%=l 'Edit' %></a>
         </div>
+            
+        <div class="item green <%= 'selected' if $tab eq 'access' %>">
+            <a href="<%= url_for('repo_changeAccess', url => $repo->{url}) %>"><%=l 'Access' %></a>
+        </div>
+
     % }
 
 % end

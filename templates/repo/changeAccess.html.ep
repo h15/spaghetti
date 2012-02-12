@@ -1,0 +1,98 @@
+% layout 'default';
+%
+% title l('Change access');
+% stash ( tab => 'access' );
+% include 'repo/vertical_nav';
+
+<table class="list">
+    <tr>
+        <form method="post" access="<%= url_for('repo_changeAccess', url => $url) %>">
+            <td>
+                <%=l 'User' %>:
+                <input type="text" name="user">
+            </td>
+            <td>
+                <label>
+                    <acronym title="Read">
+                        R
+                    </acronym>
+                    <input type="checkbox" name="r">
+                </label>
+                
+                <label>
+                    <acronym title="Write">
+                        W
+                    </acronym>
+                    <input type="checkbox" name="w">
+                </label>
+                
+                <label>
+                    <acronym title="Create">
+                        C
+                    </acronym>
+                    <input type="checkbox" name="c">
+                </label>
+                
+                <label>
+                    <acronym title="Delete">
+                        D
+                    </acronym>
+                    <input type="checkbox" name="d">
+                </label>
+                
+                <input type="submit" value="<%=l 'Add' %>">
+        </form>
+    </tr>
+
+% for my $a ( values %$accessList )
+% {
+
+    <tr>
+        <td>
+            <%= render_user {
+                                id    => $a->{userId},
+                                name  => $a->{name},
+                                mail  => $a->{mail},
+                                banId => $a->{banId}
+                            } %>
+        </td>
+        <td>
+            <form method="post" access="<%= url_for('repo_changeAccess', url => $url) %>">
+                <label>
+                    <acronym title="Read">
+                        R
+                    </acronym>
+                    <input type="checkbox" name="r" <%= 'checked="checked"' if $a->{rwpcd} & 1 %>>
+                </label>
+                
+                <label>
+                    <acronym title="Write">
+                        W
+                    </acronym>
+                    <input type="checkbox" name="w" <%= 'checked="checked"' if $a->{rwpcd} & 2 %>>
+                </label>
+                
+                <label>
+                    <acronym title="Create">
+                        C
+                    </acronym>
+                    <input type="checkbox" name="c" <%= 'checked="checked"' if $a->{rwpcd} & 8 %>>
+                </label>
+                
+                <label>
+                    <acronym title="Delete">
+                        D
+                    </acronym>
+                    <input type="checkbox" name="d" <%= 'checked="checked"' if $a->{rwpcd} & 16 %>>
+                </label>
+                
+                <input type="hidden" name="user" value="<%= $a->{userId} %>">
+                
+                <input type="submit" value="<%=l 'Edit' %>">
+            </form>
+        </td>
+    </tr>
+% }
+
+</table>
+
