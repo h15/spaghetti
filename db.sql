@@ -21,8 +21,26 @@ create table `user`
     FOREIGN KEY (`banId`)    REFERENCES `ban`(`id`)
 );
 
-INSERT INTO `user` (`id`, `mail`, `password`, `name`, `createAt`, `modifyAt`, `accessAt`, `banId`, `banTime`) VALUES(0,'anonymous@lorcode.org','','anonymous',0,0,0,0,0),
+INSERT INTO `user` (`id`, `mail`, `password`, `name`, `createAt`, `modifyAt`, `accessAt`, `banId`, `banTime`) VALUES
+(0,'anonymous@lorcode.org','','anonymous',0,0,0,0,0),
 (1,'admin@lorcode.org','eaf959d9e23b7a07bf6364f50efd6007','admin',0,0,0,0,0);
+
+create table `item`
+(
+    `id`        int(11) unsigned auto_increment primary key,
+    `name`      varchar(32)  character set ascii collate ascii_general_ci not null,
+    `desc`      varchar(255) character set ascii collate ascii_general_ci not null,
+    `trade`     tinyint(4)  not null default 0
+);
+
+create table `userToItem`
+(
+    `userId` int(11) unsigned not null,
+    `itemId` int(11) unsigned not null,
+    
+    FOREIGN KEY (`userId`) REFERENCES `user`(`id`),
+    FOREIGN KEY (`itemId`) REFERENCES `item`(`id`)
+);
 
 create table `userInfo`
 (
@@ -174,7 +192,8 @@ create table `project`
     `id`        int(11) unsigned not null,
     `url`       varchar(128) character set ascii collate ascii_general_ci not null,
     `title`     varchar(256) character set utf8 collate utf8_general_ci not null,
-    `repos`     int(11) unsigned not null default 0,
+    `repos`     tinyint(4) unsigned not null default 0,
+    `maxRepo`   tinyint(4) unsigned not null default 0,
     
     UNIQUE(`url`),
     FOREIGN KEY (`id`)    REFERENCES `thread`(`id`)

@@ -625,6 +625,20 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->stash( projects => $projects );
         }
+    
+    sub items
+        {
+            my $this = shift;
+               $this->redirect_to('404') unless $this->user->{id};
+               
+            my $dbh = Pony::Crud::Dbh::MySQL->new->dbh;
+            
+            my $sth = $dbh->prepare($Spaghetti::SQL::user->{my_items});
+               $sth->execute( $this->user->{id} );
+            my $items = $sth->fetchall_hashref('id');
+            
+            $this->stash( items => $items );
+        }
 
 1;
 

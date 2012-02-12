@@ -193,6 +193,19 @@ our $user =
         WHERE th.owner = ?
         ORDER BY th.modifyAt DESC
     },
+    
+    my_items =>
+    q{
+        SELECT i.id, i.name, i.desc
+        FROM `item` AS i
+        WHERE i.id IN
+        (
+            SELECT itemId
+            FROM `userToItem`
+            WHERE userId = ?
+        )
+        ORDER BY i.name ASC
+    },
 };
 
 our $project =

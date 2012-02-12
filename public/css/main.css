@@ -578,3 +578,8 @@
         position:relative;
         left:15px;
     }
+    
+    acronym
+    {
+        border-bottom:dotted 1px #888;
+    }

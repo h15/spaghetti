@@ -1,0 +1,31 @@
+% layout 'default';
+%
+% title l('My items');
+%
+% stash(tab => 'items');
+% include 'user/vertical_nav';
+
+% if ( keys %$items )
+% {
+
+<div class="itemList">
+    % for my $i ( values %$items )
+    % {
+        <div class="item">
+            <a href="<%#= %>">
+                <img src="/pic/item/<%= $i->{id} %>.png">
+                <%= $i->{title} %></a>
+            <div class="desc">
+                <%=b l($i->{desc}) %>
+            </div>
+        </div>
+    % }
+</div>
+% }
+% else
+% {
+    <p>
+        <%= 'List is empty' %>.
+    </p>
+% }
+

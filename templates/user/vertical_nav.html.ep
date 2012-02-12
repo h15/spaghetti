@@ -25,6 +25,10 @@
     <a href="<%= url_for 'user_projects' %>"><%=l 'Projects' %></a>
 </div>
 
+<div class="item <%= 'selected' if $tab eq 'items' %>">
+    <a href="<%= url_for 'user_items' %>"><%=l 'Items' %></a>
+</div>
+
 <div class="item <%= 'selected' if $tab eq 'mail' %>">
     <a href="<%= url_for 'user_change_mail' %>"><%=l 'Change mail' %></a>
 </div>
@@ -37,7 +41,7 @@
     <a href="<%= url_for 'user_config' %>"><%=l 'Config' %></a>
 </div>
 
-<div class="item red <%= 'selected' if $tab eq 'project' %>">
+<div class="item red <%= 'selected' if $tab eq 'logout' %>">
     <a href="<%= url_for 'user_logout' %>"><%=l 'logout' %></a>
 </div>
     

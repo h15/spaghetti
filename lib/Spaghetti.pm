@@ -165,6 +165,9 @@ use Mojo::Base 'Mojolicious';
             $r->route('/user/config')
                 ->to('user#config')
                   ->name('user_config');
+            $r->route('/user/items')
+                ->to('user#items')
+                  ->name('user_items');
             
             $a->route('/user')
                 ->to('user#list')
