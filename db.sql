@@ -30,11 +30,18 @@ create table `item`
     `id`        int(11) unsigned auto_increment primary key,
     `name`      varchar(32)  character set ascii collate ascii_general_ci not null,
     `desc`      varchar(255) character set ascii collate ascii_general_ci not null,
-    `trade`     tinyint(4)  not null default 0
+    `trade`     tinyint(4)   not null default 0,
+    `effect`    varchar(16)  character set ascii collate ascii_general_ci,
+    `params`    varchar(32)  character set ascii collate ascii_general_ci
 );
+
+INSERT INTO `item` (`id`, `name`, `desc`, `trade`, `effect`, `params`) VALUES
+(1,'nil', 'nothing',1,NULL,NULL),
+(2,'Project ticket', 'Free ticket for one project',0,'CreateProject',1);
 
 create table `userToItem`
 (
+    `id`     int(11) unsigned auto_increment primary key,
     `userId` int(11) unsigned not null,
     `itemId` int(11) unsigned not null,
     
@@ -82,6 +89,7 @@ create table `group`
 INSERT INTO `group` (`id`, `name`, `desc`, `prioritet`) VALUES
 (0,'Anonymous','',0),
 (1,'Admin','',0),
+(2,'Archon','Gifts, carma',1),
 (998, 'Project leader', '', 100),
 (999, 'User', 'Simple user', 9999);
 

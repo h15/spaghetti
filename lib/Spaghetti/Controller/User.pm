@@ -329,6 +329,19 @@ use Mojo::Base 'Mojolicious::Controller';
             my $model= new Pony::Crud::MySQL('user');
             my $user = $model->read({ id => $id });
             
+            # Is Archon?
+            #
+            
+            if ( grep { $_ eq 2 } @{ $this->user->{groups} } )
+            {
+                my @items = Pony::Crud::MySQL->new('item')->list();
+                
+                $this->stash( items => \@items );
+            }
+            
+            # Render
+            #
+            
             $this->stash( user => $user );
             $this->render;
         }

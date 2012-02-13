@@ -9,6 +9,19 @@
     
 % end
 
+% if ( defined $items )
+% {
+    <div class="items">
+        % for $i ( @$items )
+        % {
+            <a href="<%#= %>">
+                <img src="/pic/item/<%= $i->{id} %>.png"
+                     alt="<%=l $i->{desc} %>"
+                     title="<%=l $i->{desc} %>"></a>
+        % }
+    </div>
+% }
+
 <table class=homeUser>
 
 % for my $k ( qw/name createAt modifyAt accessAt/ ) {
