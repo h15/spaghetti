@@ -1,3 +1,123 @@
+commit 5b2b4e0281807e100a39f322b05e47d5c85da854
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Tue Feb 14 02:41:16 2012 +0600
+
+    items and project creating are working
+
+commit b7a3f910b92419aa63b29bedb2be62f441f9d7a8
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Tue Feb 14 00:01:05 2012 +0600
+
+    create item by archon, activate item
+
+commit 9137d2b7abd5640150ac3ea00b346be89313a019
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Feb 12 19:16:47 2012 +0600
+
+    add items to users
+
+commit 343826da035bd79f2b95d9dc3a37b05b53ec5480
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Feb 12 16:34:21 2012 +0600
+
+    fixes in Repos
+
+commit b0d84a58ac581129527daa520373a6a818fe91d3
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Feb 12 06:56:50 2012 +0600
+
+    add access config page
+
+commit 4d88647906cb8f0fbd7e73e5f81903bcba25e203
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Feb 12 04:13:48 2012 +0600
+
+    add edit action for project
+
+commit 7ab997d583618eb6a385823d80cfe4ad39157214
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Feb 12 03:07:30 2012 +0600
+
+    add vertical menu for repos
+
+commit 2610e6f59df5cbf7bc82c8e54822bf151ff8d156
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Feb 12 02:30:02 2012 +0600
+
+    add edit action for repos
+
+commit b266a51c03d80ad223f64f94edcba0503cfccb5c
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sat Feb 11 22:20:07 2012 +0600
+
+    add create, read repo
+
+commit cb178b57f6adb34995aafb61b866c4711defae22
+Author: Georgy Bazhukov <gosha.bugov@gmail.com>
+Date:   Sat Feb 11 04:06:32 2012 +0600
+
+    show repo
+
+commit fc72be56aee295383fb6fd68bed8f3e460f71a3d
+Author: gosha <gosha@bugtop.(none)>
+Date:   Sat Feb 11 01:04:39 2012 +0600
+
+    move user vert nav panel into external template && add page for user`s projects
+
+commit 42ffbbc94c95028e08886219955397eb66f573e6
+Author: helios <helios@home.(none)>
+Date:   Thu Feb 9 02:24:26 2012 +0600
+
+    add admin stuff for pojects manipulating
+
+commit 1a68253d4cf9dd51e6f26fd61471a0255bb30924
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Wed Feb 8 22:00:06 2012 +0600
+
+    just save it
+
+commit 46239310a1d064db288b9b178282c72df84b1c9a
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Wed Feb 8 03:03:48 2012 +0600
+
+    start project controller
+
+commit 6a2a82c910ba19ed286c9e0f32684b49b327d949
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Tue Feb 7 23:04:18 2012 +0600
+
+    add db table for repo2user rights
+
+commit ea885c9b0e90ad874da658375435088d2a212b4f
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Mon Feb 6 23:33:24 2012 +0600
+
+    add tables for projects and repos
+
+commit 11aa06c2a5fb9de2078cee5faf5ef6c3a93ba948
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Mon Feb 6 23:32:48 2012 +0600
+
+    add copyright
+
+commit 6eac7d69fcfbca8757c8f5b845bc208bad7144a5
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Mon Feb 6 21:11:40 2012 +0600
+
+    some organization fixes
+
+commit 19fac9fa394c0c0440174ec7f9c32182699a6e06
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Mon Feb 6 21:04:21 2012 +0600
+
+    fix html
+
+commit 39a891145e3738bc05edfc16ace0e01d322205d6
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Feb 5 04:13:46 2012 +0600
+
+    changes
+
 commit 1ac74aa82e2d046e0882ea81eedc1515ea82c00e
 Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
 Date:   Sun Feb 5 04:12:59 2012 +0600
