@@ -583,3 +583,36 @@
     {
         border-bottom:dotted 1px #888;
     }
+    
+    /**
+     *  Items
+     */
+    .items>a>img, .item>a>img
+    {
+        height:48px;
+    }
+    
+    .popupItemWrap
+    {
+        position:fixed;
+        top:0;
+        left:0;
+        z-index:100;
+        width:100%;
+        height:100%;
+        background:rgba(0,0,0,0.5);
+    }
+    
+    .popupItem
+    {
+        width:400px;
+        margin:50px auto;
+        padding:1px 20px 20px 20px;
+        
+        -moz-border-radius:     10px;
+        -webkit-border-radius:  10px;
+        border-radius:          10px;
+        -khtml-border-radius:   10px;
+        
+        background:#f0f0f8;
+    }

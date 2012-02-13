@@ -214,8 +214,9 @@ our $project =
     q{
         SELECT p.id, p.title, p.repos, p.maxRepo, p.url,
                th.createAt, th.modifyAt, th.parentId,
-               th.topicId, th.owner, th.author, tx.text,
-               u.name, u.mail, u.banId
+               th.topicId, th.owner, th.textId, th.author,
+               tx.`text`,
+               u.`name`, u.mail, u.banId
         FROM `project` AS p
             INNER JOIN `thread` AS th ON ( p.id = th.id )
             INNER JOIN `text`   AS tx ON ( th.textId = tx.id )

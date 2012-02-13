@@ -201,7 +201,7 @@ create table `project`
     `url`       varchar(128) character set ascii collate ascii_general_ci not null,
     `title`     varchar(256) character set utf8 collate utf8_general_ci not null,
     `repos`     tinyint(4) unsigned not null default 0,
-    `maxRepo`   tinyint(4) unsigned not null default 0,
+    `maxRepo`   tinyint(4) unsigned not null default 1,
     
     UNIQUE(`url`),
     FOREIGN KEY (`id`)    REFERENCES `thread`(`id`)

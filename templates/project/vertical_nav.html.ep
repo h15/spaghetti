@@ -15,7 +15,7 @@
         <a href="<%= url_for('project_update', id => $project->{id}) %>"><%=l 'Edit' %></a>
     </div>
 
-    % if ( $project->{maxRepo} >= $project->{repos} )
+    % if ( $project->{maxRepo} > $project->{repos} )
     % {
         <div class="item green <%= 'selected' if $tab eq 'create repo' %>">
             <a href="<%= url_for('repo_create', id => $project->{id}) %>"><%=l 'Add repository' %></a>

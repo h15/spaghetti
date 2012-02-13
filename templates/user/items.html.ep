@@ -12,11 +12,31 @@
     % for my $i ( values %$items )
     % {
         <div class="item">
-            <a href="<%#= %>">
-                <img src="/pic/item/<%= $i->{id} %>.png">
-                <%= $i->{title} %></a>
-            <div class="desc">
-                <%=b l($i->{desc}) %>
+            <a href="#" onClick="$('#popupItem-<%= $i->{id} %>').fadeIn(500);return false;">
+                <img src="/pic/item/<%= $i->{id} %>.png" alt="<%=l $i->{desc} %>"
+                     title="<%=l $i->{desc} %>"></a>
+                
+            
+            <div class="popupItemWrap hidden" id="popupItem-<%= $i->{id} %>">
+                <div class="popupItem">
+                    <h3><%=l $i->{name} %></h3>
+                    <p>
+                        <img src="/pic/item/<%= $i->{id} %>.png" class="alignleft">
+                        <%=l $i->{desc} %>
+                    </p>
+                    
+                    <div class="cb"></div>
+                    
+                    <form method="post" class="alignleft"
+                          action="<%= url_for( 'item_activate', item => $i->{id} ) %>">
+                        <input class="green" type="submit" value="<%=l 'Activate' %>">
+                    </form>
+                    <a href="#" class="alignright"
+                       onClick="$('#popupItem-<%= $i->{id} %>').fadeOut(500);return false;">
+                       <%=l 'Close' %></a>
+                       
+                    <div class="cb"></div>
+                </div>
             </div>
         </div>
     % }

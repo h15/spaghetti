@@ -32,7 +32,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             return $this->redirect_to( $this->req->headers->referrer )
                 unless $proj->{owner} == $this->user->{id}
-                       && $proj->{maxRepo} >= $proj->{repos};
+                       && $proj->{maxRepo} > $proj->{repos};
             
             # Create repo on POST request.
             # Show create form in other case.

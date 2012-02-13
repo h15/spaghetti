@@ -354,6 +354,16 @@ use Mojo::Base 'Mojolicious';
                 ->to('repo#changeAccess')
                   ->name('repo_changeAccess');
             
+            # Items
+            #
+            
+            $r->route('/item/give/:item/to/:user', item => qr/\d+/, user => qr/\d+/)
+                ->to('item#giveByArchon')
+                  ->name('item_giveByArchon');
+            $r->route('/item/activate/:item', item => qr/\d+/)
+                ->to('item#activate')
+                  ->name('item_activate');
+            
             ##
             ##  Helpers
             ##

@@ -5,6 +5,7 @@ use Mojo::Base 'Mojolicious::Controller';
     use Pony::Crud::MySQL;
     use Pony::Crud::Dbh::MySQL;
     use Spaghetti::Form::Project::Create;
+    use Spaghetti::Util;
     
     sub read
         {
@@ -102,7 +103,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     
                     $teModel->update
                     (
-                        { text => $text },
+                        { text => Spaghetti::Util::escape($text) },
                         { id   => $project->{textId} }
                     );
                     
@@ -116,7 +117,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     # All is done - let's see that!
                     #
                     
-                    return $this->redirect_to(project_read => id => $id);
+                    return $this->redirect_to(project_read => url => $url);
                 }
             }
             

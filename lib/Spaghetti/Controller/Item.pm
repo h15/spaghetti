@@ -56,21 +56,21 @@ use Mojo::Base 'Mojolicious::Controller';
                 # Get item.
                 #
                 
-                $item = Pony::Crud::MySQL->new('item')
-                          ->read({ id => $item->{itemId} });
+                my $itemObj = Pony::Crud::MySQL->new('item')
+                                ->read({ id => $item->{itemId} });
                 
                 # Does that item can do smth?
                 #
                 
-                if ( $item->{effect} )
+                if ( $itemObj->{effect} )
                 {
-                    my $class = __PACKAGE__ . '::' . $item->{name};
+                    my $class = __PACKAGE__ . '::' . $itemObj->{effect};
                     
                     # Apply item effect.
                     #
                     
                     load $class;
-                         $class->new([ split ';', $item->{param} ])
+                         $class->new( $this->user->{id}, split ';', $itemObj->{param} )
                                ->run;
                     
                     # Item disappears in the smoke...
