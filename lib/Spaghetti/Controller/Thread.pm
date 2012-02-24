@@ -19,8 +19,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # It can be string (url) or integer (id).
             
             my $id = ( $url =~ /^\d*$/ ? int $url :
-                       [ $topicModel->list({url=>$url},['threadId'],'threadId',
-                                                undef,0,1) ]->[0]->{threadId} );
+                            $topicModel->read({url=>$url})->{threadId} );
             
             # Paginator
             #
@@ -42,8 +41,11 @@ use Mojo::Base 'Mojolicious::Controller';
             my ($topic) = grep { $_->{id} eq $id } values %$threads;
             
             delete $threads->{ $topic->{id} } if defined $topic;
+                        
+            # Is empty?
+            #
             
-            $this->redirect_to('404') unless $threads;
+            $this->render(template => 'not_found', status => 404) unless $threads;
             
             my @roots;
             my $count;
@@ -104,7 +106,10 @@ use Mojo::Base 'Mojolicious::Controller';
             my $pid  = int $this->param('parentId');
             my $tid  = int $this->param('topicId');
             
-            $this->redirect_to('404') unless $this->access($tid, 'c');
+            # Access denied.
+            #
+            
+            $this->render(template => 'not_found', status => 404) unless $this->access($tid, 'c');
             
             my $form = new Spaghetti::Form::Thread::Create;
                $form->action = $this->url_for('thread_create');
@@ -151,7 +156,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     
                     {
                         my $thread = $threadModel->read({id => $parent});
-                        my $user   = $userModel  ->read({ id => $thread->{author} });
+                        my $user   = $userModel  ->read({id => $thread->{author}});
                         
                         $thread  = $threadModel->read({id => $topic});
                         my $topic= $topicModel ->read({threadId => $topic});
@@ -165,6 +170,9 @@ use Mojo::Base 'Mojolicious::Controller';
                                         parentId => $user->{threadId},
                                         topicId  => $user->{threadId},
                                    });
+                        
+                        # Text of notification
+                        # about new message.
                         
                         my $text = $this->l('You have a response in topic') .
                                    ( sprintf ' "<a href="%s">%s</a>".',
@@ -187,6 +195,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     
                     # Inheritance of groups
                     #
+                    
                     my $t2dtModel = new Pony::Crud::MySQL('threadToDataType');
                     my @types = $t2dtModel->list({threadId => $parent},
                                         ['dataTypeId'], 'dataTypeId', undef, 0, 100);
@@ -198,6 +207,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     
                     # Redirect
                     #
+                    
                     if ( $this->user->{conf}->{isTreeView} )
                     {
                         $this->redirect_to
@@ -239,7 +249,10 @@ use Mojo::Base 'Mojolicious::Controller';
             my $pid  = int ( $this->param('parentId') || 0 );
             my $tid  = int ( $this->param('topicId' ) || 0 );
             
-            $this->redirect_to('404') unless $this->access($tid, 'c');
+            # Access denied.
+            #
+            
+            $this->render(template => 'not_found', status => 404) unless $this->access($tid, 'c');
             
             my $form = new Spaghetti::Form::Topic::Create;
                $form->action = $this->url_for('thread_createTopic');
@@ -291,6 +304,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     
                     # Inheritance of groups
                     #
+                    
                     my $t2dtModel = new Pony::Crud::MySQL('threadToDataType');
                     my @types = $t2dtModel->list({threadId => $parent},
                                         ['dataTypeId'], 'dataTypeId', undef, 0, 100);
@@ -313,7 +327,10 @@ use Mojo::Base 'Mojolicious::Controller';
             my $this = shift;
             my $id   = int $this->param('id');
             
-            $this->redirect_to('404') unless $this->access($id, 'w');
+            # Access denied.
+            #
+            
+            $this->render(template => 'not_found', status => 404) unless $this->access($id, 'w');
             
             my $form = new Spaghetti::Form::Thread::Create;
                $form->action = $this->url_for( thread_edit => id => $id );
@@ -369,7 +386,10 @@ use Mojo::Base 'Mojolicious::Controller';
             my $this = shift;
             my $id   = int $this->param('id');
             
-            $this->redirect_to('404') unless $this->access($id, 'w');
+            # Access denied.
+            #
+            
+            $this->render(template => 'not_found', status => 404) unless $this->access($id, 'w');
             
             my $form = new Spaghetti::Form::Topic::Create;
                $form->action = $this->url_for( topic_edit => id => $id );
@@ -379,9 +399,8 @@ use Mojo::Base 'Mojolicious::Controller';
             my $textModel  = new Pony::Crud::MySQL('text');
             
             my $thread= $threadModel->read({ id => $id });
-            my $topic = [ $topicModel->list( {threadId => $id}, undef,
-                                             'threadId', undef, 0, 1 ) ]->[0];
-            my $text  = $textModel->read({ id => $thread->{textId} });
+            my $topic = $topicModel->read({threadId => $id});
+            my $text  = $textModel->read({id => $thread->{textId}});
             
             if ( $this->req->method eq 'POST' )
             {
@@ -417,9 +436,9 @@ use Mojo::Base 'Mojolicious::Controller';
             
             for my $k ( keys %{$form->elements} )
             {
-                $form->elements->{$k}->value = $text->{$k} if defined $text->{$k};
+                $form->elements->{$k}->value = $text->{$k}   if defined $text->{$k};
                 $form->elements->{$k}->value = $thread->{$k} if defined $thread->{$k};
-                $form->elements->{$k}->value = $topic->{$k} if defined $topic->{$k};
+                $form->elements->{$k}->value = $topic->{$k}  if defined $topic->{$k};
             }
             
             $this->stash( id => $id );
@@ -448,7 +467,10 @@ use Mojo::Base 'Mojolicious::Controller';
             
             my $threads = $sth->fetchall_hashref('id');
             
-            $this->redirect_to('404') unless $threads;
+            # Thread is empty.
+            # At least on this page.
+            
+            $this->render(template => 'not_found', status => 404) unless $threads;
             
             # Get thread count.
             #
@@ -465,7 +487,7 @@ use Mojo::Base 'Mojolicious::Controller';
                             $this->paginator( 'thread_tracker', $page,
                                 $count->{count}, $conf->{size} ) );
             
-            $this->stash( threads   => $threads   );
+            $this->stash( threads => $threads );
             $this->render;
         }
 
