@@ -45,7 +45,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Is empty?
             #
             
-            $this->render(template => 'not_found', status => 404) unless $threads;
+            $this->stop(404) unless $threads;
             
             my @roots;
             my $count;
@@ -109,7 +109,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Access denied.
             #
             
-            $this->render(template => 'not_found', status => 404) unless $this->access($tid, 'c');
+            $this->stop(404) unless $this->access($tid, 'c');
             
             my $form = new Spaghetti::Form::Thread::Create;
                $form->action = $this->url_for('thread_create');
@@ -252,7 +252,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Access denied.
             #
             
-            $this->render(template => 'not_found', status => 404) unless $this->access($tid, 'c');
+            $this->stop(404) unless $this->access($tid, 'c');
             
             my $form = new Spaghetti::Form::Topic::Create;
                $form->action = $this->url_for('thread_createTopic');
@@ -330,7 +330,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Access denied.
             #
             
-            $this->render(template => 'not_found', status => 404) unless $this->access($id, 'w');
+            $this->stop(404) unless $this->access($id, 'w');
             
             my $form = new Spaghetti::Form::Thread::Create;
                $form->action = $this->url_for( thread_edit => id => $id );
@@ -389,7 +389,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Access denied.
             #
             
-            $this->render(template => 'not_found', status => 404) unless $this->access($id, 'w');
+            $this->stop(404) unless $this->access($id, 'w');
             
             my $form = new Spaghetti::Form::Topic::Create;
                $form->action = $this->url_for( topic_edit => id => $id );
@@ -470,7 +470,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Thread is empty.
             # At least on this page.
             
-            $this->render(template => 'not_found', status => 404) unless $threads;
+            $this->stop(404) unless $threads;
             
             # Get thread count.
             #

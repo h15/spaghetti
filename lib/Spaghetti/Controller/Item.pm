@@ -14,8 +14,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Allow Archons.
             # Deny All.
             
-            $this->render(status => 401, template => 'bad_auth')
-                unless grep { $_ eq 2 } @{ $this->user->{groups} };
+            $this->stop(401) unless grep { $_ eq 2 } @{ $this->user->{groups} };
             
             if ( $this->req->method eq 'POST' )
             {
@@ -36,8 +35,7 @@ use Mojo::Base 'Mojolicious::Controller';
         {
             my $this = shift;
             
-            $this->render(status => 401, template => 'bad_auth')
-                unless $this->user->{id} > 0 && $this->user->{banId} == 0;
+            $this->stop(401) unless $this->user->{id} > 0 && $this->user->{banId} == 0;
             
             if ( $this->req->method eq 'POST' )
             {
@@ -50,7 +48,7 @@ use Mojo::Base 'Mojolicious::Controller';
                 # Item with $userId and $itemId does not exist.
                 # Get out here!
                 
-                $this->render(status => 400, template => 'bad_request') unless $item;
+                $this->stop(400) unless $item;
                 
                 # Get item.
                 #

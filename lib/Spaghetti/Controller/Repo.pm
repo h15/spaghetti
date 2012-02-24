@@ -21,7 +21,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # If project does not exist
             # - say "Bad request".
             
-            $this->render(status => 400, template => 'bad_request') unless $proj;
+            $this->stop(400) unless $proj;
             
             %$proj = ( %$thread, %$proj );
             $form->action = $this->url_for('repo_create', id => $proj->{id});
@@ -29,7 +29,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Check: does user is owner of this project
             #        and does limit reached.
             
-            $this->render(status => 400, template => 'bad_request')
+            $this->stop(400)
                 unless $proj->{owner} == $this->user->{id}
                        && $proj->{maxRepo} > $proj->{repos};
             
@@ -121,7 +121,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Does not exist.
             #
             
-            $this->render(status => 404, template => 'not_found') unless $repo;
+            $this->stop(404) unless $repo;
             
             # Get project manager.
             #
@@ -164,14 +164,14 @@ use Mojo::Base 'Mojolicious::Controller';
                        ->new('thread')
                          ->read({ id => $repo->{topicId} }, ['owner']);
             
-            $this->render(status => 400, template => 'bad_request') unless $pm;
+            $this->stop(400) unless $pm;
             
             $pm = $pm->{owner};
             
             # Allow access only for
             # owner and project owner.
             
-            $this->render(status => 401, template => 'bad_auth')
+            $this->stop(401)
                 unless $repo->{owner} == $this->user->{id}
                        || $pm == $this->user->{id};
             
@@ -253,7 +253,7 @@ use Mojo::Base 'Mojolicious::Controller';
             my $repo = $sth->fetchrow_hashref();
             my $id   = $repo->{id};
             
-            $this->render(status => 400, template => 'bad_request') unless $repo;
+            $this->stop(400) unless $repo;
             
             # Get project owner (project manager)
             #
@@ -261,14 +261,14 @@ use Mojo::Base 'Mojolicious::Controller';
             my $pm = Pony::Crud::MySQL->new('thread')
                        ->read({ id => $repo->{topicId} }, ['owner']);
             
-            $this->render(status => 401, template => 'bad_auth') unless $pm;
+            $this->stop(401) unless $pm;
             
             $pm = $pm->{owner};
             
             # Allow access only for
             # owner and project owner.
             
-            $this->render(status => 401, template => 'bad_auth')
+            $this->stop(401)
                 unless $repo->{owner} == $this->user->{id}
                        || $pm == $this->user->{id};
             

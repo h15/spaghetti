@@ -25,7 +25,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Project with this url
             # does not exist.
             
-            $this->render(status => 404, template => 'not_found') unless $project;
+            $this->stop(404) unless $project;
             
             # Get project's repos
             #
@@ -62,15 +62,14 @@ use Mojo::Base 'Mojolicious::Controller';
             # Does not exist.
             #
             
-            $this->render(status => 400, template => 'bad_request') unless $project;
+            $this->stop(400) unless $project;
             
             my $id = $project->{id};
             
             # Allow access only for
             # project owner.
             
-            $this->render(status => 401, template => 'bad_auth')
-                unless $project->{owner} == $this->user->{id};
+            $this->stop(401) unless $project->{owner} == $this->user->{id};
             
             # Edit project on POST request.
             # Show edit form in other case.
