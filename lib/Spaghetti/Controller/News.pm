@@ -29,6 +29,8 @@ use Mojo::Base 'Mojolicious::Controller';
                                      
             my $news = $sth->fetchall_hashref('id');
             
+            $this->render(status => 404, template => 'not_found') unless $news;
+            
             # Get size of news list.
             #
             

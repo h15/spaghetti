@@ -12,9 +12,9 @@ use Mojo::Base 'Mojolicious::Controller';
             my $this = shift;
             
             # Allow Archons.
-            # Deny All
+            # Deny All.
             
-            return $this->redirect_to( $this->req->headers->referrer )
+            $this->render(status => 401, template => 'bad_auth')
                 unless grep { $_ eq 2 } @{ $this->user->{groups} };
             
             if ( $this->req->method eq 'POST' )
@@ -36,7 +36,7 @@ use Mojo::Base 'Mojolicious::Controller';
         {
             my $this = shift;
             
-            return $this->redirect_to( $this->req->headers->referrer )
+            $this->render(status => 401, template => 'bad_auth')
                 unless $this->user->{id} > 0 && $this->user->{banId} == 0;
             
             if ( $this->req->method eq 'POST' )
@@ -50,8 +50,7 @@ use Mojo::Base 'Mojolicious::Controller';
                 # Item with $userId and $itemId does not exist.
                 # Get out here!
                 
-                return $this->redirect_to( $this->req->headers->referrer )
-                    unless defined $item;
+                $this->render(status => 400, template => 'bad_request') unless $item;
                 
                 # Get item.
                 #

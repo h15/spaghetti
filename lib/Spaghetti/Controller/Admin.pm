@@ -8,11 +8,11 @@ use Mojo::Base 'Mojolicious::Controller';
         {
             my $this = shift;
             
-            my @u = Pony::Crud::MySQL
-                      ->new('userToGroup')
-                        ->list( {userId => $this->user->{id}, groupId => 1},
-                                            ['userId'], 'userId', undef, 0, 1 );
-            return 1 if @u;
+            my $u2g = Pony::Crud::MySQL
+                       ->new('userToGroup')
+                         ->read({userId => $this->user->{id}, groupId => 1});
+            
+            return 1 if $u2g;
             return 0;
         }
 

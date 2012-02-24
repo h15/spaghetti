@@ -22,7 +22,10 @@ use Mojo::Base 'Mojolicious::Controller';
                
             my $project = $sth->fetchrow_hashref();
             
-            return $this->redirect_to('/404') unless $project;
+            # Project with this url
+            # does not exist.
+            
+            $this->render(status => 404, template => 'not_found') unless $project;
             
             # Get project's repos
             #
@@ -56,15 +59,17 @@ use Mojo::Base 'Mojolicious::Controller';
             
             my $project = $sth->fetchrow_hashref();
             
-            return $this->redirect_to ( $this->req->headers->referer )
-                unless $project;
+            # Does not exist.
+            #
+            
+            $this->render(status => 400, template => 'bad_request') unless $project;
             
             my $id = $project->{id};
             
             # Allow access only for
             # project owner.
             
-            return $this->redirect_to( $this->req->headers->referrer )
+            $this->render(status => 401, template => 'bad_auth')
                 unless $project->{owner} == $this->user->{id};
             
             # Edit project on POST request.
