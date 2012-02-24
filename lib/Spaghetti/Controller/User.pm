@@ -10,7 +10,12 @@ use Mojo::Base 'Mojolicious::Controller';
     use Pony::Stash;
     use Digest::MD5 "md5_hex";
     use Storable qw(thaw freeze);
-
+    
+    # Login action.
+    # Here is user can enter to the site.
+    # On GET it shows login form.
+    # On POST we'll try to login user.
+    
     sub login
         {
             my $this = shift;
@@ -22,12 +27,22 @@ use Mojo::Base 'Mojolicious::Controller';
                 
                 if ( $form->isValid )
                 {
+                    # Get fields.
+                    #
+                    
                     my $mail = $form->elements->{mail}->value;
                     my $pass = $form->elements->{password}->value;
+                    
+                    # Get user info such as
+                    # login attempts.
+                    
                     my $model= new Pony::Crud::MySQL('user');
                     my $conf = Pony::Stash->get('user');
                     my $user = $model->read({mail => $mail}, ['id','attempts']);
                     my $att  = $user->{attempts};
+
+                    # Too much attempts.
+                    #
                     
                     if ( $att > $conf->{attempts} )
                     {
@@ -36,6 +51,9 @@ use Mojo::Base 'Mojolicious::Controller';
                     }
                     else
                     {
+                        # Does user with this
+                        # mail and password exists?
+                        
                         my $where = { 'mail' => $mail,
                                       'password' => md5_hex( $mail . $pass ) };
                                      
@@ -44,7 +62,8 @@ use Mojo::Base 'Mojolicious::Controller';
                         if ( defined $user && $user->{id} > 0 )
                         {
                             # All fine.
-                            #
+                            # Flush attempt count.
+                            
                             $model->update
                             ( { accessAt => time,
                                 attempts => 0     },
@@ -55,6 +74,9 @@ use Mojo::Base 'Mojolicious::Controller';
                         }
                         else
                         {
+                            # User does not exist.
+                            # Inc attempt count.
+                            
                             $model->update
                             ( { attempts => ++$att },
                               { mail     => $mail  } );
@@ -66,10 +88,13 @@ use Mojo::Base 'Mojolicious::Controller';
                 }
             }
             
-            $this->stash( form => $form->render() );
-            $this->render;
+            $this->stash( form => $form->render );
         }
-        
+    
+    # User registration.
+    # Upgrade anonymous to registrant.
+    # GET - show form, POST - create user.
+    
     sub registration
         {
             my $this = shift;
@@ -81,9 +106,15 @@ use Mojo::Base 'Mojolicious::Controller';
                 
                 if ( $form->isValid )
                 {
+                    # Get fields' value.
+                    #
+                    
                     my $name = $form->elements->{name}->value;
                     my $mail = $form->elements->{mail}->value;
                     my $pass = $form->elements->{password}->value;
+                    
+                    # Does NAME and E-MAIL are free?
+                    #
                     
                     my $model = new Pony::Crud::MySQL('user');
                     my $user1 = $model->read( {'mail' => $mail}, ['id'] );
@@ -100,6 +131,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     {
                         # All fine.
                         #
+                        
                         my $time = time;
                         
                         # Create user's private thread.
@@ -137,6 +169,7 @@ use Mojo::Base 'Mojolicious::Controller';
                         
                         # Create user.
                         #
+                        
                         my $id = $model->create
                                  ({ 
                                      name     => $name,
@@ -150,10 +183,12 @@ use Mojo::Base 'Mojolicious::Controller';
                         
                         # Add user to default group.
                         #
+                        
                         my $u2gModel = new Pony::Crud::MySQL('userToGroup');
                         
                         # Default group.
                         #
+                        
                         $u2gModel->create({ userId  => $id,
                                             groupId => 999 });
                         
@@ -163,9 +198,11 @@ use Mojo::Base 'Mojolicious::Controller';
                 }
             }
             
-            $this->stash( form => $form->render() );
-            $this->render;
+            $this->stash( form => $form->render );
         }
+    
+    # Create 
+    #
     
     sub createPrivateThread
         {
@@ -214,7 +251,8 @@ use Mojo::Base 'Mojolicious::Controller';
     sub thread
         {
             my $this = shift;
-               $this->redirect_to('404') unless $this->user->{id};
+               $this->render({template => 'not_found', code => 404})
+                    unless $this->user->{id};
             
             my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
             
@@ -232,7 +270,8 @@ use Mojo::Base 'Mojolicious::Controller';
             my $user = Pony::Crud::MySQL->new('user')
                            ->read({ id => $this->user->{id} });
             
-            $this->redirect_to('404') if $user->{threadId} == 0;
+            $this->render({template => 'not_found', code => 404})
+                if $user->{threadId} == 0;
             
             my $sth = $dbh->prepare($Spaghetti::SQL::user->{private_thread});
                $sth->execute( $user->{threadId}, $user->{threadId}, ($page - 1) * $size, $size );
@@ -337,6 +376,10 @@ use Mojo::Base 'Mojolicious::Controller';
                 my @items = Pony::Crud::MySQL->new('item')->list();
                 
                 $this->stash( items => \@items );
+            }
+            else
+            {
+                $this->stash( items => undef );
             }
             
             # Render
