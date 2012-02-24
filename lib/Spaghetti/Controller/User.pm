@@ -251,8 +251,11 @@ use Mojo::Base 'Mojolicious::Controller';
     sub thread
         {
             my $this = shift;
-               $this->render({template => 'not_found', code => 404})
-                    unless $this->user->{id};
+            
+            # Not found for anonymous.
+            #
+
+            $this->render(template => 'not_found', status => 404) unless $this->user->{id};
             
             my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
             
@@ -270,8 +273,13 @@ use Mojo::Base 'Mojolicious::Controller';
             my $user = Pony::Crud::MySQL->new('user')
                            ->read({ id => $this->user->{id} });
             
-            $this->render({template => 'not_found', code => 404})
-                if $user->{threadId} == 0;
+            # Does thread exist?
+            #
+            
+            $this->render(template => 'not_found', status => 404) if $user->{threadId} == 0;
+            
+            # Yes, it does!
+            #
             
             my $sth = $dbh->prepare($Spaghetti::SQL::user->{private_thread});
                $sth->execute( $user->{threadId}, $user->{threadId}, ($page - 1) * $size, $size );
@@ -298,7 +306,11 @@ use Mojo::Base 'Mojolicious::Controller';
     sub home
         {
             my $this = shift;
-               $this->redirect_to('404') unless $this->user->{id};
+            
+            # Not found for anonymous.
+            #
+            
+            $this->render(template => 'not_found', status => 404) unless $this->user->{id};
             
             $this->stash( user => $this->user );
             $this->render;
@@ -307,7 +319,11 @@ use Mojo::Base 'Mojolicious::Controller';
     sub config
         {
             my $this = shift;
-               $this->redirect_to('404') unless $this->user->{id};
+            
+            # Not found for anonymous.
+            #
+            
+            $this->render(template => 'not_found', status => 404) unless $this->user->{id};
             
             if ( $this->req->method eq 'POST' )
             {
@@ -368,6 +384,11 @@ use Mojo::Base 'Mojolicious::Controller';
             my $model= new Pony::Crud::MySQL('user');
             my $user = $model->read({ id => $id });
             
+            # Does exist?
+            #
+            
+            return $this->render(status => 404, template => 'not_found') unless $user;
+            
             # Is Archon?
             #
             
@@ -403,7 +424,11 @@ use Mojo::Base 'Mojolicious::Controller';
     sub changePassword
         {
             my $this = shift;
-               $this->redirect_to('404') unless $this->user->{id};
+            
+            # Anonymous has not password.
+            #
+            
+            $this->render(template => 'not_found', status => 404) unless $this->user->{id};
             
             my $form = new Spaghetti::Form::User::ChangePassword;
             
@@ -457,6 +482,12 @@ use Mojo::Base 'Mojolicious::Controller';
     sub flushPassword
         {
             my $this  = shift;
+            
+            # Anonymous has not password.
+            #
+            
+            $this->render(template => 'not_found', status => 404) unless $this->user->{id};
+            
             my $model = new Pony::Crud::MySQL('user');
             
             $model->update({ password => '',
@@ -469,6 +500,12 @@ use Mojo::Base 'Mojolicious::Controller';
     sub genPassword
         {
             my $this  = shift;
+            
+            # Anonymous has not password.
+            #
+            
+            $this->render(template => 'not_found', status => 404) unless $this->user->{id};
+            
             my $model = new Pony::Crud::MySQL('user');
             my $pass  = md5_hex( rand );
             my $mail  = $this->user->{mail};
@@ -488,7 +525,11 @@ use Mojo::Base 'Mojolicious::Controller';
     sub changeMail
         {
             my $this = shift;
-               $this->redirect_to('404') unless $this->user->{id};
+            
+            # Anonymous has not mail.
+            #
+            
+            $this->render(template => 'not_found', status => 404) unless $this->user->{id};
             
             my $form = new Spaghetti::Form::User::ChangeMail;
             
@@ -586,6 +627,7 @@ use Mojo::Base 'Mojolicious::Controller';
                         $form = new Spaghetti::Form::User::LoginViaMail;
                         
                         $this->done('Check your mail');
+                        $this->render;
                     }
                     else
                     {
@@ -605,20 +647,22 @@ use Mojo::Base 'Mojolicious::Controller';
             my $key  = $this->param('key');
             my $conf = Pony::Stash->get('user');
             my $model= new Pony::Crud::MySQL('mailConfirm');
-               $mail = [ $model->list( { mail => $mail },
-                                       undef,'mail',undef,0,1 ) ]->[0];
+               $mail = $model->read({mail => $mail});
                                        
             my $userModel = new Pony::Crud::MySQL('user');
             
             # Mail does not used for confirm.
             #
+            
             if ( not defined $mail )
             {
                 $this->error("Does not exist");
             }
             
+            
             # Too much attempts.
             #
+            
             elsif ( $mail->{attempts} > $conf->{mailAttempts} )
             {
                 $this->error("Too much login attempts");
@@ -626,6 +670,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             # Too slow.
             #
+            
             elsif ( $mail->{expair} < time )
             {
                 $this->error("Time expaired");
@@ -633,6 +678,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             # Wrong secret.
             #
+            
             elsif ( $mail->{secret} ne $key )
             {
                 $model->update( {attempts => $mail->{attempts}+1},
@@ -643,6 +689,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             # All fine.
             #
+            
             else
             {
                 $model->update({attempts => 0}, {mail => $mail->{mail}});
@@ -671,10 +718,13 @@ use Mojo::Base 'Mojolicious::Controller';
     sub projects
         {
             my $this = shift;
-               $this->redirect_to('404') unless $this->user->{id};
-               
-            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
             
+            # Anonymous has not projects.
+            #
+            
+            $this->render(template => 'not_found', status => 404) unless $this->user->{id};
+               
+            my $dbh = Pony::Crud::Dbh::MySQL->new->dbh;
             my $sth = $dbh->prepare($Spaghetti::SQL::user->{my_projects});
                $sth->execute( $this->user->{id} );
             my $projects = $sth->fetchall_hashref('id');
@@ -685,8 +735,12 @@ use Mojo::Base 'Mojolicious::Controller';
     sub items
         {
             my $this = shift;
-               $this->redirect_to('404') unless $this->user->{id};
-               
+            
+            # Anonymous has not items.
+            #
+            
+            $this->render(template => 'not_found', status => 404) unless $this->user->{id};
+            
             my $dbh = Pony::Crud::Dbh::MySQL->new->dbh;
             
             my $sth = $dbh->prepare($Spaghetti::SQL::user->{my_items});
