@@ -123,7 +123,7 @@ use Pony::Object 'Mojolicious::Plugin';
                                           $self->req->url->base->host,
                                           $self->req->url->base->port;
                     my $pic = sprintf '<img class=userpic_small src="http://www.gravatar.com/avatar/%s?d=%s&s=%s">',
-                                      md5_hex(lc $user->{mail}), uri_escape($default), 20;
+                                      md5_hex( lc($user->{mail}||'') ), uri_escape($default), 20;
                     my $url =
                         (
                             $user->{id} != $self->user->{id} ?

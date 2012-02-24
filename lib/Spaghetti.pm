@@ -430,6 +430,8 @@ use Mojo::Base 'Mojolicious';
                     
                     my ($str,$year,$mon,$day,$hour,$min,$sec) = $this->getDateTime($val);
                     
+                    $str ||= '';
+                    
                     return new Mojo::ByteStream
                            ( qq[<time datetime="$year-$mon-${day}T$hour:]
                              . qq[$min:${sec}Z">$str</time>] );
