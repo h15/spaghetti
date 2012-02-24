@@ -18,11 +18,10 @@ use Mojo::Base 'Mojolicious::Controller';
             my $proj   = Pony::Crud::MySQL->new('project')
                            ->read({ id => $project });
             
-            # If project does not exist - get out here.
-            #
+            # If project does not exist
+            # - say "Bad request".
             
-            return $this->redirect_to( $this->req->headers->referrer )
-                unless defined $proj;
+            $this->render(status => 400, template => 'bad_request') unless $proj;
             
             %$proj = ( %$thread, %$proj );
             $form->action = $this->url_for('repo_create', id => $proj->{id});
@@ -30,7 +29,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Check: does user is owner of this project
             #        and does limit reached.
             
-            return $this->redirect_to( $this->req->headers->referrer )
+            $this->render(status => 400, template => 'bad_request')
                 unless $proj->{owner} == $this->user->{id}
                        && $proj->{maxRepo} > $proj->{repos};
             
@@ -46,10 +45,10 @@ use Mojo::Base 'Mojolicious::Controller';
                     # Get data from form.
                     #
                     
-                    my $title = $form->elements->{title}   ->value;
-                    my $url   = $form->elements->{url}     ->value;
-                    my $text  = $form->elements->{text}    ->value;
-                    my $owner = $form->elements->{owner}   ->value;
+                    my $title = $form->elements->{title}->value;
+                    my $url   = $form->elements->{url}  ->value;
+                    my $text  = $form->elements->{text} ->value;
+                    my $owner = $form->elements->{owner}->value;
                     
                     # Prepare models.
                     #
@@ -111,7 +110,7 @@ use Mojo::Base 'Mojolicious::Controller';
             my $url  = $this->param('url');
             my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
             
-            # Get repo
+            # Get repo.
             #
             
             my $sth = $dbh->prepare( $Spaghetti::SQL::repo->{read} );
@@ -119,16 +118,20 @@ use Mojo::Base 'Mojolicious::Controller';
             
             my $repo = $sth->fetchrow_hashref();
             
-            return $this->redirect_to( $this->req->headers->referrer )
-                unless defined $repo;
-            
-            # Get project manager
+            # Does not exist.
             #
             
-            my $pm = Pony::Crud::MySQL->new('thread')
-                       ->read({ id => $repo->{topicId} }, ['owner'])->{owner};
+            $this->render(status => 404, template => 'not_found') unless $repo;
             
-            # Prepare to render
+            # Get project manager.
+            #
+            
+            my $pm = Pony::Crud::MySQL
+                       ->new('thread')
+                         ->read({id => $repo->{topicId}}, ['owner'])
+                           ->{owner};
+            
+            # Prepare to render.
             #
             
             $this->stash( pm => $pm );
@@ -157,17 +160,18 @@ use Mojo::Base 'Mojolicious::Controller';
             # Get project owner (project manager)
             #
             
-            my $pm = Pony::Crud::MySQL->new('thread')
-                       ->read({ id => $repo->{topicId} }, ['owner']);
+            my $pm = Pony::Crud::MySQL
+                       ->new('thread')
+                         ->read({ id => $repo->{topicId} }, ['owner']);
             
-            return $this->redirect_to(repo_read => url => $url) unless $pm;
+            $this->render(status => 400, template => 'bad_request') unless $pm;
             
             $pm = $pm->{owner};
             
             # Allow access only for
             # owner and project owner.
             
-            return $this->redirect_to( $this->req->headers->referrer )
+            $this->render(status => 401, template => 'bad_auth')
                 unless $repo->{owner} == $this->user->{id}
                        || $pm == $this->user->{id};
             
@@ -249,7 +253,7 @@ use Mojo::Base 'Mojolicious::Controller';
             my $repo = $sth->fetchrow_hashref();
             my $id   = $repo->{id};
             
-            return $this->redirect_to(repo_read => url => $url) unless $repo;
+            $this->render(status => 400, template => 'bad_request') unless $repo;
             
             # Get project owner (project manager)
             #
@@ -257,14 +261,14 @@ use Mojo::Base 'Mojolicious::Controller';
             my $pm = Pony::Crud::MySQL->new('thread')
                        ->read({ id => $repo->{topicId} }, ['owner']);
             
-            return $this->redirect_to(repo_read => url => $url) unless $pm;
+            $this->render(status => 401, template => 'bad_auth') unless $pm;
             
             $pm = $pm->{owner};
             
             # Allow access only for
             # owner and project owner.
             
-            return $this->redirect_to( $this->req->headers->referrer )
+            $this->render(status => 401, template => 'bad_auth')
                 unless $repo->{owner} == $this->user->{id}
                        || $pm == $this->user->{id};
             
