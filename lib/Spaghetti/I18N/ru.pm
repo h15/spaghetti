@@ -123,6 +123,8 @@ our %Lexicon = (
     'Create new data type'          => 'Создать новый тип данных',
     'Configure special params for'  => 'Настройка специальных параметров для',
     'Yes, I want to exit from this site' => 'Да, я хочу выйти из этого сайта',
+    'You have not rights to do it'  => 'У Вас не хватает прав, чтобы совершить это действие',
+    'The data, which you send us, is not valid or not actual' => 'Данные, которые вы отправили, не верны или устарели.'
 );
 
 $Lexicon{$_} = decode('utf8', $Lexicon{$_}) for keys %Lexicon;

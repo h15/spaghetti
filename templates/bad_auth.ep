@@ -1,0 +1,7 @@
+% layout 'default';
+% title l('Bad authentication');
+
+<div class="rounded error">
+    <%=l 'You have not rights to do it' %>
+</div>
+

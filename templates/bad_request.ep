@@ -1,0 +1,7 @@
+% layout 'default';
+% title l('Bad request');
+
+<div class="rounded error">
+    <%=l 'The data, which you send us, is not valid or not actual' %>
+</div>
+
