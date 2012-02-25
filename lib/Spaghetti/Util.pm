@@ -47,10 +47,12 @@ use utf8;
                $s =~ s/</&lt;/g;
                $s =~ s/>/&gt;/g;
                $s =~ s/'/&#39;/g;
-               $s =~ s/ - / &mdash; /g;
+               $s =~ s/ - / &ndash; /g;
+               $s =~ s/ -- / &mdash; /g;
             
-            my $tag =
-                qr/(?:a|b|i|u|s|div|span|ul|ol|li|h[1-6]|p|sub|sup|header|footer|nav|article|table|tr|td|th|strong|strike|blockquote|cite|br|img|hr)/;
+            my $tag = qr/(?:a|b|i|u|s|div|span|ul|ol|li|h[1-6]|p|sub|sup|
+                            header|footer|nav|article|table|tr|td|th|strong|
+                            strike|blockquote|cite|br|img|hr)/x;
                 
             my $attr = qr/(?:href|style|class|title|alt|src|for)/;
             
