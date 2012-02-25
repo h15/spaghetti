@@ -405,17 +405,17 @@
     
     article.other>nav
     {
-        background:#f0f0f8;
+        background:#e0e0f0;
     }
     
     article.hot>nav
     {
-        background:#f8f0f0;
+        background:#f0e0e0;
     }
     
     article.me>nav
     {
-        background:#f0f8f0;
+        background:#e0f0e0;
     }
     
     .responses, .hot-responses
