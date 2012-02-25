@@ -80,10 +80,11 @@ our $thread =
                 ( SELECT COUNT(thr.id)     FROM `thread`AS thr WHERE thr.topicId = th.id ) as count,
                 ( SELECT MAX(thr.modifyAt) FROM `thread`AS thr
                     WHERE thr.topicId = th.id OR thr.id = th.id ) AS latest,
-                ( SELECT u.name FROM `thread` AS last
+                ( SELECT CONCAT(u.name, ',' , u.mail)
+                    FROM `thread` AS last
                     INNER JOIN `user` AS u ON ( last.author = u.id  )
                         WHERE last.topicId = th.id OR last.id = th.id
-                        ORDER BY last.id DESC LIMIT 1 ) AS lname
+                        ORDER BY last.id DESC LIMIT 1 ) AS luser
             FROM `thread` AS th
             INNER JOIN `topic` AS t1   ON ( t1.threadId  = th.id )
             INNER JOIN `user`  AS u    ON ( th.author    = u.id  )
