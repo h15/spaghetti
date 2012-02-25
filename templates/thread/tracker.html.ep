@@ -12,7 +12,7 @@
 % for my $k ( sort { $threads->{$b}->{latest} <=> $threads->{$a}->{latest} } keys %$threads )
 % {
 %     my $t = $threads->{$k};
-%     my $luser = split ',', $t->{luser};
+%     my ($lid, $lname, $lmail) = split ',', $t->{luser};
 
 <tr class="post" id="thread-<%= $t->{id} %>">
     
@@ -39,9 +39,9 @@
         <div class="alignright">
                 <%= render_user
                     {
-                        id    => $t->{author},
-                        name  => $luser->{name},
-                        mail  => $luser->{mail},
+                        id    => $lid,
+                        name  => $lname,
+                        mail  => $lmail,
                     }
                 %>
         </div>
