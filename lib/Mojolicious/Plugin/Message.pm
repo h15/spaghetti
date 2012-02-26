@@ -1,5 +1,6 @@
 package Mojolicious::Plugin::Message;
 use Mojo::Base 'Mojolicious::Plugin';
+use Mojo::IOLoop;
 use Carp;
 
     our $VERSION = 0.000003;
@@ -64,6 +65,13 @@ use Carp;
                     my ( $this, $code ) = @_;
                     
                     $this->render(status => $code, template => "_$code" );
+                    
+                    # FIXME: Guaranted exit from controller without die.
+                    #
+                    #$this->finish;
+                    #my $id = Mojo::IOLoop->recurring(0 => sub{});
+                    #
+                    #Mojo::IOLoop->drop($id);
                     
                     die;
                 }

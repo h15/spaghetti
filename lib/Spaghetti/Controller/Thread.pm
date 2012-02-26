@@ -38,14 +38,15 @@ use Mojo::Base 'Mojolicious::Controller';
                                      ($page-1) * $size, $size );
             
             my $threads = $sth->fetchall_hashref('id');
-            my ($topic) = grep { $_->{id} eq $id } values %$threads;
-            
-            delete $threads->{ $topic->{id} } if defined $topic;
                         
             # Is empty?
             #
             
-            $this->stop(404) unless $threads;
+            $this->stop(404) unless keys %$threads;
+            
+            my ($topic) = grep { $_->{id} eq $id } values %$threads;
+            
+            delete $threads->{ $topic->{id} } if defined $topic;
             
             my @roots;
             my $count;
@@ -109,7 +110,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Access denied.
             #
             
-            $this->stop(404) unless $this->access($tid, 'c');
+            $this->stop(403) unless $this->access($tid, 'c');
             
             my $form = new Spaghetti::Form::Thread::Create;
                $form->action = $this->url_for('thread_create');
@@ -252,7 +253,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Access denied.
             #
             
-            $this->stop(404) unless $this->access($tid, 'c');
+            $this->stop(403) unless $this->access($tid, 'c');
             
             my $form = new Spaghetti::Form::Topic::Create;
                $form->action = $this->url_for('thread_createTopic');
@@ -330,7 +331,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Access denied.
             #
             
-            $this->stop(404) unless $this->access($id, 'w');
+            $this->stop(403) unless $this->access($id, 'w');
             
             my $form = new Spaghetti::Form::Thread::Create;
                $form->action = $this->url_for( thread_edit => id => $id );
@@ -389,7 +390,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Access denied.
             #
             
-            $this->stop(404) unless $this->access($id, 'w');
+            $this->stop(403) unless $this->access($id, 'w');
             
             my $form = new Spaghetti::Form::Topic::Create;
                $form->action = $this->url_for( topic_edit => id => $id );

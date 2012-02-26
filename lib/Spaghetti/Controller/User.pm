@@ -428,7 +428,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Anonymous has not password.
             #
             
-            $this->stop(401) unless $this->user->{id};
+            $this->stop(403) unless $this->user->{id};
             
             my $form = new Spaghetti::Form::User::ChangePassword;
             
@@ -486,7 +486,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Anonymous has not password.
             #
             
-            $this->stop(401) unless $this->user->{id};
+            $this->stop(403) unless $this->user->{id};
             
             my $model = new Pony::Crud::MySQL('user');
             
@@ -504,7 +504,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Anonymous has not password.
             #
             
-            $this->stop(401) unless $this->user->{id};
+            $this->stop(403) unless $this->user->{id};
             
             my $model = new Pony::Crud::MySQL('user');
             my $pass  = md5_hex( rand );
@@ -529,7 +529,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Anonymous has not mail.
             #
             
-            $this->stop(401) unless $this->user->{id};
+            $this->stop(403) unless $this->user->{id};
             
             my $form = new Spaghetti::Form::User::ChangeMail;
             
@@ -722,7 +722,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Anonymous has not projects.
             #
             
-            $this->stop(401) unless $this->user->{id};
+            $this->stop(403) unless $this->user->{id};
                
             my $dbh = Pony::Crud::Dbh::MySQL->new->dbh;
             my $sth = $dbh->prepare($Spaghetti::SQL::user->{my_projects});
@@ -739,7 +739,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Anonymous has not items.
             #
             
-            $this->stop(401) unless $this->user->{id};
+            $this->stop(403) unless $this->user->{id};
             
             my $dbh = Pony::Crud::Dbh::MySQL->new->dbh;
             

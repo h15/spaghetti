@@ -1,0 +1,7 @@
+% layout 'default';
+% title l('Forbidden');
+
+<div class="rounded error">
+    <%=l 'You have not permission to get this page' %>
+</div>
+
