@@ -58,7 +58,7 @@ use Pony::Object 'Mojolicious::Plugin';
                     
                     # Allow write action for owner.
                     #
-                    my $t = $model->read({id => $tid}, ['owner']);
+                    my $t = $model->read({id => $tid, owner => $uid}, ['owner']);
                     
                     return 1 if defined $t;
                     
