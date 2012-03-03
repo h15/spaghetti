@@ -86,6 +86,15 @@ use Mojo::Base 'Mojolicious';
               }
             );
             
+            Pony::Stash->findOrCreate
+            ( site =>
+              {
+                isAkismet => 0,
+                akismetApi => '',
+                root => 'http://lorcode.org/',
+              }
+            );
+            
             # Preload lang hashes.
             #
             

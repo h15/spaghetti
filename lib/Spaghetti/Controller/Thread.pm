@@ -7,6 +7,7 @@ use Mojo::Base 'Mojolicious::Controller';
     use Pony::Crud::Dbh::MySQL;
     use Pony::Crud::MySQL;
     use Pony::Stash;
+    use Net::Akismet;
     
     sub show
         {
@@ -127,6 +128,35 @@ use Mojo::Base 'Mojolicious::Controller';
                     my $parent= $form->elements->{parentId}->value;
                     my $topic = $form->elements->{topicId}->value;
                     my $userId= $this->user->{id};
+                    
+                    # Test thread by Akismet.
+                    #
+                    
+                    my $site = Pony::Stash->get('site');
+                    
+                    if ( $site->{isAkismet} )
+                    {
+                        my $akismet = Net::Akismet->new(
+                            KEY => $site->{akismetApi},
+                            URL => $site->{root},
+                        ) or die('Key verification failure!');
+
+                        my $ok = $akismet->check
+                        (
+                                USER_IP                 => $this->tx->remote_address,
+                                COMMENT_USER_AGENT      => $this->req->headers->user_agent,
+                                COMMENT_CONTENT         => $text,
+                                COMMENT_AUTHOR          => $this->user->{name},
+                                COMMENT_AUTHOR_EMAIL    => $this->user->{mail},
+                                REFERRER                => $this->req->headers->referrer,
+                        )
+                        or die('Is the Akismet server dead?');
+        
+                        $this->stop(401) if 'true' ne $ok;
+                    }
+                    
+                    # Init models.
+                    #
                     
                     my $threadModel= new Pony::Crud::MySQL('thread');
                     my $topicModel = new Pony::Crud::MySQL('topic');
