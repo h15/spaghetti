@@ -52,15 +52,19 @@ use utf8;
             
             my $tag = qr/(?:a|b|i|u|s|div|span|ul|ol|li|h[1-6]|p|sub|sup|
                             header|footer|nav|article|table|tr|td|th|strong|
-                            strike|blockquote|cite|br|img|hr)/x;
+                            strike|blockquote|cite|br|img|hr|code|pre)/x;
                 
             my $attr = qr/(?:href|style|class|title|alt|src|for)/;
             
-            # Parse pare tag
+            # Parse pair tag
             $s =~ s/\&lt;($tag)((?:\s+$attr="[^\\\"]*")*)\&gt;/<\1\2>/igs;
             
             # Parse single tag
             $s =~ s/\&lt;\/($tag)\&gt;/<\/\1>/igs;
+            
+            # Link
+            $s=~ s{(^|[^"])((?:http|ftp|https)://[a-z0-9\-\/\.\=&?\%_@#:+]+)}
+                  {\1<a href="\2">\2</a>}ig;
             
             $s;
         }

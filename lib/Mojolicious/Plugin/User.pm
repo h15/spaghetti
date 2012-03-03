@@ -101,7 +101,7 @@ use Pony::Object 'Mojolicious::Plugin';
                         $user->{ban} = $ban;
                     }
                     
-                    # Define lang for Pony::Forms.
+                    # Define lang.
                     #
                     
                     Pony::View::Translate->new->lang = $user->{conf}->{lang};
