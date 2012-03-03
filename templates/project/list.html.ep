@@ -1,0 +1,25 @@
+% layout 'default';
+%
+% title l('Projects');
+%
+% stash( messageType => 'info' );
+% stash( message => l('This section is not ready yet.') );
+
+<!--
+    Projects
+-->
+
+<div class="aligncenter">
+    <ul class="abc">
+
+        % for my $l ( 'A' .. 'Z', 0 .. 9 )
+        % {
+            <li>
+                <a href="<%= url_for 'project_listByAbc', letter => $l %>">
+                    <%= $l %>
+                </a>
+            </li>
+        % }
+
+    </ul>
+</div>

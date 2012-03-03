@@ -2,16 +2,58 @@ package Spaghetti::Controller::Project;
 use Mojo::Base 'Mojolicious::Controller';
     
     use Pony::Stash;
-    use Pony::Crud::MySQL;
-    use Pony::Crud::Dbh::MySQL;
+    use Pony::Model::Crud::MySQL;
+    use Pony::Model::Dbh::MySQL;
     use Spaghetti::Form::Project::Create;
     use Spaghetti::Util;
+    
+    sub list
+        {
+            my $this = shift;
+            
+            # Some smart
+            # SELECT
+        }
+    
+    sub listByAbc
+        {
+            my $this   = shift;
+            my $letter = shift;
+            my $dbh    = Pony::Model::Dbh::MySQL->new->dbh;
+            my $size   = Pony::Stash->get('thread')->{size};
+            
+            # Paginator
+            #
+            
+            my $page = int ( $this->param('page') || 0 );
+               $page = 1 if $page < 1;
+            
+            # Get project list.
+            #
+            
+            my $sth = $dbh->prepare( $Spaghetti::SQL::project->{listByAbc} );
+               $sth->execute( #$this->user->{id},
+                              "$letter%", ($page - 1)*$size, $size );
+            
+            my $projects = $sth->fetchall_hashref('id');
+            
+            my $count = Pony::Model::Crud::MySQL->new('project')->count;
+            
+            # Prepare to render.
+            #
+            
+            $this->stash( paginator =>
+                            $this->paginator( 'thread_show_p', $page,
+                                $count, $size, [ letter => $letter ] ) );
+            
+            $this->stash( projects => $projects );
+        }
     
     sub read
         {
             my $this = shift;
             my $url  = $this->param('url');
-            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $dbh  = Pony::Model::Dbh::MySQL->new->dbh;
             my $conf = Pony::Stash->get('project');
             
             # Get project
@@ -47,7 +89,7 @@ use Mojo::Base 'Mojolicious::Controller';
         {
             my $this = shift;
             my $url  = $this->param('url');
-            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $dbh  = Pony::Model::Dbh::MySQL->new->dbh;
             my $form = new Spaghetti::Form::Project::Create;
                $form->action = $this->url_for('project_update', url => $url);
             
@@ -92,9 +134,9 @@ use Mojo::Base 'Mojolicious::Controller';
                     # Prepare models.
                     #
                     
-                    my $thModel = new Pony::Crud::MySQL('thread');
-                    my $teModel = new Pony::Crud::MySQL('text');
-                    my $prModel = new Pony::Crud::MySQL('project');
+                    my $thModel = new Pony::Model::Crud::MySQL('thread');
+                    my $teModel = new Pony::Model::Crud::MySQL('text');
+                    my $prModel = new Pony::Model::Crud::MySQL('project');
                     
                     # Update records in database.
                     #

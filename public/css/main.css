@@ -257,7 +257,7 @@
     .info
     {
         background: #ffd;
-        border: 1px solid #fff7dd;
+        border: 1px solid #eee7cc;
     }
 
     .error
@@ -615,4 +615,25 @@
         -khtml-border-radius:   10px;
         
         background:#f0f0f8;
+    }
+    
+    /**
+     *  ABC
+     */
+    ul.abc
+    {
+        padding:0px;
+        margin:0px;
+        text-align:center;
+        display:block;
+    }
+    
+    ul.abc li
+    {
+        list-style:none;
+        float:left;
+        width:20px;
+        font-size:14px;
+        padding:0px;
+        margin:0px;
     }

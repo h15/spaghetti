@@ -6,6 +6,7 @@ use Mojo::Base 'Mojolicious';
     
     use Pony::Stash;
     use Pony::Crud::Dbh::MySQL;
+    use Pony::Model::Dbh::MySQL;
     use Spaghetti::SQL;
     
     # This method will run once at server start
@@ -85,6 +86,7 @@ use Mojo::Base 'Mojolicious';
             my $db = Pony::Stash->get('database');
             
             Pony::Crud::Dbh::MySQL->new($db);
+            Pony::Model::Dbh::MySQL->new($db);
             
             ##
             ##  Plugins
@@ -337,6 +339,12 @@ use Mojo::Base 'Mojolicious';
             $r->route('/project/edit/:url')
                 ->to('project#update')
                   ->name('project_update');
+            $r->route('/project/:letter', letter => qr/[A-Z0-9]/ )
+                ->to('project#listByAbc')
+                  ->name('project_listByAbc');
+            $r->route('/project')
+                ->to('project#list')
+                  ->name('project_list');
             
             # Repos
             #

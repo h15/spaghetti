@@ -1,0 +1,25 @@
+% layout 'default';
+%
+% title l('Projects starts from') . ' ' . stash('letter');
+
+<!--
+    Projects
+-->
+
+% if ( keys %$projects )
+% {
+<div class="repoList">
+    
+    % for my $p ( values %$projects )
+    % {
+        <div class="item">
+            <a href="<%= url_for project_read => url => $p->{url} %>">
+                <%= $p->{title} %></a>(<%= $p->{repos} %>)
+             <%= render_datetime $p->{modifyAt} %> /
+             <%= render_datetime $p->{createAt} %>
+        </div>
+    % }
+    
+</div>
+% }
+
