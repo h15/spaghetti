@@ -141,7 +141,7 @@ use Mojo::Base 'Mojolicious::Controller';
                             URL => $site->{root},
                         ) or die('Key verification failure!');
 
-                        my $ok = $akismet->check
+                        my $fail = $akismet->check
                         (
                                 USER_IP                 => $this->tx->remote_address,
                                 COMMENT_USER_AGENT      => $this->req->headers->user_agent,
@@ -152,7 +152,7 @@ use Mojo::Base 'Mojolicious::Controller';
                         )
                         or die('Is the Akismet server dead?');
         
-                        $this->stop(401) if 'true' ne $ok;
+                        $this->stop(401) if 'true' eq $fail;
                     }
                     
                     # Init models.
