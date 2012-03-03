@@ -1,3 +1,117 @@
+commit 236f5aff9040996602d95d7dbf40260bad5e9d93
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Mar 4 01:22:02 2012 +0600
+
+    add link highlight
+
+commit a945d2ddf7d5a6b2f04762ca4b6249831ad29f46
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sat Mar 3 23:40:52 2012 +0600
+
+    Change localize plugin
+
+commit e635b8eeeb7db4f685383247037cb0ca4a26ede9
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sat Mar 3 17:53:48 2012 +0600
+
+    Add project list action
+
+commit 60a33887749e8b373ecd91ff45df13568d719db2
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Feb 26 11:19:16 2012 +0600
+
+    thread.t && fix many bugs
+
+commit 4bc9bd301da72f430f68241fa4516b90cc96853d
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Feb 26 10:50:32 2012 +0600
+
+    fix bug in access plugin
+
+commit 2fd2358771922a5bb3e1c79df6b4c559ba19616c
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sat Feb 25 18:10:09 2012 +0600
+
+    fix colors in threads
+
+commit 9c0da3017d1c5ee80f65ed5e492351b99d7c3471
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sat Feb 25 18:09:08 2012 +0600
+
+    fix show last user in tracker
+
+commit 4d5f1be9d86c14f6bc1ce9da5d9841b41fbd290b
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sat Feb 25 08:16:21 2012 +0600
+
+    fix tracker - show last user via render_user
+
+commit 2778dadc02df54dbd3cb61132e77596a1e4f30c9
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sat Feb 25 07:30:02 2012 +0600
+
+    split dash to ndash and mdash
+
+commit ca6068d943404803d21bbc4f51b95f5ca0c6ff57
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sat Feb 25 03:30:14 2012 +0600
+
+    add user-tests
+
+commit 75bc891078b50109fde93ad0debcdb4bb645b18d
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Fri Feb 24 15:32:53 2012 +0600
+
+    add guaranted exit form IOLoop on 404 and other
+
+commit 36133705d2fcf003a339e79a79e5c95f2411dd4c
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Fri Feb 24 13:27:52 2012 +0600
+
+    add http-status pages
+
+commit 3b0951f571299781e9ec86ae3bec198a752116b2
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Fri Feb 24 13:19:12 2012 +0600
+
+    no more redirects. Show statuses
+
+commit 732916a2cce4c4d53d0cb6e3dad95a2d641a7d35
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Fri Feb 24 12:58:24 2012 +0600
+
+    clean Repo controller like controllers from prev commits
+
+commit 1ffed0ed56f7f74a79b4caa1b8ec12b00cd6e257
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Fri Feb 24 12:10:01 2012 +0600
+
+    Fix thread controller: no more redirects on 404. Used new style of Pony::Crud::MySQL->read.
+
+commit 146ab5097094b972202944b1348b438856495349
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Fri Feb 24 12:09:38 2012 +0600
+
+    Fix user controller: no more redirects on 404. Used new style of Pony::Crud::MySQL->read.
+
+commit a3b9a2dc8c7fdbccd70276b39b9c34bdaeefda44
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Fri Feb 24 11:15:33 2012 +0600
+
+    fix bug with empty gift-list on user profile
+
+commit efabbcd3753161d3cdc8726945b066c282e92691
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Fri Feb 17 23:29:58 2012 +0600
+
+    add updateGitolite script - dump Spaghetti repos to gitolite config
+
+commit 1ca97eec6736c98500684626651d483b9cff4683
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Tue Feb 14 02:42:30 2012 +0600
+
+    v0.0.8
+
 commit 5b2b4e0281807e100a39f322b05e47d5c85da854
 Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
 Date:   Tue Feb 14 02:41:16 2012 +0600

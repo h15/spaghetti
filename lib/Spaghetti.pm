@@ -476,9 +476,6 @@ use Mojo::Base 'Mojolicious';
             
             $this->helper
             (
-                # FIXME: can't use I18N plugin here:
-                #        $self->stash->{I18N} is undef.
-                
                 getDateTime => sub
                 {
                     my ($self, $val) = @_;
@@ -500,8 +497,8 @@ use Mojo::Base 'Mojolicious';
                                     $hour == $h ?
                                         $min == $mi ?
                                             $sec == $s ?
-                                                $Spaghetti::I18N::ru::Lexicon{'now'}
-                                            : $Spaghetti::I18N::ru::Lexicon{'a few seconds ago'}
+                                                $self->l('now')
+                                            : $self->l('a few seconds ago')
                                         : ago( min => $mi - $min, $self )
                                     : ago( hour => $h - $hour, $self )
                                 : "$hour:$min, $day.$mon"
@@ -529,8 +526,8 @@ use Mojo::Base 'Mojolicious';
                                 : 1
                             );
                             
-                            return $val ." ". $Spaghetti::I18N::ru::Lexicon{"${type}s$a"}
-                                        ." ". $Spaghetti::I18N::ru::Lexicon{ago};
+                            return $val ." ". $self->l("${type}s$a")
+                                        ." ". $self->l('ago');
                         }
                 }
             );
