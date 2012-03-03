@@ -230,7 +230,7 @@ our $project =
                th.createAt, th.modifyAt
         FROM `project` AS p
             INNER JOIN `thread` AS th ON ( p.id = th.id )
-        WHERE p.title LIKE ?
+        WHERE p.url LIKE ?
         ORDER BY p.title LIMIT ?, ?
     },
 };

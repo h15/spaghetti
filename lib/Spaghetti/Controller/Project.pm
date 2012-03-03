@@ -18,7 +18,7 @@ use Mojo::Base 'Mojolicious::Controller';
     sub listByAbc
         {
             my $this   = shift;
-            my $letter = shift;
+            my $letter = lc $this->param('letter');
             my $dbh    = Pony::Model::Dbh::MySQL->new->dbh;
             my $size   = Pony::Stash->get('thread')->{size};
             
@@ -43,7 +43,7 @@ use Mojo::Base 'Mojolicious::Controller';
             #
             
             $this->stash( paginator =>
-                            $this->paginator( 'thread_show_p', $page,
+                            $this->paginator( 'project_listByAbc', $page,
                                 $count, $size, [ letter => $letter ] ) );
             
             $this->stash( projects => $projects );
