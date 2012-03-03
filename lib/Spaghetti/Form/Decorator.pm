@@ -8,7 +8,7 @@ use Pony::Object 'Pony::View::Form::Decorator';
         {
             my $this = shift;
             my $e    = shift;
-            my $t    = new Pony::View::Form::Translate;
+            my $t    = new Pony::View::Translate;
             
             sprintf $this->element, $t->t( $e->{label} ),
                     @$e{ qw/require value error/ };

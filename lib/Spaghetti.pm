@@ -8,6 +8,7 @@ use Mojo::Base 'Mojolicious';
     use Pony::Crud::Dbh::MySQL;
     use Pony::Model::Dbh::MySQL;
     use Spaghetti::SQL;
+    use Module::Load;
     
     # This method will run once at server start
     sub startup
@@ -59,16 +60,21 @@ use Mojo::Base 'Mojolicious';
             Pony::Stash->findOrCreate
             ( user =>
               {
-                attempts        => 3,
-                mailAttempts    => 3,
-                expairMail      => 86400,
+                cookies      => 'some random string',
+                salt         => 'some random string',
+                enable_registration => 1,
+                attempts     => 3,
+                mailAttempts => 3,
+                expairMail   => 86400,
               }
             );
             
             Pony::Stash->findOrCreate
             ( defaultUserConf =>
               {
-                isTreeView  => 0,
+                isTreeView => 0,
+                lang  => 'ru',
+                langs => [ qw/en ru/ ]
               }
             );
             
@@ -79,6 +85,16 @@ use Mojo::Base 'Mojolicious';
                 topic => 1,
               }
             );
+            
+            # Preload lang hashes.
+            #
+            
+            for my $l ( @{ Pony::Stash->get('defaultUserConf')->{langs} } )
+            {
+                my $class = "Spaghetti::I18N::$l";
+                load $class;
+                Pony::View::Translate->new->Lexicon->{$l} = $class->Lexicon;
+            }
             
             # Database
             #
@@ -93,7 +109,6 @@ use Mojo::Base 'Mojolicious';
             ##
             
             $this->plugin('user');
-            $this->plugin('I18N');
             $this->plugin('access');
             $this->plugin('message');
             $this->plugin('mail');
@@ -375,6 +390,19 @@ use Mojo::Base 'Mojolicious';
             ##
             ##  Helpers
             ##
+            
+            use Pony::View::Translate;
+            
+            my $translate = new Pony::View::Translate;
+            
+            $this->helper
+            (
+                l => sub
+                {
+                    my ( $self, @param ) = @_;
+                    $translate->t( @param );
+                }
+            );
             
             $this->helper
             (

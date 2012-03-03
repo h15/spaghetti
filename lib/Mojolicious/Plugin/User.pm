@@ -9,9 +9,11 @@ use Pony::Object 'Mojolicious::Plugin';
     use URI::Escape qw(uri_escape);
     use Storable qw(thaw freeze);
     use Pony::Stash;
-    use Pony::Crud::MySQL;
+    use Pony::Model::Crud::MySQL;
+    use Pony::View::Translate;
+    use Module::Load;
 
-    our $VERSION = '0.000007';
+    our $VERSION = '0.000008';
 
     sub register
         {
@@ -19,20 +21,14 @@ use Pony::Object 'Mojolicious::Plugin';
             #
             
             my($self, $app) = @_;
-            my $userModel   = new Pony::Crud::MySQL('user');
-            my $u2gModel    = new Pony::Crud::MySQL('userToGroup');
-            my $banModel    = new Pony::Crud::MySQL('ban');
+            my $userModel   = new Pony::Model::Crud::MySQL('user');
+            my $u2gModel    = new Pony::Model::Crud::MySQL('userToGroup');
+            my $banModel    = new Pony::Model::Crud::MySQL('ban');
             my $anonymous   = $userModel->read({id => 0});
             my $user        = $anonymous;
-            my $conf        = Pony::Stash->findOrCreate
-                              ( user => {
-                                    cookies     => 'some random string',
-                                    expiration  => 3600 * 24,
-                                    salt        => 'some random string',
-                                    enable_registration => 1,
-                              });
-                    
-            my $default = Pony::Stash->get('defaultUserConf');
+            my $conf        = Pony::Stash->get('user');
+            my $default     = Pony::Stash->get('defaultUserConf');
+            
             %$anonymous = ( conf => $default, %$anonymous );
             
             # Configure session.
@@ -60,16 +56,17 @@ use Pony::Object 'Mojolicious::Plugin';
                         
                         $user->{groups} = [ map { $_->{groupId} } @groups ];
                         
-                        my $responses = Pony::Crud::MySQL->new('userInfo')
+                        my $responses = Pony::Model::Crud::MySQL->new('userInfo')
                                             ->read({id => $id}, ['responses']);
                         
                         $user->{responses} = $responses->{responses} || 0;
                         
                         # Get config
                         #
+                        
                         unless ( defined $conf )
                         {
-                            $conf = Pony::Crud::MySQL
+                            $conf = Pony::Model::Crud::MySQL
                                       ->new('userInfo')
                                         ->read({id => $id}, ['conf']);
                             
@@ -103,6 +100,11 @@ use Pony::Object 'Mojolicious::Plugin';
                         $user = $anonymous;
                         $user->{ban} = $ban;
                     }
+                    
+                    # Define lang for Pony::Forms.
+                    #
+                    
+                    Pony::View::Translate->new->lang = $user->{conf}->{lang};
                 }
             );
             
@@ -116,7 +118,7 @@ use Pony::Object 'Mojolicious::Plugin';
                 {
                     my ( $self, $user ) = @_;
                     
-                    $user = Pony::Crud::MySQL->new('user')->read({id => $user})
+                    $user = Pony::Model::Crud::MySQL->new('user')->read({id => $user})
                                                 unless ( ref $user eq 'HASH' );
                     
                     my $default = sprintf 'http://%s:%s/pic/userpic20.png',
