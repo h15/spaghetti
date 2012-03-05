@@ -6,7 +6,7 @@ use Mojo::Base 'Mojolicious::Controller';
     sub edit
         {
             my $this = shift;
-            my $conf = Pony::Stash->new->{conf};
+            my $conf = Pony::Stash->new->conf;
             
             $conf = \%$conf;
             
@@ -16,6 +16,8 @@ use Mojo::Base 'Mojolicious::Controller';
             {
                 for my $key ( keys %$conf )
                 {
+                    next unless ref $conf->{$key} eq 'HASH';
+                    
                     for my $jay ( keys %{ $conf->{$key} } )
                     {
                         my $val = $this->param("$key $jay");

@@ -74,7 +74,7 @@ use Mojo::Base 'Mojolicious';
               {
                 isTreeView => 0,
                 lang  => 'ru',
-                langs => [ qw/en ru/ ]
+                langs => 'en ru'
               }
             );
             
@@ -98,7 +98,7 @@ use Mojo::Base 'Mojolicious';
             # Preload lang hashes.
             #
             
-            for my $l ( @{ Pony::Stash->get('defaultUserConf')->{langs} } )
+            for my $l ( split /\W/, Pony::Stash->get('defaultUserConf')->{langs} )
             {
                 my $class = "Spaghetti::I18N::$l";
                 load $class;

@@ -4,36 +4,48 @@
 % stash(tab => 'config');
 % include 'admin/vertical_nav';
 
-<form method="post" action="<%= url_for 'admin_config_edit' %>">
-
 % for my $key ( sort keys %$conf )
 % {
 
-<h2><%= $key %></h2>
-<table class=list style="width:400px;">
-    <tr>
-        <th>key</th>
-        <th style="width:180px;">value</th>
-    </tr>
+<form method="post" action="<%= url_for 'admin_config_edit' %>">
 
-%     for my $jay ( sort keys %{ $conf->{$key} } )
-%     {
+    <h2><%= $key %></h2>
+    <table class=list style="width:400px;">
+        <tr>
+            <th>key</th>
+            <th style="width:180px;">value</th>
+        </tr>
 
-    <tr>
-        <td><%= $jay %></td>
-        <td><input name="<%= $key . ' ' . $jay %>"
-                   value="<%= $conf->{$key}->{$jay} %>"></td>
-    </tr>
+    %   if ( defined $conf->{$key} && ref $conf->{$key} eq 'HASH' )
+    %   {
 
-%     }
+    %       for my $jay ( sort keys %{ $conf->{$key} } )
+    %       {
 
-</table>
+        <tr>
+            <td><%= $jay %></td>
+            <td><input name="<%= $key . ' ' . $jay %>"
+                       value="<%= $conf->{$key}->{$jay} %>"></td>
+        </tr>
+
+    %       }
+
+    %   }
+
+        <tr>
+            <td></td>
+            <td>
+                <input type=submit>
+            </td>
+        </tr>
+
+    </table>
+
+</form>
 
 % }
 
-    <input type=submit>
-</form>
 
 <form method="post" action="<%= url_for 'admin_config_save' %>">
-    <input type=submit value="<%=l 'save' %>">
+    <input class="red" type=submit value="<%=l 'save' %>">
 </form>
