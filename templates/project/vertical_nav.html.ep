@@ -4,29 +4,40 @@
 % my $project = stash('project');
 %
 
-<div class="item <%= 'selected' if $tab eq 'read' %>">
-    <a href="<%= url_for('project_read', url => $project->{url}) %>"><%=l 'Project' %></a>
-</div>
-
+    <a href="<%= url_for('project_read', url => $project->{url}) %>">
+        <div class="item <%= 'selected' if $tab eq 'read' %>">
+            <%=l 'Project' %>
+        </div>
+    </a>
+    
 % if ( user->{id} == $project->{owner} )
 % {
 
-    <div class="item green <%= 'selected' if $tab eq 'edit' %>">
-        <a href="<%= url_for('project_update', id => $project->{id}) %>"><%=l 'Edit' %></a>
-    </div>
-
+    <a href="<%= url_for('project_update', id => $project->{id}) %>">
+        <div class="item green <%= 'selected' if $tab eq 'edit' %>">
+            <%=l 'Edit' %>
+        </div>
+    </a>
+    
     % if ( $project->{maxRepo} > $project->{repos} )
     % {
-        <div class="item green <%= 'selected' if $tab eq 'create repo' %>">
-            <a href="<%= url_for('repo_create', id => $project->{id}) %>"><%=l 'Add repository' %></a>
-        </div>
+    
+        <a href="<%= url_for('repo_create', id => $project->{id}) %>">
+            <div class="item green <%= 'selected' if $tab eq 'create repo' %>">
+                <%=l 'Add repository' %>
+            </div>
+        </a>
+        
     % }
     % else
     % {
-        <div class="item off">
-            <a href="#" alt="<%=l 'No free slots' %>" title="<%=l 'No free slots' %>">
-                <%=l 'Add repository' %></a>
-        </div>
+    
+        <a href="#" alt="<%=l 'No free slots' %>" title="<%=l 'No free slots' %>">
+            <div class="item off">
+                    <%=l 'Add repository' %>
+            </div>
+        </a>
+        
     % }
 
 % }

@@ -499,9 +499,19 @@
         box-shadow: -4px 0 4px 0px rgba(0,0,0,0.2);
     }
     
+    nav.vertical div.item:hover
+    {
+        background:#e6e3ef;
+    }
+    
     nav.vertical div.item a
     {
         text-decoration:none;
+    }
+    
+    nav.vertical>a>div.item:hover
+    {
+        color:#2869AB;
     }
     
     nav.vertical div.selected
@@ -540,7 +550,7 @@
     
     nav.vertical div.red:hover
     {
-        background:#faa;
+        background:#fdd;
     }
     
     nav.vertical div.green
@@ -555,7 +565,7 @@
     
     nav.vertical div.green:hover
     {
-        background:#afa;
+        background:#d8ffd8;
     }
         
     nav.vertical div.off

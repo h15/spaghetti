@@ -6,44 +6,66 @@
     %=b render_userpic( user->{mail}, 96 );
 </div>
 
+<!-- MENU -->
 
+<a href="<%= url_for 'user_home' %>">
+    <div class="item <%= 'selected' if $tab eq 'home' %>">
+        <%=l 'Profile' %>
+    </div>
+</a>
 
-<div class="item <%= 'selected' if $tab eq 'home' %>">
-    <a href="<%= url_for 'user_home' %>"><%=l 'Profile' %></a>
-</div>
+<a href="<%= url_for 'user_thread' %>">
+    <div class="item <%= 'selected' if $tab eq 'thread' %>">
+    
+        % if ( user->{threadId} )
+        % {
+        
+            <%=l 'Private thread' %>
+            
+        % } else {
+        
+            <a href="<%= url_for 'user_createPrivateThread' %>"><%=l 'Create private thread' %></a>
+            
+        % }
+        
+    </div>
+</a>
 
-<div class="item <%= 'selected' if $tab eq 'thread' %>">
-    % if ( user->{threadId} )
-    % {
-        <a href="<%= url_for 'user_thread' %>"><%=l 'Private thread' %></a>
-    % } else {
-        <a href="<%= url_for 'user_createPrivateThread' %>"><%=l 'Create private thread' %></a>
-    % }
-</div>
+<a href="<%= url_for 'user_projects' %>">
+    <div class="item <%= 'selected' if $tab eq 'projects' %>">
+        <%=l 'Projects' %>
+    </div>
+</a>
 
-<div class="item <%= 'selected' if $tab eq 'projects' %>">
-    <a href="<%= url_for 'user_projects' %>"><%=l 'Projects' %></a>
-</div>
+<a href="<%= url_for 'user_items' %>">
+    <div class="item <%= 'selected' if $tab eq 'items' %>">
+        <%=l 'Items' %>
+    </div>
+</a>
 
-<div class="item <%= 'selected' if $tab eq 'items' %>">
-    <a href="<%= url_for 'user_items' %>"><%=l 'Items' %></a>
-</div>
+<a href="<%= url_for 'user_change_mail' %>">
+    <div class="item <%= 'selected' if $tab eq 'mail' %>">
+        <%=l 'Change mail' %>
+    </div>
+</a>
 
-<div class="item <%= 'selected' if $tab eq 'mail' %>">
-    <a href="<%= url_for 'user_change_mail' %>"><%=l 'Change mail' %></a>
-</div>
+<a href="<%= url_for 'user_change_password' %>">
+    <div class="item <%= 'selected' if $tab eq 'password' %>">
+        <%=l 'Change password' %>
+    </div>
+</a>
 
-<div class="item <%= 'selected' if $tab eq 'password' %>">
-    <a href="<%= url_for 'user_change_password' %>"><%=l 'Change password' %></a>
-</div>
+<a href="<%= url_for 'user_config' %>">
+    <div class="item <%= 'selected' if $tab eq 'config' %>">
+        <%=l 'Config' %>
+    </div>
+</a>
 
-<div class="item <%= 'selected' if $tab eq 'config' %>">
-    <a href="<%= url_for 'user_config' %>"><%=l 'Config' %></a>
-</div>
-
-<div class="item red <%= 'selected' if $tab eq 'logout' %>">
-    <a href="<%= url_for 'user_logout' %>"><%=l 'logout' %></a>
-</div>
+<a href="<%= url_for 'user_logout' %>">
+    <div class="item red <%= 'selected' if $tab eq 'logout' %>">
+        <%=l 'logout' %>
+    </div>
+</a>
     
 % end
 

@@ -4,23 +4,32 @@
 % my $repo = stash('repo');
 % my $pm   = stash('pm') || -1;
 
-<div class="item">
-    <a href="<%= url_for('project_read', url => $repo->{projectUrl}) %>"><%=l 'Project' %></a>
-</div>
+<a href="<%= url_for('project_read', url => $repo->{projectUrl}) %>">
+    <div class="item">
+        <%=l 'Project' %>
+    </div>
+</a>
 
-<div class="item <%= 'selected' if $tab eq 'read' %>">
-    <a href="<%= url_for('repo_read', url => $repo->{url}) %>"><%=l 'Repository' %></a>
-</div>
+<a href="<%= url_for('repo_read', url => $repo->{url}) %>">
+    <div class="item <%= 'selected' if $tab eq 'read' %>">
+        <%=l 'Repository' %>
+    </div>
+</a>
 
     % if ( $pm == user->{id} || $repo->{owner} == user->{id} )
     % {
-        <div class="item green <%= 'selected' if $tab eq 'edit' %>">
-            <a href="<%= url_for('repo_update', url => $repo->{url}) %>"><%=l 'Edit' %></a>
-        </div>
+    
+        <a href="<%= url_for('repo_update', url => $repo->{url}) %>">
+            <div class="item green <%= 'selected' if $tab eq 'edit' %>">
+                <%=l 'Edit' %>
+            </div>
+        </a>
             
-        <div class="item green <%= 'selected' if $tab eq 'access' %>">
-            <a href="<%= url_for('repo_changeAccess', url => $repo->{url}) %>"><%=l 'Access' %></a>
-        </div>
+        <a href="<%= url_for('repo_changeAccess', url => $repo->{url}) %>">
+            <div class="item green <%= 'selected' if $tab eq 'access' %>">
+                <%=l 'Access' %>
+            </div>
+        </a>
 
     % }
 

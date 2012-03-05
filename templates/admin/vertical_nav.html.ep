@@ -2,32 +2,46 @@
 %
 % my $tab = stash('tab');
 
-<div class="item red <%= 'selected' if $tab eq 'index' %>">
-    <a href="<%= url_for 'admin_admin_index' %>"><%=l 'Admin panel' %></a>
-</div>
+<a href="<%= url_for 'admin_admin_index' %>">
+    <div class="item red <%= 'selected' if $tab eq 'index' %>">
+        <%=l 'Admin panel' %>
+    </div>
+</a>
 
-<div class="item <%= 'selected' if $tab eq 'user' %>">
-    <a href="<%= url_for 'admin_user_list' %>"><%=l 'Users' %></a>
-</div>
+<a href="<%= url_for 'admin_user_list' %>">
+    <div class="item <%= 'selected' if $tab eq 'user' %>">
+        <%=l 'Users' %>
+    </div>
+</a>
 
-<div class="item <%= 'selected' if $tab eq 'thread' %>">
-    <a href="<%= url_for 'admin_thread_list' %>"><%=l 'Threads' %></a>
-</div>
+<a href="<%= url_for 'admin_thread_list' %>">
+    <div class="item <%= 'selected' if $tab eq 'thread' %>">
+        <%=l 'Threads' %>
+    </div>
+</a>
 
-<div class="item <%= 'selected' if $tab eq 'group' %>">
-    <a href="<%= url_for 'admin_group_list' %>"><%=l 'Groups' %></a>
-</div>
+<a href="<%= url_for 'admin_group_list' %>">
+    <div class="item <%= 'selected' if $tab eq 'group' %>">
+        <%=l 'Groups' %>
+    </div>
+</a>
 
-<div class="item <%= 'selected' if $tab eq 'type' %>">
-    <a href="<%= url_for 'admin_dataType_list' %>"><%=l 'Types' %></a>
-</div>
+<a href="<%= url_for 'admin_dataType_list' %>">
+    <div class="item <%= 'selected' if $tab eq 'type' %>">
+        <%=l 'Types' %>
+    </div>
+</a>
 
-<div class="item <%= 'selected' if $tab eq 'project' %>">
-    <a href="<%= url_for 'admin_project_list' %>"><%=l 'Projects' %></a>
-</div>
+<a href="<%= url_for 'admin_project_list' %>">
+    <div class="item <%= 'selected' if $tab eq 'project' %>">
+        <%=l 'Projects' %>
+    </div>
+</a>
 
-<div class="item <%= 'selected' if $tab eq 'config' %>">
-    <a href="<%= url_for 'admin_config_edit' %>"><%=l 'Config' %></a>
-</div>
+<a href="<%= url_for 'admin_config_edit' %>">
+    <div class="item <%= 'selected' if $tab eq 'config' %>">
+        <%=l 'Config' %>
+    </div>
+</a>
     
 % end
