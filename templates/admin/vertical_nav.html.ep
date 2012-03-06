@@ -3,7 +3,7 @@
 % my $tab = stash('tab');
 
 <a href="<%= url_for 'admin_admin_index' %>">
-    <div class="item red <%= 'selected' if $tab eq 'index' %>">
+    <div class="item <%= 'selected' if $tab eq 'index' %>">
         <%=l 'Admin panel' %>
     </div>
 </a>

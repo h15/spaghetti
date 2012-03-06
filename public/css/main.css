@@ -25,7 +25,7 @@
         width:760px;
         margin:0px auto;
         padding:10px 20px;
-        min-height:400px;
+        min-height:440px;
         position: relative;
         box-shadow:
             10px 0 10px -10px rgba(0,0,0,0.5),
@@ -513,11 +513,6 @@
     {
         color:#2869AB;
     }
-    
-    nav.vertical div.selected
-    {
-        background:#fff;
-    }
 
     nav.vertical div.save
     {
@@ -529,13 +524,6 @@
         text-align:center;
         padding:5px;
         background: #fee;
-    }
-
-    nav.vertical div.selected
-    {
-        position:relative;
-        background:#fff;
-        z-index:999;
     }
     
     nav.vertical div.red
@@ -551,6 +539,23 @@
     nav.vertical div.red:hover
     {
         background:#fdd;
+    }
+    
+    nav.vertical>a>div.selected:hover
+    {
+        background:#fff;
+    }
+
+    nav.vertical>a>div.selected:hover
+    {
+        color:#D31141;
+    }
+
+    nav.vertical>a>div.selected
+    {
+        position:relative;
+        background:#fff;
+        z-index:9;
     }
     
     nav.vertical div.green
