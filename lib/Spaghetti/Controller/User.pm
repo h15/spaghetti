@@ -627,7 +627,9 @@ use Mojo::Base 'Mojolicious::Controller';
                         $form = new Spaghetti::Form::User::LoginViaMail;
                         
                         $this->done('Check your mail');
-                        $this->render;
+                        $this->stash( form => $form->render() );
+                        
+                        return $this->render;
                     }
                     else
                     {
