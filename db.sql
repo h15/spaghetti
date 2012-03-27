@@ -240,7 +240,7 @@ create table `repoGroup`
 (
     `id`        int(11) unsigned not null auto_increment primary key,
     `name`      varchar(256) character set utf8 collate utf8_general_ci not null,
-    `desc`      varchar(1024) character set utf8 collate utf8_general_ci not null
+    `desc`      varchar(1024) character  set utf8 collate utf8_general_ci not null
 );
 
 drop table if exists `repoRights`;
