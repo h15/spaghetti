@@ -14,12 +14,24 @@ create table `user`
     `banTime`   int(11) not null default 0,
     `attempts`  int(1)  unsigned not null default 0,
     `threadId`  int(11) unsigned not null,
+    `sshKeyCount` tinyint(4) unsigned not null default 0,
     
     unique (`mail`),
     unique (`name`),
     
     FOREIGN KEY (`threadId`) REFERENCES `thread`(`id`),
     FOREIGN KEY (`banId`)    REFERENCES `ban`(`id`)
+);
+
+drop table if exists `sshKey`;
+create table `sshKey`
+(
+    `id`        int(11) unsigned auto_increment primary key,
+    `userId`    int(11) unsigned not null,
+    `status`    tinyint(4) unsigned not null default 0,
+    `key`       varchar(4096) character set ascii collate ascii_general_ci not null,
+
+    FOREIGN KEY (`userId`) REFERENCES `user`(`id`)
 );
 
 INSERT INTO `user` (`id`, `mail`, `password`, `name`, `createAt`, `modifyAt`, `accessAt`, `banId`, `banTime`) VALUES
@@ -61,6 +73,11 @@ create table `userInfo`
     `responses` tinyint(4) unsigned not null default 0,
     
     FOREIGN KEY (`id`)  REFERENCES `user`(`id`)
+);
+
+drop table if exists `task`
+(
+      
 );
 
 drop table if exists `mailConfirm`;

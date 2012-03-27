@@ -752,6 +752,54 @@ use Mojo::Base 'Mojolicious::Controller';
             $this->stash( items => $items );
         }
 
+    sub addSshKey
+        {
+            my $this = shift;
+            
+            # Anonymous has not items.
+            #
+            
+            $this->stop(403) unless $this->user->{id};
+
+            my $form = new Spaghetti::Form::User::AddSshKey;
+            
+            # Try to add key on POST.
+            #
+
+            if ( $this->req->method eq 'POST' )
+            {
+                $form->data->{$_} = $this->param($_) for keys %{$form->elements};
+                
+                if ( $form->isValid )
+                {
+                    my $key = $this->param('key');
+                    my $lim = Pony::Stash->get('user')->{sshKeyLimit};
+
+                    if ( $this->user->{sshKeyCount} < $lim )
+                    {
+                        Pony::Model::Crud::MySQL->new('sshKey')->create
+                        ({
+                            userId  => $this->user->{id},
+                            status  => 0,
+                            key     => $key,
+                        });
+
+                        Pony::Model::Crud::MySQL->new('user')->update
+                        ( {sshKeyCount => $this->user->{sshKeyCount} + 1},
+                          {id => $this->user->{id} } );
+
+                        return $this->done('SSH key added');
+                    }
+                    else
+                    {
+                        return $this->error('SSH key limit');
+                    }
+                }
+            }
+
+            $this->stash( form => $form->render() );
+        }
+
 1;
 
 __END__
