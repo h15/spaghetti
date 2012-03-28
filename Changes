@@ -1,3 +1,75 @@
+commit f6632fd3577d0802898f7d2b6def05db49e2ae4c
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Thu Mar 29 00:09:22 2012 +0600
+
+    add edit action for ssh
+
+commit 1b98451dbdbd38261159e0e7ec6ace8c5eb1e081
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Wed Mar 28 10:47:28 2012 +0600
+
+    More code for Ssh action
+
+commit a4c5b99ece61255f9c6a017554dddd9134d16511
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Wed Mar 28 01:44:02 2012 +0600
+
+    add action for ssh keys
+
+commit 765a6d7132619bdbac35f9d04cdde16ef2c4f128
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Tue Mar 27 21:01:46 2012 +0600
+
+    some fixes for gitolite.conf generate
+
+commit bad7fdee861f9cb4b343fc4b26396de7a7bac1dd
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sat Mar 24 02:32:32 2012 +0600
+
+    fix loginViaMail
+
+commit 1a89455ec2d668a521fc5f858932e40c41b3af66
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Tue Mar 6 08:18:27 2012 +0600
+
+    one more fix for tabs
+
+commit aa0ffc8d9a698a6c403d05d578e9b5c091584d98
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Mon Mar 5 22:45:39 2012 +0600
+
+    fix admin-iface for config
+
+commit 00c4cdd5f09a60b4d7f7139cb82f3522b9a5a346
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Mon Mar 5 21:59:53 2012 +0600
+
+    fix tabs
+
+commit b3d7108d50d1c94ee907bc9e7eb7561af7baf64d
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Mar 4 04:37:39 2012 +0600
+
+    fix akismet
+
+commit 85229e7b3799d4145bf002b4b286a511f4d00b4b
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Mar 4 04:01:41 2012 +0600
+
+    add akismet for checking threads
+
+commit 18a0bae752ec520faec87c8d2a5327bceaa3576a
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Mar 4 03:05:41 2012 +0600
+
+    fix project list
+
+commit c8eb21e99c4cf1dc4d2dcb375223b37a9bcd9c05
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Sun Mar 4 02:22:21 2012 +0600
+
+    changes, fix date localize
+
 commit 236f5aff9040996602d95d7dbf40260bad5e9d93
 Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
 Date:   Sun Mar 4 01:22:02 2012 +0600
