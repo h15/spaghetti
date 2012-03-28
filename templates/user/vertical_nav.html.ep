@@ -55,6 +55,12 @@
     </div>
 </a>
 
+<a href="<%= url_for 'user_ssh' %>">
+    <div class="item <%= 'selected' if $tab eq 'sshKey' %>">
+        <%=l 'Public keys' %>
+    </div>
+</a>
+
 <a href="<%= url_for 'user_config' %>">
     <div class="item <%= 'selected' if $tab eq 'config' %>">
         <%=l 'Config' %>

@@ -1,11 +1,14 @@
 package Spaghetti::Controller::User;
 use Mojo::Base 'Mojolicious::Controller';
     
+    # Forms.
     use Spaghetti::Form::User::Login;
     use Spaghetti::Form::User::LoginViaMail;
     use Spaghetti::Form::User::Registration;
     use Spaghetti::Form::User::ChangePassword;
     use Spaghetti::Form::User::ChangeMail;
+    use Spaghetti::Form::User::AddSshKey;
+
     use Pony::Crud::MySQL;
     use Pony::Stash;
     use Digest::MD5 "md5_hex";
@@ -752,7 +755,7 @@ use Mojo::Base 'Mojolicious::Controller';
             $this->stash( items => $items );
         }
 
-    sub addSshKey
+    sub ssh
         {
             my $this = shift;
             
@@ -762,6 +765,10 @@ use Mojo::Base 'Mojolicious::Controller';
             $this->stop(403) unless $this->user->{id};
 
             my $form = new Spaghetti::Form::User::AddSshKey;
+
+            my @keys = Pony::Model::Crud::MySQL
+                         ->new('sshKey')
+                           ->list({ userId => $this->user->{id} });
             
             # Try to add key on POST.
             #
@@ -779,24 +786,26 @@ use Mojo::Base 'Mojolicious::Controller';
                     {
                         Pony::Model::Crud::MySQL->new('sshKey')->create
                         ({
-                            userId  => $this->user->{id},
-                            status  => 0,
-                            key     => $key,
+                            userId   => $this->user->{id},
+                            status   => 0,
+                            createAt => time,
+                            key      => $key,
                         });
 
                         Pony::Model::Crud::MySQL->new('user')->update
                         ( {sshKeyCount => $this->user->{sshKeyCount} + 1},
                           {id => $this->user->{id} } );
 
-                        return $this->done('SSH key added');
+                        $this->done('SSH key added');
                     }
                     else
                     {
-                        return $this->error('SSH key limit');
+                        $this->error('SSH key limit reached');
                     }
                 }
             }
 
+            $this->stash( keys => \@keys );
             $this->stash( form => $form->render() );
         }
 

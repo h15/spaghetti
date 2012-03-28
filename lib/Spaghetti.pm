@@ -66,6 +66,7 @@ use Mojo::Base 'Mojolicious';
                 attempts     => 3,
                 mailAttempts => 3,
                 expairMail   => 86400,
+                sshKeyLimit  => 5,
               }
             );
             
@@ -194,6 +195,9 @@ use Mojo::Base 'Mojolicious';
             $r->route('/user/items')
                 ->to('user#items')
                   ->name('user_items');
+            $r->route('/user/ssh')
+                ->to('user#ssh')
+                  ->name('user_ssh');
             
             $a->route('/user')
                 ->to('user#list')

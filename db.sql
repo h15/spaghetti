@@ -29,7 +29,8 @@ create table `sshKey`
     `id`        int(11) unsigned auto_increment primary key,
     `userId`    int(11) unsigned not null,
     `status`    tinyint(4) unsigned not null default 0,
-    `key`       varchar(4096) character set ascii collate ascii_general_ci not null,
+    `createAt`  int(11) not null default 0,
+    `key`       varchar(512) character set ascii collate ascii_general_ci not null,
 
     FOREIGN KEY (`userId`) REFERENCES `user`(`id`)
 );
