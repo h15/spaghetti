@@ -1,0 +1,6 @@
+% layout 'default';
+%
+% title l('Edit public keys');
+%
+% stash(tab => 'sshKey');
+% include 'user/vertical_nav';

@@ -1,7 +1,7 @@
 package Spaghetti::Form::User::AddSshKey;
 use Pony::Object qw/Pony::View::Form/;
     
-    use Spaghetti::Form::Decorator;
+    use Spaghetti::Form::OneColumnDecorator;
 
     has action => '/user/ssh';
     has method => 'post';
@@ -10,7 +10,7 @@ use Pony::Object qw/Pony::View::Form/;
     sub create
         {
             my $this = shift;
-               $this->decorator = new Spaghetti::Form::Decorator;
+               $this->decorator = new Spaghetti::Form::OneColumnDecorator;
             
             $this->addElement
             (

@@ -134,8 +134,8 @@
     
     textarea
     {
-        width:664px;
-        height:300px;
+        width:100%;
+        height:200px;
     }
     
     .alignleft   { float:left; margin:0px 5px;  }
@@ -497,6 +497,27 @@
         margin:5px 0px 5px 0px;
         float:left;
         box-shadow: -4px 0 4px 0px rgba(0,0,0,0.2);
+    }
+
+    .sshKeyItem
+    {
+        font-size:12px;
+        font-family:Mono;
+        background: #D8D9EB;
+        border:1px solid #D8D9DB;
+        padding:10px;
+        margin: 10px 0px;
+        cursor:pointer;
+        -moz-border-radius:     6px;
+        -webkit-border-radius:  6px;
+        border-radius:          6px;
+        -khtml-border-radius:   6px;
+    }
+
+    .sshTime
+    {
+        font-size:14px;
+        font-family:Sans;
     }
     
     nav.vertical div.item:hover

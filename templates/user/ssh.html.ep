@@ -7,12 +7,29 @@
 
 % for my $k ( @$keys )
 % {
-	<div style="font-size:10px;">
-		<%= substr($k->{key}, 0, 40) %>...
-		<div class=alignright>
+	<div class="sshKeyItem showButton" id="showButton-sshKey<%= $k->{id} %>">
+		<%= substr($k->{key}, 0, 70) %>...
+		<div class="alignright sshTime">
 			<%= render_datetime($k->{createAt}) %>
 		</div>
 	</div>
+
+	<div class="sshKeyItem hideButton hidden" id="hideButton-sshKey<%= $k->{id} %>" style="opacity:0.6">
+		<%= substr($k->{key}, 0, 70) %>...
+		<div class="alignright sshTime">
+			<%= render_datetime($k->{createAt}) %>
+		</div>
+	</div>
+
+	<div class="hidden" id="hiddenArea-sshKey<%= $k->{id} %>">
+		
+			% $form->elements->{key}->{value} = $k->{key};
+			% $form->action = url_for(user_sshEdit => id => $k->{id});
+			%=b $form->render();
+		
+	</div>
 % }
 
-%=b $form;
+% $form->elements->{key}->{value} = '';
+% $form->action = url_for('user_ssh');
+%=b $form->render();

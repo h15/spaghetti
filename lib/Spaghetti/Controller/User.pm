@@ -806,7 +806,50 @@ use Mojo::Base 'Mojolicious::Controller';
             }
 
             $this->stash( keys => \@keys );
-            $this->stash( form => $form->render() );
+            $this->stash( form => $form );
+        }
+
+    sub sshEdit
+        {
+            my $this = shift;
+            my $id   = int $this->param('id') || 0;
+            
+            # Anonymous has not items.
+            #
+            
+            $this->stop(403) unless $this->user->{id};
+
+            my $form = new Spaghetti::Form::User::AddSshKey;
+               $form->action = $this->url_for(user_sshEdit => id => $id);
+
+            # Is it my ssh key.
+            #
+
+            my $sshKey = Pony::Model::Crud::MySQL
+                           ->new('sshKey')->read({id => $id});
+
+            $this->stop(403) if not defined $sshKey
+                                || $sshKey->{userId} != $this->user->{id};
+
+            # Try to add key on POST.
+            #
+
+            if ( $this->req->method eq 'POST' )
+            {
+                $form->data->{$_} = $this->param($_) for keys %{$form->elements};
+                
+                if ( $form->isValid )
+                {
+                    my $key = $this->param('key');
+
+                    Pony::Model::Crud::MySQL->new('sshKey')
+                        ->update({key => $key, createAt => time}, {id => $id});
+
+                    return $this->redirect_to( $this->url_for('user_ssh') );
+                }
+            }
+
+            $this->error('Invalid request');
         }
 
 1;
