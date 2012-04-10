@@ -23,6 +23,10 @@ create table `user`
     FOREIGN KEY (`banId`)    REFERENCES `ban`(`id`)
 );
 
+INSERT INTO `user` (`id`, `mail`, `password`, `name`, `createAt`, `modifyAt`, `accessAt`, `banId`, `banTime`) VALUES
+(0,'anonymous@lorcode.org','','anonymous',0,0,0,0,0),
+(1,'admin@lorcode.org','eaf959d9e23b7a07bf6364f50efd6007','admin',0,0,0,0,0);
+
 drop table if exists `sshKey`;
 create table `sshKey`
 (
@@ -35,9 +39,19 @@ create table `sshKey`
     FOREIGN KEY (`userId`) REFERENCES `user`(`id`)
 );
 
-INSERT INTO `user` (`id`, `mail`, `password`, `name`, `createAt`, `modifyAt`, `accessAt`, `banId`, `banTime`) VALUES
-(0,'anonymous@lorcode.org','','anonymous',0,0,0,0,0),
-(1,'admin@lorcode.org','eaf959d9e23b7a07bf6364f50efd6007','admin',0,0,0,0,0);
+drop table if exists `responses`;
+create table `responses`
+(
+    `id`        int(11) unsigned auto_increment primary key,
+    `userId`    int(11) unsigned not null,
+    `createAt`  int(11) unsigned not null,
+    `response`  int(11) unsigned not null,
+    `message`   int(11) unsigned not null,
+
+    FOREIGN KEY (`response`) REFERENCES `thread`(`id`),
+    FOREIGN KEY (`userId`)  REFERENCES `user`(`id`),
+    FOREIGN KEY (`message`) REFERENCES `thread`(`id`)
+);
 
 drop table if exists `item`;
 create table `item`

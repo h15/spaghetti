@@ -251,6 +251,18 @@ use Mojo::Base 'Mojolicious::Controller';
             $this->redirect_to('user_home');
         }
     
+    sub responses
+        {
+            my $this = shift;
+            
+            # Not found for anonymous.
+            #
+
+            $this->stop(404) unless $this->user->{id};
+
+            
+        }
+
     sub thread
         {
             my $this = shift;

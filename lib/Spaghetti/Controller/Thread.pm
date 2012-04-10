@@ -102,6 +102,18 @@ use Mojo::Base 'Mojolicious::Controller';
                 $this->render('news/show') : $this->render;
         }
     
+    # Create thread.
+    #
+    # Show form on GET, try to create thread on POST.
+    # * Check text via Akismet.
+    # * Create notification for this thread
+    #   (it's a response to another thread).
+    # * Rights' inheritance from parent thread.
+    # * Redirect to new thread (two cases).
+    #
+    # @param int parentId - id of thread (get rights).
+    # @param int topicId  - id of thread (show in this thread).
+    
     sub create
         {
             my $this = shift;
@@ -124,9 +136,12 @@ use Mojo::Base 'Mojolicious::Controller';
                 
                 if ( $form->isValid )
                 {
+                    # Get data from form.
+                    #
+                    
                     my $text  = $form->elements->{text}->value;
-                    my $parent= $form->elements->{parentId}->value;
-                    my $topic = $form->elements->{topicId}->value;
+                    my $parent= $pid; #$form->elements->{parentId}->value;
+                    my $topic = $tid; #$form->elements->{topicId}->value;
                     my $userId= $this->user->{id};
                     
                     # Test thread by Akismet.
@@ -163,6 +178,9 @@ use Mojo::Base 'Mojolicious::Controller';
                     my $textModel  = new Pony::Crud::MySQL('text');
                     my $userModel  = new Pony::Crud::MySQL('user');
                     
+                    # Write thread.
+                    #
+                    
                     my $thId = $threadModel->create
                                ({
                                     author   => $userId,
@@ -185,44 +203,20 @@ use Mojo::Base 'Mojolicious::Controller';
                     # Add notification to private thread
                     # of user, who is an author of parent thread.
                     
-                    {
-                        my $thread = $threadModel->read({id => $parent});
-                        my $user   = $userModel  ->read({id => $thread->{author}});
-                        
-                        $thread  = $threadModel->read({id => $topic});
-                        my $topic= $topicModel ->read({threadId => $topic});
-                        
-                        my $thId = $threadModel->create
-                                   ({
-                                        author   => 1,
-                                        owner    => 1,
-                                        createAt => time,
-                                        modifyAt => time,
-                                        parentId => $user->{threadId},
-                                        topicId  => $user->{threadId},
-                                   });
-                        
-                        # Text of notification
-                        # about new message.
-                        
-                        my $text = $this->l('You have a response in topic') .
-                                   ( sprintf ' "<a href="%s">%s</a>".',
-                                     $this->url_for('thread_show', url => $thread->{id}),
-                                     $topic->{title} );
-                        
-                        my $teId = $textModel->create
-                                   ({
-                                        threadId => $thId,
-                                        text     => $text,
-                                   });
-                        
-                        $threadModel->update( { textId => $teId },
-                                              { id     => $thId } );
-                        
-                        my $dbh = Pony::Crud::Dbh::MySQL->new->dbh;
-                           $dbh->prepare($Spaghetti::SQL::user->{inc_responses})
-                               ->execute( $user->{id} );
-                    }
+                    my $thread = Pony::Model::Crud::MySQL
+                                    ->new('thread')->read({id => $parent});
+
+                    Pony::Model::Crud::MySQL->new('responses')->create
+                    ({
+                        userId   => $thread->{author},
+                        createAt => time,
+                        response => $thId,
+                        message  => $parent
+                    });
+                    
+                    my $dbh = Pony::Crud::Dbh::MySQL->new->dbh;
+                       $dbh->prepare($Spaghetti::SQL::user->{inc_responses})
+                           ->execute( $thread->{author} );
                     
                     # Inheritance of groups
                     #
