@@ -198,6 +198,9 @@ use Mojo::Base 'Mojolicious';
             $r->route('/user/ssh')
                 ->to('user#ssh')
                   ->name('user_ssh');
+            $r->route('/user/home/responses')
+                ->to('user#responses')
+                  ->name('user_responses');
             $r->route('/user/ssh/:id', id => qr/\d+/)
                 ->to('user#sshEdit')
                   ->name('user_sshEdit');

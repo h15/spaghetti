@@ -260,7 +260,18 @@ use Mojo::Base 'Mojolicious::Controller';
 
             $this->stop(404) unless $this->user->{id};
 
+            my $dbh = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $sth = $dbh->prepare($Spaghetti::SQL::user->{responses});
+               $sth->execute( $this->user->{id}, 0, 20 );
+               
+            my $resps = $sth->fetchall_hashref('id');
             
+            # Flush response count.
+            #
+            Pony::Crud::MySQL->new('userInfo')
+                ->update({ responses => 0 }, { id => $this->user->{id} });
+            
+            $this->stash(responses => $resps);
         }
 
     sub thread
@@ -306,8 +317,8 @@ use Mojo::Base 'Mojolicious::Controller';
             
             # Flush response count.
             #
-            Pony::Crud::MySQL->new('userInfo')
-                ->update({ responses => 0 }, { id => $user->{id} });
+            #Pony::Crud::MySQL->new('userInfo')
+            #    ->update({ responses => 0 }, { id => $user->{id} });
             
             # Prepare to render.
             #

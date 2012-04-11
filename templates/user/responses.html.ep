@@ -1,0 +1,77 @@
+% layout 'default';
+%
+% title l('Responses');
+%
+% include 'user/vertical_nav';
+
+%#=b $paginator
+
+% for my $k ( sort {$b <=> $a} keys %$responses )
+% {
+%   my $r = $responses->{$k};
+        <article class="post <%= $r->{modifyAt} + 3600 > time ? 'hot' : '' %> response"
+                 id="response-<%= $r->{id} %>" style="border:1px solid #C8C9CB">
+            <nav>
+                <div style="float:left; margin-right:5px">
+                    <%=l 'Topic' %>: <a href="<%= url_for('thread_show', url => $r->{url}) %>"><%= $r->{title} %></a>
+                </div>
+                
+                <div class="sefl">
+                    <a href="<%= url_for('thread_show', url => $r->{mid}) %>">#</a>
+                </div>
+                <div class="time">
+                    % if ( $r->{modifyAt} == $r->{createAt} ) {
+                    %
+                        <%= render_datetime($r->{modifyAt}) %>
+                    %
+                    % } else {
+                    %
+                        <acronym title="<%= format_datetime($r->{createAt}) %>">
+                            <%= render_datetime($r->{modifyAt}) %>
+                        </acronym>
+                    %
+                    % }
+                </div>
+                <div class="user">
+                    <%= render_user({ id    => user->{id},
+                                      name  => user->{name},
+                                      mail  => user->{mail},
+                                      banId => user->{banId} }) %>
+                </div>
+                <div class=cb></div>
+            </nav>
+            
+            <div class="postContent">
+                <%=b $r->{text} %>
+            </div>
+            
+        <!-- Response -->
+
+            <article class="tree-post <%= $r->{modifyAt} + 3600 > time ? 'hot' : '' %> response" id="response-<%= $r->{id} %>">
+                <nav>
+                    <div class="sefl">
+                        <a href="<%= url_for('thread_show', url => $r->{rid}) %>">#</a>
+                    </div>
+                    <div class="time">
+                        <%= render_datetime($r->{rcreateAt}) %>
+                    </div>
+                    <div class="user">
+                        <%= render_user({ id    => $r->{userId},
+                                          name  => $r->{name},
+                                          mail  => $r->{mail},
+                                          banId => $r->{banId} }) %>
+                    </div>
+                    <div class=cb></div>
+                </nav>
+            
+                <div class="postContent">
+                    <%=b $r->{rtext} %>
+                </div>
+            
+            </article>
+        </article>
+
+        <div style="clear:both;margin:20px 0px"></div>
+% }
+
+%#=b $paginator

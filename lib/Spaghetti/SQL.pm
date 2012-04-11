@@ -174,15 +174,20 @@ our $user =
     
     responses =>
     q{
-        SELECT r.id AS rid, r.createAt AS rcreateAt, r.`text` AS rtext,
-               m.id, m.createAt, m.modifyAt, m.`text`,
-               u.name, u.mail, u.id AS userId, u.banId
+        SELECT r.id AS rid, r.createAt AS rcreateAt, rt.`text` AS rtext,
+               m.id AS mid, m.createAt, m.modifyAt, mt.`text`,
+               u.name, u.mail, u.id AS userId, u.banId,
+               t1.title, t1.url,
+               resp.id
         FROM responses AS resp
             INNER JOIN `thread` r ON (r.id = resp.response)
+                INNER JOIN `text` rt ON (rt.id = r.textId)
             INNER JOIN `thread` m ON (m.id = resp.message)
-            INNER JOIN `user`   u ON (u.id = r.userId)
+                INNER JOIN `text` mt ON (mt.id = m.textId)
+            INNER JOIN `user`   u ON (u.id = r.author)
+            LEFT OUTER JOIN `topic` t1 ON (t1.threadId  = r.topicId)
         WHERE resp.userId = ?
-            ORDER BY resp.createAt DESC
+            ORDER BY resp.id ASC
             LIMIT ?, ?
     },
     
@@ -220,12 +225,6 @@ our $user =
             WHERE userId = ?
         )
         ORDER BY i.name ASC
-    },
-
-    responses =>
-    q{
-        SELECT
-        FROM `responses
     },
 };
 

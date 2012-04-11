@@ -48,9 +48,10 @@
         % {
         
             <div class="alignright">
-                <a href="<%= url_for 'user_thread' %>">
+                <a href="<%= url_for 'user_responses' %>">
                     <div class="alignleft <%= user->{responses} ? 'hot-responses' : 'responses' %>">
-                        <%= user->{responses} %>
+                        <span style="font-weight:400"><%=l 'Responses' %></span>
+                            <%= user->{responses} %>
                     </div>
                 </a>
                 

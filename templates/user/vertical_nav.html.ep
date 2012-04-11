@@ -14,23 +14,6 @@
     </div>
 </a>
 
-<a href="<%= url_for 'user_thread' %>">
-    <div class="item <%= 'selected' if $tab eq 'thread' %>">
-    
-        % if ( user->{threadId} )
-        % {
-        
-            <%=l 'Private thread' %>
-            
-        % } else {
-        
-            <a href="<%= url_for 'user_createPrivateThread' %>"><%=l 'Create private thread' %></a>
-            
-        % }
-        
-    </div>
-</a>
-
 <a href="<%= url_for 'user_projects' %>">
     <div class="item <%= 'selected' if $tab eq 'projects' %>">
         <%=l 'Projects' %>

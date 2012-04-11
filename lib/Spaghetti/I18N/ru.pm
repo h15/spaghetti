@@ -149,6 +149,8 @@ use Encode 'decode';
                 'Topic'         => 'Тема',
                 'Flush password'    => 'Сбросить',
                 'Generate password' => 'Сгенерировать',
+                'Responses'     => 'Ответы',
+                'Response'      => 'Ответ'
             };
             
             $lang->{$_} = decode('utf8', $lang->{$_}) for keys %$lang;
