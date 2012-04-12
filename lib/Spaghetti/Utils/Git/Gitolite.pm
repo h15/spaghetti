@@ -66,6 +66,8 @@ use Pony::Object;
             
             open F, '>', $this->file or die "Can't find file " . $this->file;
             {
+                print F "repo gitolite-admin\n\tRW+ = root\n\n";
+                
                 my $model = new Pony::Model::Crud::MySQL('repoRightsViaUser');
                 
                 for my $r ( values %$repos )
