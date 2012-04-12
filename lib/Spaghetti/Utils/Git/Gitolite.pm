@@ -73,7 +73,7 @@ use Pony::Object;
                 for my $r ( values %$repos )
                 {
                     printf F "repo %s/%s\n", $r->{projectUrl}, $r->{url};
-                    print  F "\tR\t= ALL\n";
+                    print  F "\tR\t= \@all\n";
                     printf F "\tRW+CD\t= %s\n", join ' ', @{$users{$r->{owner}}};
                     
                     # Get user list from this repo.
