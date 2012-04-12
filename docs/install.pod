@@ -1,0 +1,41 @@
+
+=pod
+
+=head1 Prepare git user
+
+Install soft. Run as root.
+
+    aptitude install openssh-server git-core
+
+    adduser --system --shell /bin/sh --gecos 'git version control' --group \
+            --disabled-password --home /home/git git
+
+Create ssh key for git.
+
+    sudo -u git ssh-keygen
+
+Allow ssh support for git.
+
+    echo "AllowUsers git" >> /etc/ssh/sshd_config
+    /etc/init.d/ssh restart
+
+=head1 Install gitolite
+
+Run as git.
+
+    git clone git://github.com/sitaramc/gitolite
+    gitolite/src/gl-system-install
+    gl-setup -q ~/YourName.pub
+
+Get admin repo.
+
+    git clone git@server:gitolite-admin
+
+=head1 Install spaghetti
+
+    git clone git://github.com/h15/spaghetti.git
+    cd ./spaghetti
+    ./script/updateGitolite /path/to/gitolite-admin
+
+=cut
+

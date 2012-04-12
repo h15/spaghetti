@@ -117,10 +117,10 @@
         color:#D31141;
     }
     
-    #form-createTopic td, #form-thread-create td
+    /*#form-createTopic td, #form-thread-create td
     {
         display:none;
-    }
+    }*/
     
     #form-createTopic td:nth-child(2n), #form-thread-create td:nth-child(2n)
     {
@@ -129,7 +129,7 @@
     
     textarea
     {
-        width:100%;
+        width:640px;
         height:200px;
     }
     
@@ -171,7 +171,7 @@
     
     #form-createTopic .pony-text
     {
-        width:660px;
+        width:640px;
     }
     
     h1, h2, h3, h4, h5, h6
@@ -269,14 +269,14 @@
         border: 1px solid #cfc;
     }
 
-    .h2idden
+    .hidden
     {
         display:none;
     }
     
     .pony-form
     {
-        width:100%;
+        margin:10px;
     }
     
     .pony-form .error
@@ -308,10 +308,9 @@
         color:#a00;
     }
     
-    .pony-text
+    .wide
     {
-        font-size:18px;
-        width:100%;
+        width:640px;
     }
     
     .legend
