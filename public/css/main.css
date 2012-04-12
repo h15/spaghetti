@@ -24,17 +24,12 @@
     {
         width:760px;
         margin:0px auto;
-        padding:10px 20px;
+        padding:10px 25px 10px 15px;
         min-height:440px;
         position: relative;
         box-shadow:
             10px 0 10px -10px rgba(0,0,0,0.5),
             -10px 0 10px -10px rgba(0,0,0,0.5);
-    }
-
-    .hidden
-    {
-        display:none;
     }
     
     article.post, header.topic
@@ -274,9 +269,14 @@
         border: 1px solid #cfc;
     }
 
-    .hidden
+    .h2idden
     {
         display:none;
+    }
+    
+    .pony-form
+    {
+        width:100%;
     }
     
     .pony-form .error
@@ -308,9 +308,10 @@
         color:#a00;
     }
     
-    .pony-form input
+    .pony-text
     {
-        float:right;
+        font-size:18px;
+        width:100%;
     }
     
     .legend
