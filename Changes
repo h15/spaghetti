@@ -1,3 +1,33 @@
+commit 0061d285cc420d53100cb886c344e7737fb841d2
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Thu Apr 12 10:26:33 2012 +0600
+
+    Fix gitolite module
+
+commit 6633cc572cdffa9f4699cb70665a82cf33d637eb
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Thu Apr 12 10:26:09 2012 +0600
+
+    fix rendering
+
+commit 974e3a0a05b9bb5d992b62acb63a6cd3868528b3
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Wed Apr 11 19:48:49 2012 +0600
+
+    Responses done
+
+commit 1e8b249ab7bb76a16202a09b186cca2069e6c25b
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Tue Apr 10 23:54:59 2012 +0600
+
+    change response mechanic. [unstable]
+
+commit 7523ea3ea9edf766dec542bf62cbd6dc93d3d162
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Thu Mar 29 00:17:51 2012 +0600
+
+    changes
+
 commit f6632fd3577d0802898f7d2b6def05db49e2ae4c
 Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
 Date:   Thu Mar 29 00:09:22 2012 +0600

@@ -5,6 +5,7 @@ use Pony::Object;
     use Pony::Model::Crud::MySQL;
     
     has file => '';
+    has dir  => '';
     has sql  => {
                     getRepo => 
                     q{
@@ -26,7 +27,12 @@ use Pony::Object;
     sub init
         {
             my $this = shift;
-               $this->file = shift;
+               $this->dir = shift;
+               $this->file = $this->dir . '/conf/gitolite.conf';
+            
+            mkdir $this->dir unless -d $this->dir;
+            mkdir $this->dir unless -d $this->dir . '/conf';
+            mkdir $this->dir unless -d $this->dir . '/keydir';
         }
     
     sub update
@@ -102,6 +108,16 @@ use Pony::Object;
                 }
             }
             close F;
+            
+            # Write keys.
+            #
+            
+            while ( my($k, $v) = each %$keys )
+            {
+                open F, '>>', $this->dir . "/keydir/$k.pub" or die;
+                print F $v->{key};
+                close F;
+            }
         }
 
 
