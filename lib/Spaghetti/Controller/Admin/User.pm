@@ -1,7 +1,7 @@
 package Spaghetti::Controller::Admin::User;
 use Mojo::Base 'Mojolicious::Controller';
 
-    use Pony::Crud::MySQL;
+    use Pony::Model::Crud::MySQL;
     
     sub list
         {
@@ -14,9 +14,9 @@ use Mojo::Base 'Mojolicious::Controller';
                $page = 1 if $page < 1;
             
             my $conf  = Pony::Stash->findOrCreate( default => { size => 10 } );
-            my @users = Pony::Crud::MySQL->new('user')->list( undef, undef, undef,
+            my @users = Pony::Model::Crud::MySQL->new('user')->list( undef, undef, undef,
                                 undef, ($page-1)*$conf->{size}, $conf->{size} );
-            my $count = Pony::Crud::MySQL->new('user')->count;
+            my $count = Pony::Model::Crud::MySQL->new('user')->count;
             
             $this->stash( paginator => $this->paginator
                           ('admin_user_list', $page, $count, $conf->{size}) );
@@ -29,11 +29,11 @@ use Mojo::Base 'Mojolicious::Controller';
             my $this = shift;
             my $id   = $this->param('id');
             
-            my $user = Pony::Crud::MySQL->new('user')->read({id => $id});
-            my @groups = Pony::Crud::MySQL->new('group')->list;
+            my $user = Pony::Model::Crud::MySQL->new('user')->read({id => $id});
+            my @groups = Pony::Model::Crud::MySQL->new('group')->list;
             
             my @g = map { $_->{groupId} }
-                      Pony::Crud::MySQL
+                      Pony::Model::Crud::MySQL
                         ->new('userToGroup')
                           ->list({userId => $id},['groupId'],'groupId');
             
@@ -51,7 +51,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             if ( $this->req->method eq 'POST' )
             {
-                Pony::Crud::MySQL->new('user')->delete({id => $id});
+                Pony::Model::Crud::MySQL->new('user')->delete({id => $id});
             }
             
             $this->redirect_to('admin_user_list');
@@ -68,7 +68,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->redirect_to('admin_user_list') if $id == 0 || $groupId == 0;
             
-            Pony::Crud::MySQL->new('userToGroup')
+            Pony::Model::Crud::MySQL->new('userToGroup')
                              ->create({userId => $id, groupId => $groupId});
             
             $this->redirect_to('admin_user_show', id => $id);
@@ -85,7 +85,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->redirect_to('admin_user_list') if $id == 0 || $groupId == 0;
             
-            Pony::Crud::MySQL->new('userToGroup')
+            Pony::Model::Crud::MySQL->new('userToGroup')
                              ->delete({userId => $id, groupId => $groupId});
             
             $this->redirect_to('admin_user_show', id => $id);

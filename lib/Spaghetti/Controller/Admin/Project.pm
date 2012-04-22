@@ -2,8 +2,8 @@ package Spaghetti::Controller::Admin::Project;
 use Mojo::Base 'Mojolicious::Controller';
     
     use Pony::Stash;
-    use Pony::Crud::MySQL;
-    use Pony::Crud::Dbh::MySQL;
+    use Pony::Model::Crud::MySQL;
+    use Pony::Model::Dbh::MySQL;
     use Spaghetti::Form::Admin::Project::Create;
     use Spaghetti::Util;
     
@@ -31,9 +31,9 @@ use Mojo::Base 'Mojolicious::Controller';
                     # Prepare models.
                     #
                     
-                    my $thModel = new Pony::Crud::MySQL('thread');
-                    my $teModel = new Pony::Crud::MySQL('text');
-                    my $prModel = new Pony::Crud::MySQL('project');
+                    my $thModel = new Pony::Model::Crud::MySQL('thread');
+                    my $teModel = new Pony::Model::Crud::MySQL('text');
+                    my $prModel = new Pony::Model::Crud::MySQL('project');
                     
                     # Create records in database.
                     #
@@ -91,11 +91,11 @@ use Mojo::Base 'Mojolicious::Controller';
             
             my $size = Pony::Stash->get('thread')->{size};
             
-            my @projects = Pony::Crud::MySQL->new('project')
+            my @projects = Pony::Model::Crud::MySQL->new('project')
                              ->list( undef, undef, undef, undef,
                                         ($page - 1) * $size, $size );
             
-            my $count = Pony::Crud::MySQL->new('project')->count;
+            my $count = Pony::Model::Crud::MySQL->new('project')->count;
             
             # Prepare to render
             #
@@ -111,14 +111,14 @@ use Mojo::Base 'Mojolicious::Controller';
         {
             my $this = shift;
             my $id   = int $this->param('id');
-            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $dbh  = Pony::Model::Dbh::MySQL->new->dbh;
             
             # Get project info
             # and get project's repos list.
             
-            my $project = Pony::Crud::MySQL->new('project')->read({id => $id});
-            my $thread  = Pony::Crud::MySQL->new('thread') ->read({id => $id});
-            my $text    = Pony::Crud::MySQL->new('text')
+            my $project = Pony::Model::Crud::MySQL->new('project')->read({id => $id});
+            my $thread  = Pony::Model::Crud::MySQL->new('thread') ->read({id => $id});
+            my $text    = Pony::Model::Crud::MySQL->new('text')
                             ->read({id => $thread->{textId} });
             
             %$project = ( %$text, %$thread, %$project );
@@ -147,9 +147,9 @@ use Mojo::Base 'Mojolicious::Controller';
             # Prepare models.
             #
             
-            my $thModel = new Pony::Crud::MySQL('thread');
-            my $teModel = new Pony::Crud::MySQL('text');
-            my $prModel = new Pony::Crud::MySQL('project');
+            my $thModel = new Pony::Model::Crud::MySQL('thread');
+            my $teModel = new Pony::Model::Crud::MySQL('text');
+            my $prModel = new Pony::Model::Crud::MySQL('project');
             
             # Get project
             #
@@ -231,13 +231,13 @@ use Mojo::Base 'Mojolicious::Controller';
         {
             my $this = shift;
             my $id   = int $this->param('id');
-            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $dbh  = Pony::Model::Dbh::MySQL->new->dbh;
             
             # Prepare models.
             #
             
-            my $thModel = new Pony::Crud::MySQL('thread');
-            my $prModel = new Pony::Crud::MySQL('project');
+            my $thModel = new Pony::Model::Crud::MySQL('thread');
+            my $prModel = new Pony::Model::Crud::MySQL('project');
             
             if ( $this->req->method eq 'POST' )
             {

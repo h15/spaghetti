@@ -2,9 +2,9 @@ package Mojolicious::Plugin::Access;
 use Pony::Object 'Mojolicious::Plugin';
 
     use Pony::Stash;
-    use Pony::Crud::MySQL;
+    use Pony::Model::Crud::MySQL;
     
-    has sql => '
+    has mysql => '
                     SELECT `id`, t.`owner` FROM `thread` AS t WHERE `id`=%d AND `id` IN
                     (
                         SELECT `threadId` FROM `threadToDataType`
@@ -37,7 +37,7 @@ use Pony::Object 'Mojolicious::Plugin';
                 {
                     my ( $self, $tid, $right ) = @_;
                     my $uid = $self->user->{id};
-                    my $model = Pony::Crud::MySQL->new('thread');
+                    my $model = Pony::Model::Crud::MySQL->new('thread');
                     
                     $tid = 0 unless defined $tid;
                     
@@ -49,7 +49,7 @@ use Pony::Object 'Mojolicious::Plugin';
                     # Allow by database record.
                     #
                     
-                    my $q = sprintf $this->sql, int($tid),
+                    my $q = sprintf $this->mysql, int($tid),
                                 $this->const->{$right}, int($uid);
                     
                     my @t = $model->raw($q);

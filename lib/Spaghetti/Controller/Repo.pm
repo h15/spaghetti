@@ -2,8 +2,8 @@ package Spaghetti::Controller::Repo;
 use Mojo::Base 'Mojolicious::Controller';
     
     use Pony::Stash;
-    use Pony::Crud::MySQL;
-    use Pony::Crud::Dbh::MySQL;
+    use Pony::Model::Crud::MySQL;
+    use Pony::Model::Dbh::MySQL;
     use Spaghetti::Form::Repo::Create;
     use Spaghetti::Util;
     
@@ -13,9 +13,9 @@ use Mojo::Base 'Mojolicious::Controller';
             my $project = int $this->param('id');
             my $form    = new Spaghetti::Form::Repo::Create;
             
-            my $thread = Pony::Crud::MySQL->new('thread')
+            my $thread = Pony::Model::Crud::MySQL->new('thread')
                            ->read({ id => $project });
-            my $proj   = Pony::Crud::MySQL->new('project')
+            my $proj   = Pony::Model::Crud::MySQL->new('project')
                            ->read({ id => $project });
             
             # If project does not exist
@@ -53,9 +53,9 @@ use Mojo::Base 'Mojolicious::Controller';
                     # Prepare models.
                     #
                     
-                    my $thModel = new Pony::Crud::MySQL('thread');
-                    my $teModel = new Pony::Crud::MySQL('text');
-                    my $reModel = new Pony::Crud::MySQL('repo');
+                    my $thModel = new Pony::Model::Crud::MySQL('thread');
+                    my $teModel = new Pony::Model::Crud::MySQL('text');
+                    my $reModel = new Pony::Model::Crud::MySQL('repo');
                     
                     # Create records in database.
                     #
@@ -88,7 +88,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     
                     # Repos++
                     #
-                    Pony::Crud::MySQL->new('project')->update
+                    Pony::Model::Crud::MySQL->new('project')->update
                     (
                         { repos => $proj->{repos} + 1 },
                         { id => $proj->{id} }
@@ -108,7 +108,7 @@ use Mojo::Base 'Mojolicious::Controller';
         {
             my $this = shift;
             my $url  = $this->param('url');
-            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $dbh  = Pony::Model::Dbh::MySQL->new->dbh;
             
             # Get repo.
             #
@@ -126,7 +126,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Get project manager.
             #
             
-            my $pm = Pony::Crud::MySQL
+            my $pm = Pony::Model::Crud::MySQL
                        ->new('thread')
                          ->read({id => $repo->{topicId}}, ['owner'])
                            ->{owner};
@@ -142,7 +142,7 @@ use Mojo::Base 'Mojolicious::Controller';
         {
             my $this = shift;
             my $url  = $this->param('url');
-            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $dbh  = Pony::Model::Dbh::MySQL->new->dbh;
             my $form = new Spaghetti::Form::Repo::Create;
                $form->action = $this->url_for(repo_update => url => $url);
             
@@ -160,7 +160,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Get project owner (project manager)
             #
             
-            my $pm = Pony::Crud::MySQL
+            my $pm = Pony::Model::Crud::MySQL
                        ->new('thread')
                          ->read({ id => $repo->{topicId} }, ['owner']);
             
@@ -196,9 +196,9 @@ use Mojo::Base 'Mojolicious::Controller';
                     # Prepare models.
                     #
                     
-                    my $thModel = new Pony::Crud::MySQL('thread');
-                    my $teModel = new Pony::Crud::MySQL('text');
-                    my $reModel = new Pony::Crud::MySQL('repo');
+                    my $thModel = new Pony::Model::Crud::MySQL('thread');
+                    my $teModel = new Pony::Model::Crud::MySQL('text');
+                    my $reModel = new Pony::Model::Crud::MySQL('repo');
                     
                     # Update records in database.
                     #
@@ -242,7 +242,7 @@ use Mojo::Base 'Mojolicious::Controller';
         {
             my $this = shift;
             my $url  = $this->param('url');
-            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $dbh  = Pony::Model::Dbh::MySQL->new->dbh;
             
             # Get repo
             #
@@ -258,7 +258,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Get project owner (project manager)
             #
             
-            my $pm = Pony::Crud::MySQL->new('thread')
+            my $pm = Pony::Model::Crud::MySQL->new('thread')
                        ->read({ id => $repo->{topicId} }, ['owner']);
             
             $this->stop(401) unless $pm;
@@ -287,7 +287,7 @@ use Mojo::Base 'Mojolicious::Controller';
                 
                 my $access = 16*$d + 8*$c + 4*$p + 2*$w + $r;
                 
-                my $model = new Pony::Crud::MySQL('repoRightsViaUser');
+                my $model = new Pony::Model::Crud::MySQL('repoRightsViaUser');
                 my $where = { repoId => $id, userId => $user };
                 
                 if ( $access != 1 )

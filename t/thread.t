@@ -9,10 +9,10 @@ use_ok 'Mojolicious';
 use_ok 'Spaghetti';
 use_ok 'Pony::Object';
 use_ok 'Pony::Stash';
-use_ok 'Pony::Crud::MySQL';
-use_ok 'Pony::Crud::Dbh::MySQL';
+use_ok 'Pony::Model::Crud::MySQL';
+use_ok 'Pony::Model::Dbh::MySQL';
 
-use Pony::Crud::Dbh::MySQL;
+use Pony::Model::Dbh::MySQL;
 use Pony::Stash;
 
 package Test;
@@ -44,7 +44,7 @@ use Pony::Object;
                    notbot   => 'on'
                })->status_is(302);
             
-            my $user = Pony::Crud::MySQL->new('user')->read({mail => 'test@example.com'});
+            my $user = Pony::Model::Crud::MySQL->new('user')->read({mail => 'test@example.com'});
                
                $t->post_form_ok('/thread/new/topic' =>
                {
@@ -201,7 +201,7 @@ use Pony::Object;
         {
             my $this = shift;
             my $data = shift;
-            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $dbh  = Pony::Model::Dbh::MySQL->new->dbh;
             
             my $sth = $dbh->prepare("SELECT LAST_INSERT_ID()");
                $sth->execute();
@@ -224,7 +224,7 @@ package main;
     #
     
     my $db = Pony::Stash->get('database');
-    Pony::Crud::Dbh::MySQL->new($db);
+    Pony::Model::Dbh::MySQL->new($db);
     
     # Run tests.
     #

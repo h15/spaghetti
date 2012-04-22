@@ -4,14 +4,14 @@ use Mojo::Base 'Mojolicious::Controller';
     use Spaghetti::Form::Topic::Create;
     use Spaghetti::Form::Thread::Create;
     use Spaghetti::Util;
-    use Pony::Crud::Dbh::MySQL;
-    use Pony::Crud::MySQL;
+    use Pony::Model::Dbh::MySQL;
+    use Pony::Model::Crud::MySQL;
     use Pony::Stash;
 
     sub list
         {
             my $this = shift;
-            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $dbh  = Pony::Model::Dbh::MySQL->new->dbh;
             
             # Paginator
             #
@@ -34,7 +34,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Get size of news list.
             #
             
-            my $count = Pony::Crud::MySQL->new('news')->count;
+            my $count = Pony::Model::Crud::MySQL->new('news')->count;
             
             # Prepare to render.
             #

@@ -4,8 +4,7 @@ use Mojo::Base 'Mojolicious::Controller';
     use Spaghetti::Form::Admin::News::FromTopic;
     use Spaghetti::Form::Admin::News::Edit;
     use Spaghetti::Util;
-    use Pony::Crud::Dbh::MySQL;
-    use Pony::Crud::MySQL;
+    use Pony::Model::Crud::MySQL;
     use Pony::Stash;
     
     sub topicToNews
@@ -15,9 +14,9 @@ use Mojo::Base 'Mojolicious::Controller';
             my $form = new Spaghetti::Form::Admin::News::FromTopic;
                $form->action = $this->url_for('admin_news_topicToNews', id => $id);
             
-            my $thModel = new Pony::Crud::MySQL('thread');
-            my $teModel = new Pony::Crud::MySQL('text');
-            my $toModel = new Pony::Crud::MySQL('topic');
+            my $thModel = new Pony::Model::Crud::MySQL('thread');
+            my $teModel = new Pony::Model::Crud::MySQL('text');
+            my $toModel = new Pony::Model::Crud::MySQL('topic');
             
             # Create news from thread.
             #
@@ -40,7 +39,7 @@ use Mojo::Base 'Mojolicious::Controller';
                                        url   => $url  },
                                      { threadId => $id });
                     
-                    Pony::Crud::MySQL->new('news')->create
+                    Pony::Model::Crud::MySQL->new('news')->create
                     ({
                         threadId => $id,
                         legend   => $legend
@@ -72,10 +71,10 @@ use Mojo::Base 'Mojolicious::Controller';
             my $form = new Spaghetti::Form::Admin::News::Edit;
                $form->action = $this->url_for('admin_news_edit', id => $id);
             
-            my $thModel = new Pony::Crud::MySQL('thread');
-            my $teModel = new Pony::Crud::MySQL('text');
-            my $toModel = new Pony::Crud::MySQL('topic');
-            my $neModel = new Pony::Crud::MySQL('news');
+            my $thModel = new Pony::Model::Crud::MySQL('thread');
+            my $teModel = new Pony::Model::Crud::MySQL('text');
+            my $toModel = new Pony::Model::Crud::MySQL('topic');
+            my $neModel = new Pony::Model::Crud::MySQL('news');
             
             if ( $this->req->method eq 'POST' )
             {

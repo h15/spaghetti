@@ -2,14 +2,14 @@ package Spaghetti::Controller::Admin::DataType;
 use Mojo::Base 'Mojolicious::Controller';
 
     use Spaghetti::Form::Admin::DataType::Create;
-    use Pony::Crud::MySQL;
+    use Pony::Model::Crud::MySQL;
     use Spaghetti::Util;
 
     sub show
         {
             my $this  = shift;
             my $id    = $this->param('id');
-            my $model = new Pony::Crud::MySQL('dataType');
+            my $model = new Pony::Model::Crud::MySQL('dataType');
             my $type  = $model->read({id => $id});
             
             $this->stash(type => $type);
@@ -19,7 +19,7 @@ use Mojo::Base 'Mojolicious::Controller';
     sub list
         {
             my $this  = shift;
-            my $model = new Pony::Crud::MySQL('dataType');
+            my $model = new Pony::Model::Crud::MySQL('dataType');
             
             my $page = int $this->param('page');
                $page = 1 if $page < 1;
@@ -49,7 +49,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     my $desc = $form->elements->{desc}->value;
                     my $prio = $form->elements->{prioritet}->value;
                     
-                    my $model = new Pony::Crud::MySQL('dataType');
+                    my $model = new Pony::Model::Crud::MySQL('dataType');
                     my $type  = $model->read({name => $name}, ['id']);
                     
                     if ( $type->{id} > 0 )
@@ -79,7 +79,7 @@ use Mojo::Base 'Mojolicious::Controller';
         {
             my $this  = shift;
             my $id    = $this->param('id');
-            my $model = new Pony::Crud::MySQL('dataType');
+            my $model = new Pony::Model::Crud::MySQL('dataType');
             my $type  = $model->read({id => $id});
             my $form  = new Spaghetti::Form::Admin::DataType::Create;
                $form->action = $this->url_for('admin_dataType_edit');
@@ -121,7 +121,7 @@ use Mojo::Base 'Mojolicious::Controller';
         {
             my $this  = shift;
             my $id    = $this->param('id');
-            my $model = new Pony::Crud::MySQL('dataType');
+            my $model = new Pony::Model::Crud::MySQL('dataType');
                $model->delete({id => $id});
             
             $this->redirect_to('admin_dataType_list');

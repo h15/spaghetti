@@ -21,7 +21,7 @@ create table `user`
     
     FOREIGN KEY (`threadId`) REFERENCES `thread`(`id`),
     FOREIGN KEY (`banId`)    REFERENCES `ban`(`id`)
-);
+) ENGINE = MYISAM;
 
 INSERT INTO `user` (`id`, `mail`, `password`, `name`, `createAt`, `modifyAt`, `accessAt`, `banId`, `banTime`) VALUES
 (0,'anonymous@lorcode.org','','anonymous',0,0,0,0,0),
@@ -37,7 +37,7 @@ create table `sshKey`
     `key`       varchar(512) character set ascii collate ascii_general_ci not null,
 
     FOREIGN KEY (`userId`) REFERENCES `user`(`id`)
-);
+) ENGINE = MYISAM;
 
 drop table if exists `responses`;
 create table `responses`
@@ -51,7 +51,7 @@ create table `responses`
     FOREIGN KEY (`response`) REFERENCES `thread`(`id`),
     FOREIGN KEY (`userId`)  REFERENCES `user`(`id`),
     FOREIGN KEY (`message`) REFERENCES `thread`(`id`)
-);
+) ENGINE = MYISAM;
 
 drop table if exists `item`;
 create table `item`
@@ -62,7 +62,7 @@ create table `item`
     `trade`     tinyint(4)   not null default 0,
     `effect`    varchar(16)  character set ascii collate ascii_general_ci,
     `params`    varchar(32)  character set ascii collate ascii_general_ci
-);
+) ENGINE = MYISAM;
 
 INSERT INTO `item` (`id`, `name`, `desc`, `trade`, `effect`, `params`) VALUES
 (1,'nil', 'nothing',1,NULL,NULL),
@@ -77,7 +77,7 @@ create table `userToItem`
     
     FOREIGN KEY (`userId`) REFERENCES `user`(`id`),
     FOREIGN KEY (`itemId`) REFERENCES `item`(`id`)
-);
+) ENGINE = MYISAM;
 
 drop table if exists `userInfo`;
 create table `userInfo`
@@ -86,15 +86,16 @@ create table `userInfo`
     `desc`      varchar(9999) character set utf8 collate utf8_general_ci not null,
     `conf`      blob,
     `responses` tinyint(4) unsigned not null default 0,
+    `threadCount` int(11) unsigned not null default 0,
     
     FOREIGN KEY (`id`)  REFERENCES `user`(`id`)
-);
-
+) ENGINE = MYISAM;
+/*
 drop table if exists `task`
 (
       
-);
-
+) ENGINE = MYISAM;
+*/
 drop table if exists `mailConfirm`;
 create table `mailConfirm`
 (
@@ -102,7 +103,7 @@ create table `mailConfirm`
     `mail`      varchar(255) character set utf8 collate utf8_general_ci not null,
     `secret`    varchar(32) character set ascii collate ascii_general_ci not null,
     `attempts`  int(1) unsigned not null default 0
-);
+) ENGINE = MYISAM;
 
 drop table if exists `ban`;
 create table `ban`
@@ -114,7 +115,7 @@ create table `ban`
     `expair`    int(11) unsigned not null,
     
     FOREIGN KEY (`userId`)  REFERENCES `user`(`id`)
-);
+) ENGINE = MYISAM;
 
 drop table if exists `group`;
 create table `group`
@@ -123,7 +124,7 @@ create table `group`
     `name`      varchar(64) character set utf8 collate utf8_general_ci not null,
     `desc`      varchar(1024) character set utf8 collate utf8_general_ci not null,
     `prioritet` int(11) unsigned not null default 0
-);
+) ENGINE = MYISAM;
 
 INSERT INTO `group` (`id`, `name`, `desc`, `prioritet`) VALUES
 (0,'Anonymous','',0),
@@ -140,7 +141,7 @@ create table `userToGroup`
     
     FOREIGN KEY (`userId`)  REFERENCES `user`(`id`),
     FOREIGN KEY (`groupId`) REFERENCES `group`(`id`)
-);
+) ENGINE = MYISAM;
 
 INSERT INTO `userToGroup` (`userId`, `groupId`) VALUES
 (0,0),
@@ -155,7 +156,7 @@ create table `access`
     
     FOREIGN KEY (`groupId`)    REFERENCES `group`(`id`),
     FOREIGN KEY (`dataTypeId`) REFERENCES `dataType`(`id`)
-);
+) ENGINE = MYISAM;
 
 drop table if exists `dataType`;
 create table `dataType`
@@ -164,7 +165,7 @@ create table `dataType`
     `name`      varchar(64) character set utf8 collate utf8_general_ci not null,
     `desc`      varchar(1024) character set utf8 collate utf8_general_ci not null,
     `prioritet` int(11) unsigned not null default 0
-);
+) ENGINE = MYISAM;
 
 drop table if exists `threadToDataType`;
 create table `threadToDataType`
@@ -174,7 +175,7 @@ create table `threadToDataType`
     
     FOREIGN KEY (`threadId`)   REFERENCES `thread`(`id`),
     FOREIGN KEY (`dataTypeId`) REFERENCES `dataType`(`id`)
-);
+) ENGINE = MYISAM;
 
 drop table if exists `thread`;
 create table `thread`
@@ -193,7 +194,7 @@ create table `thread`
     FOREIGN KEY (`parentId`) REFERENCES `thread`(`id`),
     FOREIGN KEY (`topicId`)  REFERENCES `topic`(`id`),
     FOREIGN KEY (`textId`)   REFERENCES `text`(`id`)
-);
+) ENGINE = MYISAM;
 
 drop table if exists `text`;
 create table `text`
@@ -203,7 +204,7 @@ create table `text`
     `text`      varchar(60000) character set utf8 collate utf8_general_ci not null,
     
     FOREIGN KEY (`threadId`)  REFERENCES `thread`(`id`)
-);
+) ENGINE = MYISAM;
 
 drop table if exists `topic`;
 create table `topic`
@@ -213,7 +214,7 @@ create table `topic`
     `url`       varchar(64) character set ascii collate ascii_general_ci not null primary key,
     
     FOREIGN KEY (`threadId`)  REFERENCES `thread`(`id`)
-);
+) ENGINE = MYISAM;
 
 drop table if exists `threadToTag`;
 create table `threadToTag`
@@ -223,7 +224,7 @@ create table `threadToTag`
     
     FOREIGN KEY (`threadId`) REFERENCES `thread`(`id`),
     FOREIGN KEY (`tagId`)    REFERENCES `tag`(`id`)
-);
+) ENGINE = MYISAM;
 
 drop table if exists `tag`;
 create table `tag`
@@ -233,7 +234,7 @@ create table `tag`
     `name`      varchar(64) character set utf8 collate utf8_general_ci not null,
     
     unique(`url`)
-);
+) ENGINE = MYISAM;
 
 drop table if exists `news`;
 create table `news`
@@ -242,7 +243,7 @@ create table `news`
     `legend`    varchar(140) character set utf8 collate utf8_general_ci not null,
     
     FOREIGN KEY (`threadId`)  REFERENCES `thread`(`id`)
-);
+) ENGINE = MYISAM;
 
 drop table if exists `project`;
 create table `project`
@@ -255,7 +256,7 @@ create table `project`
     
     UNIQUE(`url`),
     FOREIGN KEY (`id`)    REFERENCES `thread`(`id`)
-);
+) ENGINE = MYISAM;
 
 drop table if exists `repo`;
 create table `repo`
@@ -265,7 +266,7 @@ create table `repo`
     `url`       varchar(128) character set ascii collate ascii_general_ci not null,
     
     FOREIGN KEY (`id`)    REFERENCES `thread`(`id`)
-);
+) ENGINE = MYISAM;
 
 drop table if exists `repoGroup`;
 create table `repoGroup`
@@ -273,7 +274,7 @@ create table `repoGroup`
     `id`        int(11) unsigned not null auto_increment primary key,
     `name`      varchar(256) character set utf8 collate utf8_general_ci not null,
     `desc`      varchar(1024) character  set utf8 collate utf8_general_ci not null
-);
+) ENGINE = MYISAM;
 
 drop table if exists `repoRights`;
 create table `repoRights`
@@ -284,7 +285,7 @@ create table `repoRights`
     
     FOREIGN KEY (`repoId`)  REFERENCES `repo`(`id`),
     FOREIGN KEY (`groupId`) REFERENCES `repoGroup`(`id`)
-);
+) ENGINE = MYISAM;
 
 drop table if exists `repoRightsViaUser`;
 create table `repoRightsViaUser`
@@ -295,7 +296,7 @@ create table `repoRightsViaUser`
     
     FOREIGN KEY (`repoId`) REFERENCES `repo`(`id`),
     FOREIGN KEY (`userId`) REFERENCES `user`(`id`)
-);
+) ENGINE = MYISAM;
 
 drop table if exists `userToRepoGroup`;
 create table `userToRepoGroup`
@@ -305,4 +306,4 @@ create table `userToRepoGroup`
     
     FOREIGN KEY (`userId`)  REFERENCES `user`(`id`),
     FOREIGN KEY (`groupId`) REFERENCES `repoGroup`(`id`)
-);
+) ENGINE = MYISAM;

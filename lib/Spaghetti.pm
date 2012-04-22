@@ -5,7 +5,7 @@ use Mojo::Base 'Mojolicious';
     our $COMMIT  = '';
     
     use Pony::Stash;
-    use Pony::Crud::Dbh::MySQL;
+    use Pony::Model::Crud;
     use Pony::Model::Dbh::MySQL;
     use Spaghetti::SQL;
     use Module::Load;
@@ -34,20 +34,9 @@ use Mojo::Base 'Mojolicious';
             #
             
             Pony::Stash->new('./resources/stash.dat');
-            
-            Pony::Stash->findOrCreate
-            ( thread =>
-              {
-                size => 20,
-              }
-            );
-            
-            Pony::Stash->findOrCreate
-            ( news =>
-              {
-                size => 20,
-              }
-            );
+            Pony::Stash->findOrCreate(dbDriver => 'MySQL');
+            Pony::Stash->findOrCreate(thread => {size => 20});
+            Pony::Stash->findOrCreate(news => {size => 20});
             
             Pony::Stash->findOrCreate
             ( mail =>
@@ -74,7 +63,7 @@ use Mojo::Base 'Mojolicious';
             ( defaultUserConf =>
               {
                 isTreeView => 0,
-                lang  => 'ru',
+                lang  => 'en',
                 langs => 'en ru'
               }
             );
@@ -110,8 +99,6 @@ use Mojo::Base 'Mojolicious';
             #
             
             my $db = Pony::Stash->get('database');
-            
-            Pony::Crud::Dbh::MySQL->new($db);
             Pony::Model::Dbh::MySQL->new($db);
             
             ##

@@ -2,21 +2,21 @@ package Spaghetti::Controller::Admin::Group;
 use Mojo::Base 'Mojolicious::Controller';
 
     use Spaghetti::Form::Admin::Group::Create;
-    use Pony::Crud::MySQL;
+    use Pony::Model::Crud::MySQL;
     use Spaghetti::Util;
 
     sub show
         {
             my $this  = shift;
             my $id    = $this->param('id');
-            my $model = new Pony::Crud::MySQL('group');
+            my $model = new Pony::Model::Crud::MySQL('group');
             my $group = $model->read({id => $id});
             
             # Get types
             #
             
-            my @types = Pony::Crud::MySQL->new('dataType')->list;
-            my @access= Pony::Crud::MySQL
+            my @types = Pony::Model::Crud::MySQL->new('dataType')->list;
+            my @access= Pony::Model::Crud::MySQL
                           ->new('access')
                             ->list({groupId => $id},undef,'dataTypeId');
                             
@@ -29,7 +29,7 @@ use Mojo::Base 'Mojolicious::Controller';
     sub list
         {
             my $this  = shift;
-            my $model = new Pony::Crud::MySQL('group');
+            my $model = new Pony::Model::Crud::MySQL('group');
             
             my $page = int $this->param('page');
                $page = 1 if $page < 1;
@@ -59,7 +59,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     my $desc = $form->elements->{desc}->value;
                     my $prio = $form->elements->{prioritet}->value;
                     
-                    my $model = new Pony::Crud::MySQL('group');
+                    my $model = new Pony::Model::Crud::MySQL('group');
                     my $group = $model->read({name => $name}, ['id']);
                     
                     if ( $group->{id} > 0 )
@@ -89,7 +89,7 @@ use Mojo::Base 'Mojolicious::Controller';
         {
             my $this  = shift;
             my $id    = $this->param('id');
-            my $model = new Pony::Crud::MySQL('group');
+            my $model = new Pony::Model::Crud::MySQL('group');
             my $group = $model->read({id => $id});
             my $form  = new Spaghetti::Form::Admin::Group::Create;
                $form->action = $this->url_for('admin_group_edit');
@@ -131,7 +131,7 @@ use Mojo::Base 'Mojolicious::Controller';
         {
             my $this  = shift;
             my $id    = $this->param('id');
-            my $model = new Pony::Crud::MySQL('group');
+            my $model = new Pony::Model::Crud::MySQL('group');
                $model->delete({id => $id});
             
             $this->redirect_to('admin_group_list');
@@ -149,18 +149,18 @@ use Mojo::Base 'Mojolicious::Controller';
             $rwcd += 4 if defined $this->param('create');
             $rwcd += 8 if defined $this->param('delete');
             
-            my $a = Pony::Crud::MySQL->new('access')
+            my $a = Pony::Model::Crud::MySQL->new('access')
                       ->list({ dataTypeId => $type, groupId => $group },
                                     ['RWCD'], 'dataTypeId', undef, 0, 1 );
             
             if ( $a )
             {
-                Pony::Crud::MySQL->new('access')->update
+                Pony::Model::Crud::MySQL->new('access')->update
                 ({ RWCD => $rwcd }, { dataTypeId => $type, groupId => $group });
             }
             else
             {
-                Pony::Crud::MySQL->new('access')->create
+                Pony::Model::Crud::MySQL->new('access')->create
                 ({ RWCD => $rwcd, dataTypeId => $type, groupId => $group });
             }
             

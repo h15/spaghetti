@@ -2,8 +2,8 @@ package Spaghetti::Controller::Item;
 use Mojo::Base 'Mojolicious::Controller';
     
     use Spaghetti::Util;
-    use Pony::Crud::Dbh::MySQL;
-    use Pony::Crud::MySQL;
+    use Pony::Model::Dbh::MySQL;
+    use Pony::Model::Crud::MySQL;
     use Pony::Stash;
     use Module::Load;
     
@@ -21,7 +21,7 @@ use Mojo::Base 'Mojolicious::Controller';
                 my $itemId = int $this->param('item');
                 my $userId = int $this->param('user');
                 
-                Pony::Crud::MySQL->new('userToItem')->create
+                Pony::Model::Crud::MySQL->new('userToItem')->create
                 ({
                     itemId => $itemId,
                     userId => $userId
@@ -42,7 +42,7 @@ use Mojo::Base 'Mojolicious::Controller';
                 my $itemId = int $this->param('item');
                 my $userId = $this->user->{id};
                 
-                my $item = Pony::Crud::MySQL->new('userToItem')
+                my $item = Pony::Model::Crud::MySQL->new('userToItem')
                              ->read({itemId => $itemId, userId => $userId});
                 
                 # Item with $userId and $itemId does not exist.
@@ -53,7 +53,7 @@ use Mojo::Base 'Mojolicious::Controller';
                 # Get item.
                 #
                 
-                my $itemObj = Pony::Crud::MySQL->new('item')
+                my $itemObj = Pony::Model::Crud::MySQL->new('item')
                                 ->read({ id => $item->{itemId} });
                 
                 # Does that item can do smth?
@@ -73,7 +73,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     # Item disappears in the smoke...
                     #
                     
-                    Pony::Crud::MySQL->new('userToItem')
+                    Pony::Model::Crud::MySQL->new('userToItem')
                       ->delete({ id => $item->{id} });
                 }
             }

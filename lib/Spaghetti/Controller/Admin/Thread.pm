@@ -3,8 +3,8 @@ use Mojo::Base 'Mojolicious::Controller';
     
     use Spaghetti::Form::Admin::Thread::Create;
     use Spaghetti::Util;
-    use Pony::Crud::Dbh::MySQL;
-    use Pony::Crud::MySQL;
+    use Pony::Model::Dbh::MySQL;
+    use Pony::Model::Crud::MySQL;
     use Pony::Stash;
     
     # Admin edit simple thread.
@@ -17,8 +17,8 @@ use Mojo::Base 'Mojolicious::Controller';
             my $form = new Spaghetti::Form::Admin::Thread::Create;
                $form->action = $this->url_for('admin_thread_edit', id => $id);
             
-            my $threadModel= new Pony::Crud::MySQL('thread');
-            my $textModel  = new Pony::Crud::MySQL('text');
+            my $threadModel= new Pony::Model::Crud::MySQL('thread');
+            my $textModel  = new Pony::Model::Crud::MySQL('text');
             
             my $thread = $threadModel->read({ id => $id });
             my $text   = $textModel  ->read({ id => $thread->{textId} });
@@ -73,7 +73,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->redirect_to('admin_thread_list') if $id == 0 || $typeId == 0;
             
-            my $t2dtModel = new Pony::Crud::MySQL('threadToDataType');
+            my $t2dtModel = new Pony::Model::Crud::MySQL('threadToDataType');
                $t2dtModel->create({threadId => $id, dataTypeId => $typeId});
             
             $this->redirect_to('admin_thread_show', id => $id);
@@ -90,7 +90,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->redirect_to('admin_thread_list') if $id == 0 || $typeId == 0;
             
-            my $t2dtModel = new Pony::Crud::MySQL('threadToDataType');
+            my $t2dtModel = new Pony::Model::Crud::MySQL('threadToDataType');
                $t2dtModel->delete({threadId => $id, dataTypeId => $typeId});
             
             $this->redirect_to('admin_thread_show', id => $id);
@@ -104,18 +104,18 @@ use Mojo::Base 'Mojolicious::Controller';
             # Get types
             #
             
-            my @types = Pony::Crud::MySQL->new('dataType')->list;
+            my @types = Pony::Model::Crud::MySQL->new('dataType')->list;
             my @t = map { $_->{dataTypeId} }
-                      Pony::Crud::MySQL
+                      Pony::Model::Crud::MySQL
                         ->new('threadToDataType')
                           ->list({threadId => $id},['dataTypeId'],'dataTypeId');
             
             # Get thread
             #
             
-            my $thread= Pony::Crud::MySQL->new('thread')->read({id => $id});
-            my $text  = Pony::Crud::MySQL->new('text')->read({threadId => $id});
-            my $topic = [Pony::Crud::MySQL->new('topic')->list
+            my $thread= Pony::Model::Crud::MySQL->new('thread')->read({id => $id});
+            my $text  = Pony::Model::Crud::MySQL->new('text')->read({threadId => $id});
+            my $topic = [Pony::Model::Crud::MySQL->new('topic')->list
                         ({threadId => $id},undef,'threadId',undef,0,1)]->[0];
             
             $this->redirect_to('admin_thread_list') unless exists $thread->{id};
@@ -145,11 +145,11 @@ use Mojo::Base 'Mojolicious::Controller';
             
             my $size = Pony::Stash->get('thread')->{size};
             
-            my $dbh = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $dbh = Pony::Model::Dbh::MySQL->new->dbh;
             my $sth = $dbh->prepare( $Spaghetti::SQL::thread->{show_admin} );
                $sth->execute(($page-1)*$size, $size);
             my $threads = $sth->fetchall_hashref('id');
-            my $count = Pony::Crud::MySQL->new('thread')->count;
+            my $count = Pony::Model::Crud::MySQL->new('thread')->count;
             
             # Prepare render
             #

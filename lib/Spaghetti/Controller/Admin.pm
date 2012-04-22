@@ -2,13 +2,13 @@ package Spaghetti::Controller::Admin;
 use Mojo::Base 'Mojolicious::Controller';
     
     use Pony::Stash;
-    use Pony::Crud::MySQL;
+    use Pony::Model::Crud::MySQL;
     
     sub auth
         {
             my $this = shift;
             
-            my $u2g = Pony::Crud::MySQL
+            my $u2g = Pony::Model::Crud::MySQL
                        ->new('userToGroup')
                          ->read({userId => $this->user->{id}, groupId => 1});
             

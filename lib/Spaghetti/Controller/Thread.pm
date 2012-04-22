@@ -4,8 +4,8 @@ use Mojo::Base 'Mojolicious::Controller';
     use Spaghetti::Form::Topic::Create;
     use Spaghetti::Form::Thread::Create;
     use Spaghetti::Util;
-    use Pony::Crud::Dbh::MySQL;
-    use Pony::Crud::MySQL;
+    use Pony::Model::Dbh::MySQL;
+    use Pony::Model::Crud::MySQL;
     use Pony::Stash;
     use Net::Akismet;
     
@@ -13,8 +13,8 @@ use Mojo::Base 'Mojolicious::Controller';
         {
             my $this = shift;
             my $url  = $this->param('url') || 0;
-            my $topicModel = new Pony::Crud::MySQL('topic');
-            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $topicModel = new Pony::Model::Crud::MySQL('topic');
+            my $dbh  = Pony::Model::Dbh::MySQL->new->dbh;
             
             # Get Topic ID from requested url.
             # It can be string (url) or integer (id).
@@ -173,10 +173,10 @@ use Mojo::Base 'Mojolicious::Controller';
                     # Init models.
                     #
                     
-                    my $threadModel= new Pony::Crud::MySQL('thread');
-                    my $topicModel = new Pony::Crud::MySQL('topic');
-                    my $textModel  = new Pony::Crud::MySQL('text');
-                    my $userModel  = new Pony::Crud::MySQL('user');
+                    my $threadModel= new Pony::Model::Crud::MySQL('thread');
+                    my $topicModel = new Pony::Model::Crud::MySQL('topic');
+                    my $textModel  = new Pony::Model::Crud::MySQL('text');
+                    my $userModel  = new Pony::Model::Crud::MySQL('user');
                     
                     # Write thread.
                     #
@@ -214,21 +214,21 @@ use Mojo::Base 'Mojolicious::Controller';
                         message  => $parent
                     });
                     
-                    my $dbh = Pony::Crud::Dbh::MySQL->new->dbh;
+                    my $dbh = Pony::Model::Dbh::MySQL->new->dbh;
                        $dbh->prepare($Spaghetti::SQL::user->{inc_responses})
                            ->execute( $thread->{author} );
                     
                     # Inheritance of groups
                     #
                     
-                    my $t2dtModel = new Pony::Crud::MySQL('threadToDataType');
+                    my $t2dtModel = new Pony::Model::Crud::MySQL('threadToDataType');
                     my @types = $t2dtModel->list({threadId => $parent},
                                         ['dataTypeId'], 'dataTypeId', undef, 0, 100);
                     
                     my $q = 'INSERT INTO `threadToDataType`(`threadId`,`dataTypeId`) VALUES';
                     my @v = map { sprintf '(%s,%s)', $thId, $_->{dataTypeId} } @types;
                     
-                    Pony::Crud::Dbh::MySQL->new->dbh->do( $q . join(',', @v) );
+                    Pony::Model::Dbh::MySQL->new->dbh->do( $q . join(',', @v) );
                     
                     # Redirect
                     #
@@ -245,7 +245,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     {
                         # Get page.
                         #
-                        my $dbh = Pony::Crud::Dbh::MySQL->new->dbh;
+                        my $dbh = Pony::Model::Dbh::MySQL->new->dbh;
                         
                         my $sth = $dbh->prepare( $Spaghetti::SQL::thread->{showCount} );
                            $sth->execute( $topic, $topic, $this->user->{id} );
@@ -297,9 +297,9 @@ use Mojo::Base 'Mojolicious::Controller';
                     my $userId= $this->user->{id};
                     my $url   = substr(Spaghetti::Util::rusToLatUrl($title), 0, 52);
                     
-                    my $threadModel= new Pony::Crud::MySQL('thread');
-                    my $topicModel = new Pony::Crud::MySQL('topic');
-                    my $textModel  = new Pony::Crud::MySQL('text');
+                    my $threadModel= new Pony::Model::Crud::MySQL('thread');
+                    my $topicModel = new Pony::Model::Crud::MySQL('topic');
+                    my $textModel  = new Pony::Model::Crud::MySQL('text');
                     
                     my $thId = $threadModel->create
                                ({
@@ -330,14 +330,14 @@ use Mojo::Base 'Mojolicious::Controller';
                     # Inheritance of groups
                     #
                     
-                    my $t2dtModel = new Pony::Crud::MySQL('threadToDataType');
+                    my $t2dtModel = new Pony::Model::Crud::MySQL('threadToDataType');
                     my @types = $t2dtModel->list({threadId => $parent},
                                         ['dataTypeId'], 'dataTypeId', undef, 0, 100);
                     
                     my $q = 'INSERT INTO `threadToDataType`(`threadId`,`dataTypeId`) VALUES';
                     my @v = map { sprintf '(%s,%s)', $thId, $_->{dataTypeId} } @types;
                     
-                    Pony::Crud::Dbh::MySQL->new->dbh->do( $q . join(',', @v) ) if @v;
+                    Pony::Model::Dbh::MySQL->new->dbh->do( $q . join(',', @v) ) if @v;
                     
                     $this->redirect_to('thread_show', url => "$thId-$url");
                 }
@@ -360,8 +360,8 @@ use Mojo::Base 'Mojolicious::Controller';
             my $form = new Spaghetti::Form::Thread::Create;
                $form->action = $this->url_for( thread_edit => id => $id );
             
-            my $threadModel= new Pony::Crud::MySQL('thread');
-            my $textModel  = new Pony::Crud::MySQL('text');
+            my $threadModel= new Pony::Model::Crud::MySQL('thread');
+            my $textModel  = new Pony::Model::Crud::MySQL('text');
             
             my $thread = $threadModel->read({ id => $id });
             my $text = $textModel->read({ id => $thread->{textId} });
@@ -419,9 +419,9 @@ use Mojo::Base 'Mojolicious::Controller';
             my $form = new Spaghetti::Form::Topic::Create;
                $form->action = $this->url_for( topic_edit => id => $id );
             
-            my $threadModel= new Pony::Crud::MySQL('thread');
-            my $topicModel = new Pony::Crud::MySQL('topic');
-            my $textModel  = new Pony::Crud::MySQL('text');
+            my $threadModel= new Pony::Model::Crud::MySQL('thread');
+            my $topicModel = new Pony::Model::Crud::MySQL('topic');
+            my $textModel  = new Pony::Model::Crud::MySQL('text');
             
             my $thread= $threadModel->read({ id => $id });
             my $topic = $topicModel->read({threadId => $id});
@@ -474,7 +474,7 @@ use Mojo::Base 'Mojolicious::Controller';
     sub tracker
         {
             my $this = shift;
-            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $dbh  = Pony::Model::Dbh::MySQL->new->dbh;
             
             # Paginator
             #

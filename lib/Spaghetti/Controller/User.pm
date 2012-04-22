@@ -9,7 +9,7 @@ use Mojo::Base 'Mojolicious::Controller';
     use Spaghetti::Form::User::ChangeMail;
     use Spaghetti::Form::User::AddSshKey;
 
-    use Pony::Crud::MySQL;
+    use Pony::Model::Crud::MySQL;
     use Pony::Stash;
     use Digest::MD5 "md5_hex";
     use Storable qw(thaw freeze);
@@ -39,7 +39,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     # Get user info such as
                     # login attempts.
                     
-                    my $model= new Pony::Crud::MySQL('user');
+                    my $model= new Pony::Model::Crud::MySQL('user');
                     my $conf = Pony::Stash->get('user');
                     my $user = $model->read({mail => $mail}, ['id','attempts']);
                     my $att  = $user->{attempts};
@@ -119,7 +119,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     # Does NAME and E-MAIL are free?
                     #
                     
-                    my $model = new Pony::Crud::MySQL('user');
+                    my $model = new Pony::Model::Crud::MySQL('user');
                     my $user1 = $model->read( {'mail' => $mail}, ['id'] );
                     my $user2 = $model->read( {'name' => $name}, ['id'] );
                     
@@ -140,9 +140,9 @@ use Mojo::Base 'Mojolicious::Controller';
                         # Create user's private thread.
                         #
                         
-                        my $threadModel= new Pony::Crud::MySQL('thread');
-                        my $topicModel = new Pony::Crud::MySQL('topic');
-                        my $textModel  = new Pony::Crud::MySQL('text');
+                        my $threadModel= new Pony::Model::Crud::MySQL('thread');
+                        my $topicModel = new Pony::Model::Crud::MySQL('topic');
+                        my $textModel  = new Pony::Model::Crud::MySQL('text');
                         
                         my $thId = $threadModel->create
                                    ({
@@ -187,7 +187,7 @@ use Mojo::Base 'Mojolicious::Controller';
                         # Add user to default group.
                         #
                         
-                        my $u2gModel = new Pony::Crud::MySQL('userToGroup');
+                        my $u2gModel = new Pony::Model::Crud::MySQL('userToGroup');
                         
                         # Default group.
                         #
@@ -211,10 +211,10 @@ use Mojo::Base 'Mojolicious::Controller';
         {
             my $this = shift;
             
-            my $model = new Pony::Crud::MySQL('user');
-            my $threadModel= new Pony::Crud::MySQL('thread');
-            my $topicModel = new Pony::Crud::MySQL('topic');
-            my $textModel  = new Pony::Crud::MySQL('text');
+            my $model = new Pony::Model::Crud::MySQL('user');
+            my $threadModel= new Pony::Model::Crud::MySQL('thread');
+            my $topicModel = new Pony::Model::Crud::MySQL('topic');
+            my $textModel  = new Pony::Model::Crud::MySQL('text');
             
             my $name = $this->user->{name};
             my $time = time;
@@ -251,6 +251,11 @@ use Mojo::Base 'Mojolicious::Controller';
             $this->redirect_to('user_home');
         }
     
+    # Get responses to user's messages.
+    # Flush response count.
+    # 
+    # @see Spaghetti::Thread::Create
+    
     sub responses
         {
             my $this = shift;
@@ -260,7 +265,7 @@ use Mojo::Base 'Mojolicious::Controller';
 
             $this->stop(404) unless $this->user->{id};
 
-            my $dbh = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $dbh = Pony::Model::Dbh::MySQL->new->dbh;
             my $sth = $dbh->prepare($Spaghetti::SQL::user->{responses});
                $sth->execute( $this->user->{id}, 0, 20 );
                
@@ -268,22 +273,35 @@ use Mojo::Base 'Mojolicious::Controller';
             
             # Flush response count.
             #
-            Pony::Crud::MySQL->new('userInfo')
+            
+            Pony::Model::Crud::MySQL->new('userInfo')
                 ->update({ responses => 0 }, { id => $this->user->{id} });
             
             $this->stash(responses => $resps);
         }
-
+    
+    # Private user thread.
+    # 
+    # It uses for private messages from other
+    # users and some system messages.
+    # Thread owner can response to messages.
+    # User has not rights for this messages.
+    #
+    # In this context author is a sender,
+    # owner is a receiver.
+    #
+    # @param int page -- param for paginator.
+    
     sub thread
         {
             my $this = shift;
             
             # Not found for anonymous.
             #
-
+            
             $this->stop(404) unless $this->user->{id};
             
-            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $dbh  = Pony::Model::Dbh::MySQL->new->dbh;
             
             # Paginator
             #
@@ -296,7 +314,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Get personal threads.
             #
             
-            my $user = Pony::Crud::MySQL->new('user')
+            my $user = Pony::Model::Crud::MySQL->new('user')
                            ->read({ id => $this->user->{id} });
             
             # Does thread exist?
@@ -317,7 +335,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             # Flush response count.
             #
-            #Pony::Crud::MySQL->new('userInfo')
+            #Pony::Model::Crud::MySQL->new('userInfo')
             #    ->update({ responses => 0 }, { id => $user->{id} });
             
             # Prepare to render.
@@ -355,7 +373,7 @@ use Mojo::Base 'Mojolicious::Controller';
             {
                 my $default = Pony::Stash->get('defaultUserConf');
                 my $data;
-                my $model = new Pony::Crud::MySQL('userInfo');
+                my $model = new Pony::Model::Crud::MySQL('userInfo');
                 
                 for my $k ( keys %$default )
                 {
@@ -382,7 +400,7 @@ use Mojo::Base 'Mojolicious::Controller';
             #
             
             my $default = Pony::Stash->get('defaultUserConf');
-            my $conf = Pony::Crud::MySQL
+            my $conf = Pony::Model::Crud::MySQL
                          ->new('userInfo')
                            ->read({id => $this->user->{id}}, ['conf']);
             
@@ -407,7 +425,7 @@ use Mojo::Base 'Mojolicious::Controller';
         {
             my $this = shift;
             my $id   = $this->param('id');
-            my $model= new Pony::Crud::MySQL('user');
+            my $model= new Pony::Model::Crud::MySQL('user');
             my $user = $model->read({ id => $id });
             
             # Does exist?
@@ -420,7 +438,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             if ( grep { $_ eq 2 } @{ $this->user->{groups} } )
             {
-                my @items = Pony::Crud::MySQL->new('item')->list();
+                my @items = Pony::Model::Crud::MySQL->new('item')->list();
                 
                 $this->stash( items => \@items );
             }
@@ -473,7 +491,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     my $oldPass = $form->elements->{oldPassword}->value;
                     my $newPass = $form->elements->{newPassword}->value;
                     
-                    my $model = new Pony::Crud::MySQL('user');
+                    my $model = new Pony::Model::Crud::MySQL('user');
                     
                     my $where = { 'id'       => $this->user->{id},
                                   'password' => md5_hex( $this->user->{mail} . $oldPass ) };
@@ -514,7 +532,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->stop(403) unless $this->user->{id};
             
-            my $model = new Pony::Crud::MySQL('user');
+            my $model = new Pony::Model::Crud::MySQL('user');
             
             $model->update({ password => '',
                              modifyAt => time },
@@ -532,7 +550,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->stop(403) unless $this->user->{id};
             
-            my $model = new Pony::Crud::MySQL('user');
+            my $model = new Pony::Model::Crud::MySQL('user');
             my $pass  = md5_hex( rand );
             my $mail  = $this->user->{mail};
             
@@ -568,7 +586,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     my $pass = $form->elements->{password}->value;
                     my $mail = $form->elements->{mail}->value;
                     
-                    my $model = new Pony::Crud::MySQL('user');
+                    my $model = new Pony::Model::Crud::MySQL('user');
                     
                     my $where = { 'id'       => $this->user->{id},
                                   'password' => md5_hex( $this->user->{mail} . $pass ) };
@@ -626,7 +644,7 @@ use Mojo::Base 'Mojolicious::Controller';
                 {
                     my $conf = Pony::Stash->get('user');
                     my $mail = $form->elements->{mail}->value;
-                    my $user = Pony::Crud::MySQL
+                    my $user = Pony::Model::Crud::MySQL
                                  ->new('user')
                                    ->read({mail => $mail}, ['id']);
                 
@@ -636,11 +654,11 @@ use Mojo::Base 'Mojolicious::Controller';
                         #
                         my $key = md5_hex(rand);
                         
-                        Pony::Crud::MySQL
+                        Pony::Model::Crud::MySQL
                                  ->new('mailConfirm')
                                    ->delete({ mail => $mail });
                                
-                        Pony::Crud::MySQL
+                        Pony::Model::Crud::MySQL
                           ->new('mailConfirm')
                             ->create({ expair => time + $conf->{expairMail},
                                        mail   => $mail, secret => $key  });
@@ -674,10 +692,10 @@ use Mojo::Base 'Mojolicious::Controller';
             my $mail = $this->param('mail');
             my $key  = $this->param('key');
             my $conf = Pony::Stash->get('user');
-            my $model= new Pony::Crud::MySQL('mailConfirm');
+            my $model= new Pony::Model::Crud::MySQL('mailConfirm');
                $mail = $model->read({mail => $mail});
                                        
-            my $userModel = new Pony::Crud::MySQL('user');
+            my $userModel = new Pony::Model::Crud::MySQL('user');
             
             # Mail does not used for confirm.
             #
@@ -752,7 +770,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->stop(403) unless $this->user->{id};
                
-            my $dbh = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $dbh = Pony::Model::Dbh::MySQL->new->dbh;
             my $sth = $dbh->prepare($Spaghetti::SQL::user->{my_projects});
                $sth->execute( $this->user->{id} );
             my $projects = $sth->fetchall_hashref('id');
@@ -769,7 +787,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->stop(403) unless $this->user->{id};
             
-            my $dbh = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $dbh = Pony::Model::Dbh::MySQL->new->dbh;
             
             my $sth = $dbh->prepare($Spaghetti::SQL::user->{my_items});
                $sth->execute( $this->user->{id} );

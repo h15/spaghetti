@@ -112,12 +112,12 @@ package main;
     # Clean up before she comes.
     #
     
-    use Pony::Crud::MySQL;
+    use Pony::Model::Crud::MySQL;
     
-    my $model = new Pony::Crud::MySQL('user');
+    my $model = new Pony::Model::Crud::MySQL('user');
     my $user  = $model->read({mail => 'test@example.net'});
     
     $model->delete({ id => $user->{id} });
     
-    Pony::Crud::MySQL->new('thread')->delete({ id => $user->{threadId} });
+    Pony::Model::Crud::MySQL->new('thread')->delete({ id => $user->{threadId} });
     

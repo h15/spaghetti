@@ -8,12 +8,12 @@ use lib join '/', File::Spec->splitdir(dirname(__FILE__)), '..', 'lib';
 
 use Pony::Stash;
 use Pony::Model::Dbh::MySQL;
-use Spaghetti::Utils::Git::Gitolite;
+use Stuff::Git::Gitolite;
 
     Pony::Stash->new('./resources/stash.dat');
     my $db = Pony::Stash->get('database');
     Pony::Model::Dbh::MySQL->new($db);
             
-    Spaghetti::Utils::Git::Gitolite->new( shift @ARGV )->update;
+    Stuff::Git::Gitolite->new( shift @ARGV )->update;
 
 1;

@@ -35,6 +35,17 @@ Get admin repo.
 
     git clone git://github.com/h15/spaghetti.git
     cd ./spaghetti
+    perl ./script/spaghetti install host=localhost user=name \
+        password=secret dbname=database
+
+=head1 Run spaghetti
+
+    perl ./script/spaghetti daemon
+
+Open http://server:3000/
+
+=head1 Make gitolite config and keys
+
     ./script/updateGitolite /path/to/gitolite-admin
 
 =cut
