@@ -2,7 +2,7 @@ package Spaghetti::Controller::Item::CreateProject;
 use Pony::Object;
     
     use Digest::MD5 'md5_hex';
-    use Pony::Crud::MySQL;
+    use Pony::Model::Crud::MySQL;
     use Pony::Stash;
     
     has call => undef;
@@ -25,9 +25,9 @@ use Pony::Object;
             # Prepare models.
             #
             
-            my $thModel = new Pony::Crud::MySQL('thread');
-            my $teModel = new Pony::Crud::MySQL('text');
-            my $prModel = new Pony::Crud::MySQL('project');
+            my $thModel = new Pony::Model::Crud::MySQL('thread');
+            my $teModel = new Pony::Model::Crud::MySQL('text');
+            my $prModel = new Pony::Model::Crud::MySQL('project');
             
             # Create records in database.
             #
