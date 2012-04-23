@@ -8,6 +8,9 @@
     Repo
 -->
 
+<table style="width:100%">
+    <tr valign=top>
+        <td style="width:49%">
 <article>
     <dl>
         <dt><%=l 'Owner' %></dt>
@@ -36,4 +39,18 @@
         <%=b $repo->{text} %>
     </div>
 </article>
+        </td>
+        <td style="width:50%">
+            % for my $l ( reverse @$logs )
+            % {
+                <article class="rounded" style="width:90%;margin:0px 20px 10px 0px">
+                    <div class="alignright">
+                        <%=b render_userpic $l->{mail}, 20 %>
+                    </div>
+                    <div><%= $l->{comment} %></div>
+                </article>
+            % }
+        </td>
+    </tr>
+</table>
 

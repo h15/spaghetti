@@ -37,6 +37,7 @@ use Mojo::Base 'Mojolicious';
             Pony::Stash->findOrCreate(dbDriver => 'MySQL');
             Pony::Stash->findOrCreate(thread => {size => 20});
             Pony::Stash->findOrCreate(news => {size => 20});
+            Pony::Stash->findOrCreate(gitdir => '/home/git/repositories');
             
             Pony::Stash->findOrCreate
             ( mail =>

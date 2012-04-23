@@ -6,7 +6,7 @@ use Mojo::Base 'Mojolicious::Controller';
     use Pony::Model::Dbh::MySQL;
     use Spaghetti::Form::Repo::Create;
     use Spaghetti::Util;
-    use Git::Repository;
+    use Stuff::Git::Scanner;
     
     sub create
         {
@@ -132,32 +132,11 @@ use Mojo::Base 'Mojolicious::Controller';
                          ->read({id => $repo->{topicId}}, ['owner'])
                            ->{owner};
             
-            # AGRH!
-            my $gitdir = '/home/git/repositories/'
-                       . $repo->{projectUrl} . '/'
-                       . $repo->{url} . '.git';
-                       
-            my $r = Git::Repository->new( git_dir => $gitdir );
-            my @log = $r->run('log');
-            my @logs;
+            # Get data from git.
+            #
             
-            while ( @log )
-            {
-                my ( $comment ) = ( pop(@log) =~ /\s*(.*)/s );
-                pop @log;
-                my ( $date    ) = ( pop(@log) =~ /Date:\s*(.*)/s );
-                my ( $author  ) = ( pop(@log) =~ /Author:\s*(.*)/s );
-                my ( $commit  ) = ( pop(@log) =~ /commit\s*(.*)/s );
-                
-                push @logs, {
-                                date   => $date,
-                                author => $author,
-                                commit => $commit,
-                                comment=> $comment
-                            };
-                
-                pop @log if @log;
-            }
+            my $git = new Stuff::Git::Scanner( @$repo{ qw/projectUrl url/ } );
+            my @logs = $git->getLog(10);
             
             # Prepare to render.
             #
