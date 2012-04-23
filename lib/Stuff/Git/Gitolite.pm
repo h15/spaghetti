@@ -66,7 +66,7 @@ use Pony::Object;
             
             open F, '>', $this->file or die "Can't find file " . $this->file;
             {
-                print F "repo gitolite-admin\n\tRW+ = root\n\n";
+                print F "repo gitolite-admin\n\tRW+ = 1\n\n";
                 
                 my $model = new Pony::Model::Crud::MySQL('repoRightsViaUser');
                 
@@ -116,7 +116,7 @@ use Pony::Object;
             
             while ( my($k, $v) = each %$keys )
             {
-                open F, '>>', $this->dir . "/keydir/$k.pub" or die;
+                open F, '>', $this->dir . "/keydir/$k.pub" or die;
                 print F $v->{key};
                 close F;
             }
