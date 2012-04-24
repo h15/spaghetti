@@ -41,13 +41,15 @@
 </article>
         </td>
         <td style="width:50%">
-            % for my $l ( reverse @$logs )
+            % for my $l ( @$logs )
             % {
-                <article class="rounded" style="width:90%;margin:0px 20px 10px 0px">
+                <article class="rounded" style="width:90%;margin-bottom:10px;padding-right:-10px;">
                     <div class="alignright">
                         <%=b render_userpic $l->{mail}, 20 %>
                     </div>
-                    <div><%= $l->{comment} %></div>
+                    <a href="<%= url_for 'repo_readObject', project => param('project'), repo => param('repo'), object => $l->{commit} %>">
+                        <div><%= $l->{comment} %></div>
+                    </a>
                 </article>
             % }
         </td>

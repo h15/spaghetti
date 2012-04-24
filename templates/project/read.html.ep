@@ -50,7 +50,7 @@
     % for my $r ( values %$repos )
     % {
         <div class="item">
-            <a href="<%= url_for repo_read => url => $r->{url} %>">
+            <a href="<%= url_for 'repo_read', repo => $r->{url}, project => $project->{url} %>">
                 <%= $r->{title} %></a>
             (<%= render_datetime $r->{modifyAt} %>)
             

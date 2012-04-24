@@ -108,16 +108,17 @@ use Mojo::Base 'Mojolicious::Controller';
     sub read
         {
             my $this = shift;
-            my $url  = $this->param('url');
+            my $repo = $this->param('repo');
+            my $proj = $this->param('project');
             my $dbh  = Pony::Model::Dbh::MySQL->new->dbh;
             
             # Get repo.
             #
             
             my $sth = $dbh->prepare( $Spaghetti::SQL::repo->{read} );
-               $sth->execute( $url );
+               $sth->execute( $repo );
             
-            my $repo = $sth->fetchrow_hashref();
+            $repo = $sth->fetchrow_hashref();
             
             # Does not exist.
             #
@@ -146,10 +147,40 @@ use Mojo::Base 'Mojolicious::Controller';
             $this->stash( logs => \@logs );
         }
     
+    sub readObject
+        {
+            my $this = shift;
+            my $obj  = $this->param('object');
+            my $repo = $this->param('repo');
+            my $proj = $this->param('project');
+            
+            # Get repo.
+            #
+            
+            my $dbh = Pony::Model::Dbh::MySQL->new->dbh;
+            my $sth = $dbh->prepare( $Spaghetti::SQL::repo->{read} );
+               $sth->execute( $repo );
+            
+            $repo = $sth->fetchrow_hashref();
+            
+            # Get commit from git.
+            #
+            
+            my $git  = new Stuff::Git::Scanner( $proj, $repo->{url} );
+            my ( $desc, $files, $data ) = $git->getCommit($obj);
+            
+            $this->stash( files   => $files);
+            $this->stash( desc    => $desc );
+            $this->stash( diff    => $data );
+            $this->stash( repo    => $repo );
+            $this->stash( project => $proj );
+            $this->stash( object  => $obj  );
+        }
+    
     sub update
         {
             my $this = shift;
-            my $url  = $this->param('url');
+            my $url  = $this->param('repo');
             my $dbh  = Pony::Model::Dbh::MySQL->new->dbh;
             my $form = new Spaghetti::Form::Repo::Create;
                $form->action = $this->url_for(repo_update => url => $url);
@@ -249,7 +280,7 @@ use Mojo::Base 'Mojolicious::Controller';
     sub changeAccess
         {
             my $this = shift;
-            my $url  = $this->param('url');
+            my $url  = $this->param('repo');
             my $dbh  = Pony::Model::Dbh::MySQL->new->dbh;
             
             # Get repo

@@ -368,22 +368,6 @@ use Mojo::Base 'Mojolicious';
                 ->to('project#list')
                   ->name('project_list');
             
-            # Repos
-            #
-            
-            $r->route('/repo/read/:url')
-                ->to('repo#read')
-                  ->name('repo_read');
-            $r->route('/repo/create/:id', id => qr/\d+/)
-                ->to('repo#create')
-                  ->name('repo_create');
-            $r->route('/repo/edit/:url')
-                ->to('repo#update')
-                  ->name('repo_update');
-            $r->route('/repo/access/:url')
-                ->to('repo#changeAccess')
-                  ->name('repo_changeAccess');
-            
             # Items
             #
             
@@ -393,6 +377,25 @@ use Mojo::Base 'Mojolicious';
             $r->route('/item/activate/:item', item => qr/\d+/)
                 ->to('item#activate')
                   ->name('item_activate');
+            
+            # Repos
+            #
+            
+            $r->route('/repo/create/:id', id => qr/\d+/)
+                ->to('repo#create')
+                  ->name('repo_create');
+            $r->route('/:project/:repo.git')
+                ->to('repo#read')
+                  ->name('repo_read');
+            $r->route('/:project/:repo.git/edit')
+                ->to('repo#update')
+                  ->name('repo_update');
+            $r->route('/:project/:repo.git/access')
+                ->to('repo#changeAccess')
+                  ->name('repo_changeAccess');
+            $r->route('/:project/:repo.git/:object')
+                ->to('repo#readObject')
+                  ->name('repo_readObject');
             
             ##
             ##  Helpers

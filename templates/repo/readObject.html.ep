@@ -1,0 +1,32 @@
+% layout 'default';
+%
+% title "/$project/" . $repo->{url} . ".git " . substr($object, 0, 10);
+% stash ( tab => 'read' );
+% include 'repo/vertical_nav';
+
+<ul>
+% for my $f ( @$files )
+% {
+    <li><a href="#<%= $f %>"><%= $f %></a></li>
+% }
+</ul>
+
+<!--
+    Repo
+-->
+
+<article class="rounded" style="margin-bottom:10px;padding-right:-10px;">
+    <div class="alignright">
+        <%=b render_userpic $desc->{mail}, 20 %>
+    </div>
+    <a href="<%= url_for 'repo_readObject', project => param('project'), repo => param('repo'), object => $desc->{commit} %>">
+        <div><%= $desc->{comment} %></div>
+    </a>
+</article>
+                
+<article>
+    <table class="lines" border=0px rules="cols">
+        <%=b $diff %>
+    </table>
+</article>
+

@@ -28,25 +28,9 @@ use Pony::Object;
             
             while ( @log )
             {
-                my ( $comment ) = ( pop(@log) =~ /\s*(.*)/s );
+                push @logs, $this->getLogRow(@log);
                 
-                pop @log;
-                
-                my ( $date   ) = ( pop(@log) =~ /Date:\s*(.*)/s );
-                my ( $author ) = ( pop(@log) =~ /Author:\s*(.*)/s );
-                my ( $commit ) = ( pop(@log) =~ /commit\s*(.*)/s );
-                
-                my ( $name, $mail ) = ( $author =~ /(.*?)\<(.*?)\>/s );
-                
-                push @logs, {
-                                date   => str2time($date),
-                                name   => $name,
-                                mail   => $mail,
-                                commit => $commit,
-                                comment=> $comment
-                            };
-                
-                pop @log if @log;
+                @log = @log[6..$#log];
             }
             
             return @logs;
@@ -55,5 +39,93 @@ use Pony::Object;
     sub getFile : Public
         {
         }
-
+    
+    sub getCommit : Public
+        {
+            my $this = shift;
+            my $id   = shift;
+            
+            my @c = $this->repo->run( 'show', $id );
+            my $i = $this->getLogRow(@c);
+            @c = @c[6 .. $#c];
+            
+            my @files;
+            
+            # Old line, new line.
+            my( $o, $n );
+            
+            for my $i ( 0 .. $#c )
+            {
+                chomp $c[$i];
+                
+                given ( $c[$i] )
+                {
+                    when ( /^index/ ) { $c[$i] = ''; }
+                    when ( /^new/   ) { $c[$i] = ''; }
+                    when ( /^\+\+\+/) { $c[$i] = ''; }
+                    when ( /^---/   ) { $c[$i] = ''; }
+                    
+                    when ( /^\+/ )
+                    {
+                        $c[$i] = substr $c[$i], 1;
+                        $c[$i] = qq{<tr class="green line"><td class="oldLine"></td><td class="newLine">$n</td>}
+                               . '<td class=text>'.$c[$i].'</td></tr>';
+                        ++$n;
+                    }
+                    
+                    when ( /^\-/ )
+                    {
+                        $c[$i] = substr $c[$i], 1;
+                        $c[$i] = qq{<tr class="red line"><td class="oldLine">$o</td><td class="newLine"></td>}
+                               . '<td class=text>'.$c[$i].'</td></tr>';
+                        ++$o;
+                    }
+                    
+                    when ( /^\s/ )
+                    {
+                        $c[$i] = substr $c[$i], 1;
+                        $c[$i] = qq{<tr class="line"><td class="oldLine">$o</td><td class="newLine">$n</td>}
+                               . '<td class=text>'.$c[$i].'</td></tr>';
+                        ++$n;$o++;
+                    }
+                    
+                    when ( /^@@/ )
+                    {
+                        ( $o, $n ) = ( $c[$i] =~ /^@@ -(\d+),\d+ \+(\d+)/ );
+                        $c[$i] = '';
+                    }
+                    
+                    when (/^diff/)
+                    {
+                        ( $c[$i] ) = ( $c[$i] =~ /b\/(\S+)\s*$/ );
+                        my $f = $c[$i];
+                        $c[$i] = "<tr><td colspan=3 class='file'><a name='$f'>$f</td></tr>";
+                        unshift @files, $f;
+                    }
+                }
+            }
+            
+            return $i, \@files, join("\n", @c);
+        }
+    
+    sub getLogRow : Public
+        {
+            my $this = shift;
+            
+            my ( $commit  ) = ( $_[0] =~ /commit\s*(.*)/s );
+            my ( $author  ) = ( $_[1] =~ /Author:\s*(.*)/s );
+            my ( $date    ) = ( $_[2] =~ /Date:\s*(.*)/s );
+            my ( $comment ) = ( $_[4] =~ /\s*(.*)/s );
+            
+            my ( $name, $mail ) = ( $author =~ /(.*?)\<(.*?)\>/s );
+            
+            return  {
+                        date   => str2time($date),
+                        name   => $name,
+                        mail   => $mail,
+                        commit => $commit,
+                        comment=> $comment
+                    };
+        }
+    
 1;

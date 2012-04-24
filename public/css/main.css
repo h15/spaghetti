@@ -246,7 +246,6 @@
     .done, .error, .info, .rounded
     {
         padding: 10px;
-        padding-right: 15px;
         background:#F2F1F0;
         border: 1px solid #ddd;
         -moz-border-radius: 5px;
@@ -284,6 +283,40 @@
         border: 1px solid #cfc;
     }
 
+    /**
+     *  Show diff
+     */
+    .line
+    {
+        width: 100%;
+        font-size:12px;
+        font-family:monospace;
+        white-space:pre;
+        padding:2px;
+        border-bottom:1px solid #eee;
+    }
+    .red   {background: #fee;}
+    .green {background: #efe;}
+    .oldLine, .newLine
+    {
+        color:#70697B;
+        text-align:right;
+    }
+    .lines td { padding:0px 10px; border: 1px solid #eee; }
+    .lines .text { width: 100%; }
+    td.file
+    {
+        background:url('/pic/file.png') no-repeat;
+        border-bottom:1px solid #eee;
+        font-size:18px;
+        padding:2px 0px 0px 30px;
+        height:28px;
+        color:#60596B;
+    }
+
+    /**
+     *
+     */
     .hidden
     {
         display:none;
