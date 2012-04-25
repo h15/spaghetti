@@ -1,0 +1,18 @@
+% layout 'default';
+%
+% title l('Tree') . " /$project/" . $repo->{url} . ".git";
+% stash ( tab => 'read' );
+% include 'repo/vertical_nav';
+                
+<article>
+    % for my $f ( @$files )
+    % {
+        <a href="<%= url_for( ($f->{type} eq 'tree' ? 'repo_readTree' : 'repo_readBlob'),
+                     project => param('project'), repo => param('repo'), object => $f->{obj} ) %>">
+            <div class="tree-<%= $f->{type} %>">
+                <%= $f->{name} %>
+            </div>
+        </a>
+    % }
+</article>
+

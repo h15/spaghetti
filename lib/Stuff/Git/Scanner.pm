@@ -36,8 +36,31 @@ use Pony::Object;
             return @logs;
         }
     
-    sub getFile : Public
+    sub getTree : Public
         {
+            my $this = shift;
+            my $id   = shift;
+            
+            my @c = $this->repo->run( 'ls-tree', $id );
+            
+            # Parse
+            for my $i ( 0 .. $#c )
+            {
+                chomp $c[$i];
+                my ( $type, $obj, $name ) = ( $c[$i] =~ /(tree|blob) ([a-f0-9]+)\s+(\S+)$/ );
+                $c[$i] = {type => $type, obj => $obj, name => $name};
+            }
+            
+            return \@c;
+        }
+    
+    sub getBlob : Public
+        {
+            my $this = shift;
+            my $id   = shift;
+            
+            my @c = $this->repo->run( 'show', $id );
+            return \@c;
         }
     
     sub getCommit : Public
@@ -54,6 +77,7 @@ use Pony::Object;
             # Old line, new line.
             my( $o, $n );
             
+            # Parse
             for my $i ( 0 .. $#c )
             {
                 chomp $c[$i];
@@ -92,14 +116,18 @@ use Pony::Object;
                     when ( /^@@/ )
                     {
                         ( $o, $n ) = ( $c[$i] =~ /^@@ -(\d+),\d+ \+(\d+)/ );
-                        $c[$i] = '';
+                        
+                        if ( $o > 1 ) { $c[$i] = "<tr><td colspan=3 class='line'>...</td></tr>"; }
+                        else { $c[$i] = '' }
                     }
                     
                     when (/^diff/)
                     {
                         ( $c[$i] ) = ( $c[$i] =~ /b\/(\S+)\s*$/ );
                         my $f = $c[$i];
-                        $c[$i] = "<tr><td colspan=3 class='file'><a name='$f'>$f</td></tr>";
+                        
+                        $c[$i] = "<tr><td colspan=3 class='file'><a name='$f'></a>$f</td></tr>";
+                                                
                         unshift @files, $f;
                     }
                 }

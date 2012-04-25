@@ -4,6 +4,12 @@
 % stash ( tab => 'read' );
 % include 'repo/vertical_nav';
 
+<div class="alignright">
+    <a href="<%= url_for 'repo_readTree', project => param('project'),
+                        repo => param('repo'), object => $desc->{commit} %>">
+    <%=l 'Tree' %>
+</div>
+
 <ul>
 % for my $f ( @$files )
 % {
@@ -19,7 +25,8 @@
     <div class="alignright">
         <%=b render_userpic $desc->{mail}, 20 %>
     </div>
-    <a href="<%= url_for 'repo_readObject', project => param('project'), repo => param('repo'), object => $desc->{commit} %>">
+    <a href="<%= url_for 'repo_readObject', project => param('project'),
+                        repo => param('repo'), object => $desc->{commit} %>">
         <div><%= $desc->{comment} %></div>
     </a>
 </article>

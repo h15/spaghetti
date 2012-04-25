@@ -399,9 +399,6 @@ use Mojo::Base 'Mojolicious';
             $r->route('/:project/:repo.git/:object/tree')
                 ->to('repo#readTree')
                   ->name('repo_readTree');
-            $r->route('/:project/:repo.git/:object/blob')
-                ->to('repo#readBlob')
-                  ->name('repo_readBlob');
             
             ##
             ##  Helpers

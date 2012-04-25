@@ -293,6 +293,7 @@
         font-family:monospace;
         white-space:pre;
         padding:2px;
+        height:16px;
         border-bottom:1px solid #eee;
     }
     .red   {background: #fee;}
@@ -312,6 +313,22 @@
         padding:2px 0px 0px 30px;
         height:28px;
         color:#60596B;
+    }
+    
+    .tree-blob, .tree-tree
+    {
+        padding:4px 0px 0px 30px;
+        height:28px;
+        border-bottom:1px solid #eee;
+        margin-top:5px;
+    }
+    .tree-tree
+    {
+        background:url('/pic/folder.png') no-repeat;
+    }
+    .tree-blob
+    {
+        background:url('/pic/file.png') no-repeat;
     }
 
     /**

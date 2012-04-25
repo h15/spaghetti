@@ -177,6 +177,63 @@ use Mojo::Base 'Mojolicious::Controller';
             $this->stash( object  => $obj  );
         }
     
+    sub readBlob
+        {
+            my $this = shift;
+            my $obj  = $this->param('object');
+            my $repo = $this->param('repo');
+            my $proj = $this->param('project');
+            
+            # Get repo.
+            #
+            
+            my $dbh = Pony::Model::Dbh::MySQL->new->dbh;
+            my $sth = $dbh->prepare( $Spaghetti::SQL::repo->{read} );
+               $sth->execute( $repo );
+            
+            $repo = $sth->fetchrow_hashref();
+            
+            # Get commit from git.
+            #
+            
+            my $git  = new Stuff::Git::Scanner( $proj, $repo->{url} );
+            my $data = $git->getBlob($obj);
+            
+            $this->stash( blob    => $data );
+            $this->stash( repo    => $repo );
+            $this->stash( project => $proj );
+            $this->stash( object  => $obj  );
+        }
+    
+    sub readTree
+        {
+            my $this = shift;
+            my $tree = $this->param('tree');
+            my $obj  = $this->param('object');
+            my $repo = $this->param('repo');
+            my $proj = $this->param('project');
+            
+            # Get repo.
+            #
+            
+            my $dbh = Pony::Model::Dbh::MySQL->new->dbh;
+            my $sth = $dbh->prepare( $Spaghetti::SQL::repo->{read} );
+               $sth->execute( $repo );
+            
+            $repo = $sth->fetchrow_hashref();
+            
+            # Get commit from git.
+            #
+            
+            my $git  = new Stuff::Git::Scanner( $proj, $repo->{url} );
+            my $files = $git->getTree($obj);
+            
+            $this->stash( files   => $files);
+            $this->stash( repo    => $repo );
+            $this->stash( project => $proj );
+            $this->stash( object  => $obj  );
+        }
+    
     sub update
         {
             my $this = shift;

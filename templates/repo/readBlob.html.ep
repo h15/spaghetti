@@ -1,0 +1,15 @@
+% layout 'default';
+%
+% title "/$project/" . $repo->{url} . ".git " . substr($object, 0, 10);
+% stash ( tab => 'read' );
+% include 'repo/vertical_nav';
+                
+<article>
+    <table class="lines" border=0px rules="cols">
+        % for my $l ( @$blob )
+        % {
+            <div class="line"><%= $l %></div>
+        % }
+    </table>
+</article>
+
