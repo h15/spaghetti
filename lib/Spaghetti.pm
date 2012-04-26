@@ -361,9 +361,9 @@ use Mojo::Base 'Mojolicious';
             $r->route('/project/edit/:url')
                 ->to('project#update')
                   ->name('project_update');
-            $r->route('/project/:letter', letter => qr/[A-Z0-9]/ )
-                ->to('project#listByAbc')
-                  ->name('project_listByAbc');
+            $r->route('/projects' )
+                ->to('project#list')
+                  ->name('project_list');
             $r->route('/project')
                 ->to('project#list')
                   ->name('project_list');

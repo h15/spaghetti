@@ -10,9 +10,10 @@ use Mojo::Base 'Mojolicious::Controller';
     sub list
         {
             my $this = shift;
+            my $model = Pony::Model::Crud::MySQL->new('project');
+            my @projects = $model->list();
             
-            # Some smart
-            # SELECT
+            $this->stash( projects => \@projects );
         }
     
     sub listByAbc
