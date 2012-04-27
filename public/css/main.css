@@ -292,6 +292,7 @@
         font-size:12px;
         font-family:monospace;
         white-space:pre;
+        word-wrap:break-word;
         padding:2px;
         height:16px;
         border-bottom:1px solid #eee;
@@ -303,17 +304,19 @@
         color:#70697B;
         text-align:right;
     }
-    .lines td { padding:0px 10px; border: 1px solid #eee; }
+    .lines td { padding:0px 6px; border: 1px solid #eee; }
     .lines .text { width: 100%; }
-    td.file
+    .file
     {
         background:url('/pic/file.png') no-repeat;
         border-bottom:1px solid #eee;
         font-size:18px;
         padding:2px 0px 0px 30px;
+        margin-top:20px;
         height:28px;
         color:#60596B;
     }
+    .file a { text-decoration:none; }
     
     .tree-blob, .tree-tree
     {

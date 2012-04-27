@@ -7,7 +7,7 @@
 <div class="alignright">
     <a href="<%= url_for 'repo_readTree', project => param('project'),
                         repo => param('repo'), object => $desc->{commit} %>">
-    <%=l 'Tree' %>
+    <%=l 'Tree' %></a>
 </div>
 
 <ul>
@@ -33,7 +33,33 @@
                 
 <article>
     <table class="lines" border=0px rules="cols">
-        <%=b $diff %>
+        % for my $d ( @$diff )
+        % {
+        %   next if $d eq '';
+        
+                % if ( $d->{class} eq 'line' )
+                % {
+                    <tr class="<%= $d->{class} %>">
+                        <td class="oldLine"><%= $d->{oldLine} %></td>
+                        <td class="newLine"><%= $d->{newLine} %></td>
+                        <td class="text"><%= $d->{text} %></td>
+                    </tr>
+                % }
+                % elsif ( $d->{class} eq 'file' )
+                % {
+                    </table>
+                        <div class="file"><a name="<%= $d->{text} %>" href="#"><%= $d->{text} %></a></div>
+                    <table class="lines" border=0px rules="cols">
+                % }
+                % else
+                % {
+                    <tr class="<%= $d->{class} %>">
+                        <td class="oldLine"><%= $d->{oldLine} %></td>
+                        <td class="newLine"><%= $d->{newLine} %></td>
+                        <td class="text"><%= $d->{text} %></td>
+                    </tr>
+                % }
+        % }
     </table>
 </article>
 

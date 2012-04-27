@@ -141,7 +141,7 @@ use Mojo::Base 'Mojolicious::Controller';
             eval
             {
                 my $git = new Stuff::Git::Scanner( @$repo{ qw/projectUrl url/ } );
-                my @logs = $git->getLog(10);
+                @logs = $git->getLog(10);
             };
             
             # Prepare to render.

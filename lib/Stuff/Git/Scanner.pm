@@ -88,28 +88,40 @@ use Pony::Object;
                     when ( /^new/   ) { $c[$i] = ''; }
                     when ( /^\+\+\+/) { $c[$i] = ''; }
                     when ( /^---/   ) { $c[$i] = ''; }
+                    when ( /^Binary/) { $c[$i] = ''; }
+                    when (/^deleted/) { $c[$i] = ''; }
                     
                     when ( /^\+/ )
                     {
                         $c[$i] = substr $c[$i], 1;
-                        $c[$i] = qq{<tr class="green line"><td class="oldLine"></td><td class="newLine">$n</td>}
-                               . '<td class=text>'.$c[$i].'</td></tr>';
+                        $c[$i] = {
+                                    class   => "green line",
+                                    newLine => $n,
+                                    text    => $c[$i]
+                                 };
                         ++$n;
                     }
                     
                     when ( /^\-/ )
                     {
                         $c[$i] = substr $c[$i], 1;
-                        $c[$i] = qq{<tr class="red line"><td class="oldLine">$o</td><td class="newLine"></td>}
-                               . '<td class=text>'.$c[$i].'</td></tr>';
+                        $c[$i] = {
+                                    class   => "red line",
+                                    oldLine => $o,
+                                    text    => $c[$i]
+                                 };
                         ++$o;
                     }
                     
                     when ( /^\s/ )
                     {
                         $c[$i] = substr $c[$i], 1;
-                        $c[$i] = qq{<tr class="line"><td class="oldLine">$o</td><td class="newLine">$n</td>}
-                               . '<td class=text>'.$c[$i].'</td></tr>';
+                        $c[$i] = {
+                                    class   => " line",
+                                    oldLine => $o,
+                                    newLine => $n,
+                                    text    => $c[$i]
+                                 };
                         ++$n;$o++;
                     }
                     
@@ -117,8 +129,17 @@ use Pony::Object;
                     {
                         ( $o, $n ) = ( $c[$i] =~ /^@@ -(\d+),\d+ \+(\d+)/ );
                         
-                        if ( $o > 1 ) { $c[$i] = "<tr><td colspan=3 class='line'>...</td></tr>"; }
-                        else { $c[$i] = '' }
+                        if ( $o > 1 )
+                        {
+                            $c[$i] = {
+                                        class   => "line",
+                                        text    => '...'
+                                     };
+                        }
+                        else
+                        {
+                            $c[$i] = '';
+                        }
                     }
                     
                     when (/^diff/)
@@ -126,14 +147,17 @@ use Pony::Object;
                         ( $c[$i] ) = ( $c[$i] =~ /b\/(\S+)\s*$/ );
                         my $f = $c[$i];
                         
-                        $c[$i] = "<tr><td colspan=3 class='file'><a name='$f'></a>$f</td></tr>";
+                        $c[$i] = {
+                                    class   => "file",
+                                    text    => $f
+                                 };
                                                 
                         unshift @files, $f;
                     }
                 }
             }
             
-            return $i, \@files, join("\n", @c);
+            return $i, \@files, \@c;
         }
     
     sub getLogRow : Public

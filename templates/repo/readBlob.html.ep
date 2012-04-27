@@ -6,9 +6,13 @@
                 
 <article>
     <table class="lines" border=0px rules="cols">
+        % my $line = 0;
         % for my $l ( @$blob )
         % {
-            <div class="line"><%= $l %></div>
+            <tr class="line">
+                <td><%= ++$line; %></td>
+                <td class="text"><%= $l %></td>
+            </tr>
         % }
     </table>
 </article>
