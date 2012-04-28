@@ -12,7 +12,8 @@ use Mojo::Base 'Mojolicious::Plugin';
             my $conf = Pony::Stash->get('mail');
             
             $app->helper
-            ( mail => sub
+            (
+                mail => sub
                 {
                     # It will be bad, if you does not
                     # define $type or $mail.

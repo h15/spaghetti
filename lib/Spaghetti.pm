@@ -106,6 +106,7 @@ use Mojo::Base 'Mojolicious';
             ##  Plugins
             ##
             
+            $this->plugin('B');
             $this->plugin('user');
             $this->plugin('access');
             $this->plugin('message');
