@@ -148,12 +148,24 @@ use Pony::Object 'Mojolicious::Plugin';
                 {
                     my ( $self, $mail, $size ) = @_;
                     
-                    my $default = sprintf 'http://%s:%s/pic/userpic96.png',
-                                          $self->req->url->base->host,
-                                          $self->req->url->base->port;
+                    if ( $size == 20 )
+                    {
+                        my $default = sprintf 'http://%s:%s/pic/userpic20.png',
+                                              $self->req->url->base->host,
+                                              $self->req->url->base->port;
                     
-                    return( sprintf '<img class=userpic_big src="http://www.gravatar.com/avatar/%s?d=%s&s=%s">',
-                                   md5_hex(lc $mail), uri_escape($default), $size );
+                        return( sprintf '<img class=userpic_small src="http://www.gravatar.com/avatar/%s?d=%s&s=%s">',
+                                       md5_hex(lc $mail), uri_escape($default), $size );
+                    }
+                    else
+                    {
+                        my $default = sprintf 'http://%s:%s/pic/userpic96.png',
+                                              $self->req->url->base->host,
+                                              $self->req->url->base->port;
+                    
+                        return( sprintf '<img class=userpic_big src="http://www.gravatar.com/avatar/%s?d=%s&s=%s">',
+                                       md5_hex(lc $mail), uri_escape($default), $size );
+                    }
                 }
             );
         }
