@@ -21,13 +21,15 @@ Allow ssh support for git.
 
 =head1 Install gitolite
 
+Run as root.
+
+    aptitude install gitolite
+
 Run as git.
 
-    git clone git://github.com/sitaramc/gitolite
-    gitolite/src/gl-system-install
-    gl-setup -q ~/YourName.pub
+    gl-setup ~/1.pub
 
-Get admin repo.
+Get admin repo (run as git-admin user).
 
     git clone git@server:gitolite-admin
 
@@ -35,12 +37,38 @@ Get admin repo.
 
     git clone git://github.com/h15/spaghetti.git
     cd ./spaghetti
-    perl ./script/spaghetti install host=localhost user=name \
-        password=secret dbname=database
+
+MySQL
+
+    mysql> CREATE DATABASE `spaghetti`;
+    mysql> GRANT ALL PRIVILEGES ON spaghetti.* TO 'spaghetti'@'localhost' IDENTIFIED BY 'secret'  WITH GRANT OPTION;
+    mysql> source /path/to/spaghetti/db.sql
+
+Install dependencies
+
+    cpan Mojolicious MIME::Lite Net::Akismet Pony::Object
+
+    git clone git://github.com/h15/pony.git
+    cd ./pony
+    perl ./Build.PL
+    ./Build install
+
+Install cron task
+
+    crontab -e
+
+Write
+
+    * * * * * ./script/updateGitolite /path/to/gitolite-admin
+
+Install system
+
+    perl ./script/spaghetti install host=localhost user=spaghetti \
+        password=secret dbname=spaghetti
 
 =head1 Run spaghetti
 
-    perl ./script/spaghetti daemon
+    nohup perl ./script/spaghetti daemon &
 
 Open http://server:3000/
 
