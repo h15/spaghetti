@@ -140,9 +140,11 @@ use Mojo::Base 'Mojolicious::Controller';
             
             eval
             {
-                my $git = new Stuff::Git::Scanner( @$repo{ qw/projectUrl url/ } );
-                @logs = $git->getLog(10);
+                my $git = new Stuff::Git::Scanner(@$repo{ qw/projectUrl url/ });
             };
+            $this->stop(418) if $@;
+            
+            eval { @logs = $git->getLog(10) };
             
             # Prepare to render.
             #
@@ -171,7 +173,12 @@ use Mojo::Base 'Mojolicious::Controller';
             # Get commit from git.
             #
             
-            my $git  = new Stuff::Git::Scanner( $proj, $repo->{url} );
+            eval
+            {
+                my $git  = new Stuff::Git::Scanner( $proj, $repo->{url} );
+            };
+            $this->stop(418) if $@;
+            
             my ( $desc, $files, $data ) = $git->getCommit($obj);
             
             $this->stash( files   => $files);
@@ -201,7 +208,12 @@ use Mojo::Base 'Mojolicious::Controller';
             # Get commit from git.
             #
             
-            my $git  = new Stuff::Git::Scanner( $proj, $repo->{url} );
+            eval
+            {
+                my $git  = new Stuff::Git::Scanner( $proj, $repo->{url} );
+            };
+            $this->stop(418) if $@;
+            
             my $data = $git->getBlob($obj);
             
             $this->stash( blob    => $data );
@@ -230,7 +242,12 @@ use Mojo::Base 'Mojolicious::Controller';
             # Get commit from git.
             #
             
-            my $git  = new Stuff::Git::Scanner( $proj, $repo->{url} );
+            eval
+            {
+                my $git  = new Stuff::Git::Scanner( $proj, $repo->{url} );
+            };
+            $this->stop(418) if $@;
+            
             my $files = $git->getTree($obj);
             
             $this->stash( files   => $files);

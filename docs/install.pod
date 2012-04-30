@@ -14,9 +14,9 @@ Create ssh key for git.
 
     sudo -u git ssh-keygen
 
-Allow ssh support for git.
+Allow ssh support for git. Edit manually file C</etc/ssh/sshd_config>. Add user
+git into line "AllowUsers".
 
-    echo "AllowUsers git" >> /etc/ssh/sshd_config
     /etc/init.d/ssh restart
 
 =head1 Install gitolite
@@ -46,7 +46,7 @@ MySQL
 
 Install dependencies
 
-    cpan Mojolicious MIME::Lite Net::Akismet Pony::Object
+    cpan Mojolicious MIME::Lite Net::Akismet Pony::Object interface Git::Repository
 
     git clone git://github.com/h15/pony.git
     cd ./pony

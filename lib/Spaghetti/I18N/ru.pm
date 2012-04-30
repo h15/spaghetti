@@ -150,7 +150,8 @@ use Encode 'decode';
                 'Flush password'    => 'Сбросить',
                 'Generate password' => 'Сгенерировать',
                 'Responses'     => 'Ответы',
-                'Response'      => 'Ответ'
+                'Response'      => 'Ответ',
+                'Repo is empty' => 'Репозиторий пуст',
             };
             
             $lang->{$_} = decode('utf8', $lang->{$_}) for keys %$lang;

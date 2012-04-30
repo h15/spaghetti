@@ -15,6 +15,7 @@ use Pony::Object;
             my $dir  = Pony::Stash->get('gitdir');
             
             die "Can't find dir $dir" unless -d $dir;
+            die "Repo does not exist" unless -d "$dir/$proj/$repo.git";
             
             $this->repo = Git::Repository->new( git_dir => "$dir/$proj/$repo.git" );
         }
