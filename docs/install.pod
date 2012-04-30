@@ -58,7 +58,7 @@ Install cron task
     crontab -e
 
 Write
-* * * * * cd /
+
     * * * * * cd /path/to/spaghetti && ./script/updateGitolite /path/to/gitolite-admin && cd /path/to/gitolite-admin && git add . && git commit -m 'update' && git push
 
 Install system
