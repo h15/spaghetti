@@ -136,15 +136,10 @@ use Mojo::Base 'Mojolicious::Controller';
             # Get data from git.
             #
             
-            my @logs;
+            my $git = eval { new Stuff::Git::Scanner(@$repo{ qw/projectUrl url/ }) };
+            $this->stop(418) if $@;
             
-            eval
-            {
-                my $git = new Stuff::Git::Scanner(@$repo{ qw/projectUrl url/ });
-            };
-            $this->stop(418) unless $@;
-            
-            eval { @logs = $git->getLog(10) };
+            my @logs = eval { $git->getLog(10) };
             
             # Prepare to render.
             #
@@ -173,11 +168,8 @@ use Mojo::Base 'Mojolicious::Controller';
             # Get commit from git.
             #
             
-            eval
-            {
-                my $git  = new Stuff::Git::Scanner( $proj, $repo->{url} );
-            };
-            $this->stop(418) unless $@;
+            my $git = eval { new Stuff::Git::Scanner($proj, $repo->{url}) };
+            $this->stop(418) if $@;
             
             my ( $desc, $files, $data ) = $git->getCommit($obj);
             
@@ -208,13 +200,10 @@ use Mojo::Base 'Mojolicious::Controller';
             # Get commit from git.
             #
             
-            eval
-            {
-                my $git  = new Stuff::Git::Scanner( $proj, $repo->{url} );
-            };
-            $this->stop(418) unless $@;
+            my $git = eval { new Stuff::Git::Scanner($proj, $repo->{url}) };
+            $this->stop(418) if $@;
             
-            my $data = $git->getBlob($obj);
+            my $data = eval { $git->getBlob($obj) };
             
             $this->stash( blob    => $data );
             $this->stash( repo    => $repo );
@@ -242,11 +231,8 @@ use Mojo::Base 'Mojolicious::Controller';
             # Get commit from git.
             #
             
-            eval
-            {
-                my $git  = new Stuff::Git::Scanner( $proj, $repo->{url} );
-            };
-            $this->stop(418) unless $@;
+            my $git = eval { new Stuff::Git::Scanner($proj, $repo->{url}) };
+            $this->stop(418) if $@;
             
             my $files = $git->getTree($obj);
             
