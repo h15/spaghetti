@@ -103,6 +103,8 @@ use Pony::Object;
                     
                     while ( my($k, $v) = each %rights )
                     {
+                        next unless ref $users{$_} eq 'ARRAY';
+                        
                         my @str = map { join ' ', @{$users{$_}} } @$v;
                         
                         print F "\t$k\t= @str\n";
