@@ -27,7 +27,7 @@ Run as root.
 
 Run as git.
 
-    gl-setup ~/1.pub
+    gl-setup ~/root.pub
 
 Get admin repo (run as git-admin user).
 
