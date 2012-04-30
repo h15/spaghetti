@@ -142,7 +142,7 @@ use Mojo::Base 'Mojolicious::Controller';
             {
                 my $git = new Stuff::Git::Scanner(@$repo{ qw/projectUrl url/ });
             };
-            $this->stop(418) if $@;
+            $this->stop(418) unless $@;
             
             eval { @logs = $git->getLog(10) };
             
@@ -177,7 +177,7 @@ use Mojo::Base 'Mojolicious::Controller';
             {
                 my $git  = new Stuff::Git::Scanner( $proj, $repo->{url} );
             };
-            $this->stop(418) if $@;
+            $this->stop(418) unless $@;
             
             my ( $desc, $files, $data ) = $git->getCommit($obj);
             
@@ -212,7 +212,7 @@ use Mojo::Base 'Mojolicious::Controller';
             {
                 my $git  = new Stuff::Git::Scanner( $proj, $repo->{url} );
             };
-            $this->stop(418) if $@;
+            $this->stop(418) unless $@;
             
             my $data = $git->getBlob($obj);
             
@@ -246,7 +246,7 @@ use Mojo::Base 'Mojolicious::Controller';
             {
                 my $git  = new Stuff::Git::Scanner( $proj, $repo->{url} );
             };
-            $this->stop(418) if $@;
+            $this->stop(418) unless $@;
             
             my $files = $git->getTree($obj);
             
