@@ -8,8 +8,17 @@
 
 <div class="repoList">
     
-    % for my $p ( @$projects )
+    % my $letter = '';
+    %
+    % for my $p ( sort { $a->{title} lt $b->{title} } @$projects )
     % {
+    %   my $firstLetter = substr $p->{title}, 0, 1;
+    %
+    %   if ( $letter ne $firstLetter )
+    %   {
+            <h2><%= uc $firstLetter %></h2>
+    %       $letter = $firstLetter;
+    %   }
         <div class="item">
             <a href="<%= url_for project_read => url => $p->{url} %>">
                 <%= $p->{title} %></a> (<%= $p->{repos} %>)
