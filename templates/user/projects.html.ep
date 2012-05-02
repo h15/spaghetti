@@ -18,15 +18,11 @@
                 <%= $p->{title} %></a>
             (<%= $p->{repos} %>)
                 
-                <dl>
-                    <dt><%=l 'modifyAt' %></dt>
-                    <dd><%= render_datetime $p->{modifyAt} %></dd>
-                </dl>
-                
-                <dl>
-                    <dt><%=l 'createAt' %></dt>
-                    <dd><%= render_datetime $p->{createAt} %></dd>
-                </dl>
+                <div class="alignright">
+                    <acronym title="<%= format_datetime($p->{createAt}) %>">
+                        <%= render_datetime($p->{modifyAt}) %>
+                    </acronym>
+                </div>
         </div>
     % }
 </div>

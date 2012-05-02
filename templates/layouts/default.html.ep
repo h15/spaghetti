@@ -132,6 +132,9 @@
 
     <footer class=overall>
             <small style="color:#888">
+                <table style="width:700px">
+                    <tr valign="top">
+                        <td style="border-right:1px solid #ccc;width:280px;">
                 Spaghetti &mdash; forum system for developers<br>
                 Current version:
                 <acronym title="<%= $Spaghetti::COMMIT %>">
@@ -139,6 +142,16 @@
                 </acronym><br>
                 Built with <a href="http://perl.org/">Perl</a><br>
                 Powered by <a href="http://lorcode.org/">LorCode</a>
+                        </td>
+                        <td>
+                            <div id="vkusno">
+                                <img src="/pic/vkusno.png" class="alignleft">
+                                    <a href="http://www.vkusnoserver.ru/">ВкусноСервер</a>
+                                    &mdash; официальный<br> поставщик макаронных изделий
+                            </div>
+                        </td>
+                    <tr>
+                </table>
             </small>
     </footer>
 

@@ -9,28 +9,28 @@
 -->
 
 <article>
-    <dl>
-        <dt><%=l 'Owner' %></dt>
-        <dd><%= render_user {
-                                id    => $project->{owner},
-                                name  => $project->{name},
-                                mail  => $project->{mail},
-                                banId => $project->{banId},
-                            } %>
-        </dd>
-    </dl>
+    <table class="list" style="width:400px;margin-bottom:20px">
+        <tr>
+            <td><%=l 'Owner' %></td>
+            <td><%= render_user {
+                                    id    => $project->{owner},
+                                    name  => $project->{name},
+                                    mail  => $project->{mail},
+                                    banId => $project->{banId},
+                                } %>
+            </td>
+        </tr>
     
-    <dl>
-        <dt><%=l 'modifyAt' %></dt>
-        <dd><%= render_datetime $project->{modifyAt} %>
-        </dd>
-    </dl>
-    
-    <dl>
-        <dt><%=l 'createAt' %></dt>
-        <dd><%= render_datetime $project->{createAt} %>
-        </dd>
-    </dl>
+        <tr>
+            <td><%=l 'modifyAt' %></td>
+            <td><%= render_datetime $project->{modifyAt} %></td>
+        </tr>
+        
+        <tr>
+            <td><%=l 'createAt' %></td>
+            <td><%= render_datetime $project->{createAt} %></td>
+        </tr>
+    </table>
     
     <div>
         <%=b $project->{text} %>

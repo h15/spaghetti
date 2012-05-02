@@ -1,3 +1,153 @@
+commit 0c1444e3585341bbc8ebbc6e51639efcfeb5a65b
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Wed May 2 22:38:37 2012 +0600
+
+    project list looks better
+
+commit d33f29fff18bedf43f992e918e62ea8296a002a9
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Mon Apr 30 22:54:43 2012 +0600
+
+    change admin key name
+
+commit 1935d112418de525d6bbc5837db54eb773dc5d34
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Mon Apr 30 17:57:27 2012 +0600
+
+    done
+
+commit 1bb6f48ceff3f9e819bbccdccf60354fce79056e
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Mon Apr 30 17:55:11 2012 +0600
+
+    one more fix
+
+commit 8e69573997a810546010964a6f351cca750990cb
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Mon Apr 30 17:26:47 2012 +0600
+
+    one more fix
+
+commit bc5defcd96d84a22b9334e4e1708d497ba3842ee
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Mon Apr 30 16:45:29 2012 +0600
+
+    fix Git::Scanner ecxeption
+
+commit b58ae7d0e619c02d457fa8651a0ac0c6bc081b03
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Mon Apr 30 16:37:30 2012 +0600
+
+    add Git::Scanner ecxeption
+
+commit ca0564b9ea63774f8ada22e11c134153b3e6804a
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Sun Apr 29 01:46:21 2012 +0600
+
+    add "b" helper
+
+commit a856df4052f1716cb7cd6474d1449d452883ad89
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Sun Apr 29 01:45:52 2012 +0600
+
+    fix install doc
+
+commit be33015835655ee6aa2cb3cfd2094b363445c443
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Sat Apr 28 23:21:03 2012 +0600
+
+    v0.0.11
+
+commit 2c9dad681a1689a8e6a6db6e84ca9f8f7d21de43
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Sat Apr 28 16:18:29 2012 +0600
+
+    fix git show object
+
+commit c58bc19b596a1b8be83776ad061a5d40073914ff
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Fri Apr 27 22:30:21 2012 +0600
+
+    repos fixed
+
+commit df08af423630efe7b81cf29f4433932e77a21ade
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Thu Apr 26 09:54:52 2012 +0600
+
+    add project list
+
+commit ffbc43f9bacb98c75fcfc65348cb7b3a9e3aed5b
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Wed Apr 25 10:53:26 2012 +0600
+
+    cleanup
+
+commit 79deed45ae1a4ea4665381d117b9f9975f27c0db
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Wed Apr 25 10:51:15 2012 +0600
+
+    add blob viewer
+
+commit ec8055320720784901861245c022d48c8f44bc9e
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Wed Apr 25 00:54:37 2012 +0600
+
+    add commit viewer
+
+commit 032413815149b3af292069f23dea9c2ad76788c7
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Mon Apr 23 20:36:59 2012 +0600
+
+    add logs for repos
+
+commit 5ff8110c6e41bd27503f4af5f176ed2bfac1dc22
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Mon Apr 23 20:36:29 2012 +0600
+
+    add module for git access
+
+commit 4c6050a62257daabdeac53031ad49a81f42aa3bf
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Mon Apr 23 10:34:34 2012 +0600
+
+    use Git::Repository && read git log
+
+commit e34f6388d93e513167b22f25329bb2c6ad3d3a98
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Mon Apr 23 10:32:48 2012 +0600
+
+    fix Items for Pony::Model::Crud support
+
+commit 4c3ffcc88114799a3a54d3d67f717449c81cb9c3
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Mon Apr 23 02:28:54 2012 +0600
+
+    Small fixes to support new Pony names
+
+commit 495150483c0018b0411b44a5998f389238ecd764
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Thu Apr 12 23:13:59 2012 +0600
+
+    fix upd Gitolite script
+
+commit 62f3561a77010e6b62af6ef738a2023a8ac7cc2a
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Thu Apr 12 21:41:44 2012 +0600
+
+    fix gitolite-admin
+
+commit 931d22c2197caee9d42e2a9624951af7d8036f10
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Thu Apr 12 21:04:52 2012 +0600
+
+    fix rendering
+
+commit ce24fc59377b539e1e674428e2439ec7bd18f6e5
+Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
+Date:   Thu Apr 12 19:51:15 2012 +0600
+
+    gitolite support works
+
 commit 0061d285cc420d53100cb886c344e7737fb841d2
 Author: Georgy Bazhukov <georgy.bazhukov@gmail.com>
 Date:   Thu Apr 12 10:26:33 2012 +0600
