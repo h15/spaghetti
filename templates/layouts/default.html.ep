@@ -3,31 +3,9 @@
   <head>
     <title><%= title %></title>
     %= stylesheet '/css/main.css'
-    %#= stylesheet '/css/jHtmlArea/jHtmlArea.css'
     %= javascript 'http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js'
     %= javascript '/js/main.js'
-    %#= javascript '/js/jHtmlArea.min.js'
-    %#= javascript '/js/jHtmlArea.ColorPickerMenu.min.js'
-    <script>
-        /*$(document).ready(function(){
-            $("textarea").htmlarea({
-                toolbarText: $.extend({}, jHtmlArea.defaultOptions.toolbarText, {}),
-                css: "/css/jHtmlArea/jHtmlArea.Editor.css",
-                image:'/css/jHtmlArea/jHtmlArea.png',
-            });
-        });*/
-    </script>
-    
-    <style type="text/css">
-        /*div.jHtmlArea .ToolBar ul li a.custom_disk_button 
-        {
-            background: url('/css/jHtmlArea/jHtmlArea.png') no-repeat;
-            background-position: 0 0;
-        }*/
-    </style>
-    
     <meta charset="utf-8">
-
   </head>
   <body>
     <nav class=overall>
@@ -132,6 +110,8 @@
 
     <footer class=overall>
             <small style="color:#888">
+            % if ( $self->req->headers->host =~ /code/i )
+            % {
                 <table style="width:700px">
                     <tr valign="top">
                         <td style="border-right:1px solid #ccc;width:280px;">
@@ -152,6 +132,17 @@
                         </td>
                     <tr>
                 </table>
+            % }
+            % else
+            % {
+                Spaghetti &mdash; forum system for developers<br>
+                Current version:
+                <acronym title="<%= $Spaghetti::COMMIT %>">
+                    <%= $Spaghetti::VERSION %>
+                </acronym><br>
+                Built with <a href="http://perl.org/">Perl</a><br>
+                Powered by <a href="http://lorcode.org/">LorCode</a>
+            % }
             </small>
     </footer>
 
