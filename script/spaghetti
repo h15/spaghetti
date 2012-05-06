@@ -40,6 +40,8 @@ if ( $ARGV[0] eq 'install' )
     exit;
 }
 
+use Spaghetti::Defaults;
+
 # Application
 $ENV{MOJO_APP} ||= 'Spaghetti';
 
