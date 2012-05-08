@@ -7,12 +7,17 @@ use Pony::Object;
     
     protected repo => undef;
     
+    # Init one repo.
+    # @access public
+    # @raises "Can't find dir ..."
+    # @raises "Repo does not exist"
+    
     sub init : Public
         {
             my $this = shift;
             my $proj = shift;
             my $repo = shift;
-            my $dir  = Pony::Stash->get('gitdir');
+            my $dir  = Pony::Stash->get('git')->{dir};
             
             die "Can't find dir $dir" unless -d $dir;
             die "Repo does not exist" unless -d "$dir/$proj/$repo.git";
@@ -20,11 +25,38 @@ use Pony::Object;
             $this->repo = Git::Repository->new( git_dir => "$dir/$proj/$repo.git" );
         }
     
+    # Special C<run> method to prevent server
+    # overload by huge git objects.
+    # @access protected
+    # @raises "Too big"
+    
+    sub run : Protected
+        {
+            my $this = shift;
+            my $cmd = $this->repo->command(@_);
+            my $stdout = $cmd->stdout;
+            
+            my $lineCount = 0;
+            my @out;
+            
+            while ( my $out = <$stdout> && ++$lineCount != 100_000 )
+            {
+                push @out, $out;
+            }
+            
+            die 'Too big' if $lineCount == 100_000;
+            
+            return @out;
+        }
+    
+    # Get log.
+    # @access public
+    
     sub getLog : Public
         {
             my $this = shift;
             my $size = shift;
-            my @log = $this->repo->run( qw/log -n/, $size );
+            my @log = $this->run( qw/log -n/, $size );
             my @logs;
             
             while ( @log )
@@ -37,12 +69,15 @@ use Pony::Object;
             return @logs;
         }
     
+    # Get file tree.
+    # @access public
+    
     sub getTree : Public
         {
             my $this = shift;
             my $id   = shift;
             
-            my @c = $this->repo->run( 'ls-tree', $id );
+            my @c = $this->run( 'ls-tree', $id );
             
             # Parse
             for my $i ( 0 .. $#c )
@@ -55,14 +90,20 @@ use Pony::Object;
             return \@c;
         }
     
+    # Get file.
+    # @access public
+    
     sub getBlob : Public
         {
             my $this = shift;
             my $id   = shift;
             
-            my @c = $this->repo->run( 'show', $id );
+            my @c = $this->run( 'show', $id );
             return \@c;
         }
+    
+    # Get parsed commit.
+    # @access public
     
     sub getCommit : Public
         {
@@ -161,7 +202,10 @@ use Pony::Object;
             return $i, \@files, \@c;
         }
     
-    sub getLogRow : Public
+    # Parse rows, make log's line hash.
+    # @access protected
+    
+    sub getLogRow : Protected
         {
             my $this = shift;
             

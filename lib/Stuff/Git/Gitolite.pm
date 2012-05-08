@@ -3,10 +3,12 @@ use Pony::Object;
     
     use Pony::Model::Dbh::MySQL;
     use Pony::Model::Crud::MySQL;
+    use Pony::Stash;
     
-    has file => '';
-    has dir  => '';
-    has sql  => {
+    has file  => '';
+    has dir   => '';
+    has allow => 0;
+    has sql   => {
                     getRepo => 
                     q{
                         SELECT r.id, r.url,
@@ -15,20 +17,23 @@ use Pony::Object;
                         FROM `repo` AS r
                         INNER JOIN `thread`  AS t ON ( r.id = t.id )
                         INNER JOIN `project` AS p ON ( p.id = t.topicId )
-                     },
+                    },
                     getSshKeys =>
                     q{
                         SELECT s.key, s.id, u.name, u.id AS userId
                         FROM `sshKey` AS s
                         INNER JOIN `user` AS u ON (s.userId = u.id)
                     },
-                };
+                 };
     
     sub init
         {
             my $this = shift;
-               $this->dir = shift;
-               $this->file = $this->dir . '/conf/gitolite.conf';
+            my $conf = Pony::Stash->get('git');
+            
+            $this->dir   = $conf->{dir};
+            $this->allow = $conf->{all};
+            $this->file  = $this->dir . '/conf/gitolite.conf';
             
             mkdir $this->dir unless -d $this->dir;
             mkdir $this->dir unless -d $this->dir . '/conf';
@@ -66,6 +71,7 @@ use Pony::Object;
             
             open F, '>', $this->file or die "Can't find file " . $this->file;
             {
+                # Gitolite-admin's account.
                 print F "repo gitolite-admin\n\tRW+ = root\n\n";
                 
                 my $model = new Pony::Model::Crud::MySQL('repoRightsViaUser');
@@ -73,7 +79,10 @@ use Pony::Object;
                 for my $r ( values %$repos )
                 {
                     printf F "repo %s/%s\n", $r->{projectUrl}, $r->{url};
-                    print  F "\tR\t= \@all\n";
+                    
+                    # Allow access for anonymous.
+                    print  F "\tR\t= \@all\n" if $this->allow;
+                    # Repo owner.
                     printf F "\tRW+CD\t= %s\n", join ' ', @{$users{$r->{owner}}};
                     
                     # Get user list from this repo.
