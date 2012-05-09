@@ -39,7 +39,8 @@ use Mojo::Base 'Mojolicious::Controller';
             
             if ( $this->req->method eq 'POST' )
             {
-                $form->data->{$_} = $this->param($_) for keys %{$form->elements};
+                $form->data->{$_} = $this->param($_)
+                    for keys %{$form->elements};
                 
                 if ( $form->isValid )
                 {
@@ -136,7 +137,10 @@ use Mojo::Base 'Mojolicious::Controller';
             # Get data from git.
             #
             
-            my $git = eval { new Stuff::Git::Scanner(@$repo{ qw/projectUrl url/ }) };
+            my $git = eval {
+                new Stuff::Git::Scanner(@$repo{ qw/projectUrl url/ })
+            };
+            
             $this->stop(418) if $@;
             
             my @logs = eval { $git->getLog(10) };

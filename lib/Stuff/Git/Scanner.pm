@@ -22,7 +22,8 @@ use Pony::Object;
             die "Can't find dir $dir" unless -d $dir;
             die "Repo does not exist" unless -d "$dir/$proj/$repo.git";
             
-            $this->repo = Git::Repository->new( git_dir => "$dir/$proj/$repo.git" );
+            $this->repo = Git::Repository
+                            ->new( git_dir => "$dir/$proj/$repo.git" );
         }
     
     # Special C<run> method to prevent server
@@ -34,17 +35,17 @@ use Pony::Object;
         {
             my $this = shift;
             my $cmd = $this->repo->command(@_);
-            my $stdout = $cmd->stdout;
+            my $stdout = $cmd->stdout();
             
             my $lineCount = 0;
             my @out;
             
-            while ( my $out = <$stdout> && ++$lineCount != 100_000 )
+            while ( my $out = <$stdout> )
             {
+                exit 'Too big' if ++$lineCount == 100_000;
+                chomp $out;
                 push @out, $out;
             }
-            
-            die 'Too big' if $lineCount == 100_000;
             
             return @out;
         }
@@ -61,9 +62,11 @@ use Pony::Object;
             
             while ( @log )
             {
-                push @logs, $this->getLogRow(@log);
-                
+                push @logs, $this->getLogRow( @log[0..5] );
                 @log = @log[6..$#log];
+                
+                # trim
+                shift @log while @log && $log[0] =~ /^\s*$/;
             }
             
             return @logs;
@@ -83,7 +86,10 @@ use Pony::Object;
             for my $i ( 0 .. $#c )
             {
                 chomp $c[$i];
-                my ( $type, $obj, $name ) = ( $c[$i] =~ /(tree|blob) ([a-f0-9]+)\s+(\S+)$/ );
+                
+                my ( $type, $obj, $name ) =
+                        ( $c[$i] =~ /(tree|blob) ([a-f0-9]+)\s+(\S+)$/ );
+                
                 $c[$i] = {type => $type, obj => $obj, name => $name};
             }
             
@@ -208,11 +214,21 @@ use Pony::Object;
     sub getLogRow : Protected
         {
             my $this = shift;
+            my $i = 0;
             
-            my ( $commit  ) = ( $_[0] =~ /commit\s*(.*)/s );
-            my ( $author  ) = ( $_[1] =~ /Author:\s*(.*)/s );
-            my ( $date    ) = ( $_[2] =~ /Date:\s*(.*)/s );
-            my ( $comment ) = ( $_[4] =~ /\s*(.*)/s );
+            # Get commit
+            my ( $commit ) = ( $_[ $i++ ] =~ /commit\s*(.*)/s );
+            
+            # Skip 'rubbish' lines
+            ++$i if $_[$i] =~ /Merge:\s*(.*)/s;
+            
+            my ( $author ) = ( $_[ $i++ ] =~ /Author:\s*(.*)/s );
+            my ( $date   ) = ( $_[ $i++ ] =~ /Date:\s*(.*)/s );
+            
+            # Skip empty line
+            ++$i;
+            
+            my ( $comment ) = ( $_[ $i++ ] =~ /\s*(.*)/s );
             
             my ( $name, $mail ) = ( $author =~ /(.*?)\<(.*?)\>/s );
             
@@ -226,3 +242,4 @@ use Pony::Object;
         }
     
 1;
+
