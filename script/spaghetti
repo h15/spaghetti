@@ -3,6 +3,7 @@ use Mojo::Base -strict;
 
 use File::Basename 'dirname';
 use File::Spec;
+use Term::ANSIColor;
 
 use lib join '/', File::Spec->splitdir(dirname(__FILE__)), 'lib';
 use lib join '/', File::Spec->splitdir(dirname(__FILE__)), '..', 'lib';
@@ -14,36 +15,46 @@ Please visit http://mojolicio.us for detailed installation instructions.
 
 EOF
 
-# ./script/spaghetti install host=localhost dbname=gitty \
-# user=gitty password=secret
+    # ./script/spaghetti install host=localhost dbname=gitty \
+    # user=gitty password=secret
 
-if ( $ARGV[0] eq 'install' )
-{
-    use Pony::Stash;
-    
-    # touch
-    open F, '>./resources/stash.dat';
-    print F '';
-    close F;
-    
-    my $stash = Pony::Stash->new('./resources/stash.dat');
-    my %conf;
-    
-    for my $conf ( @ARGV[1..4] )
+    if ( $ARGV[0] eq 'install' )
     {
-        %conf = ( %conf, split('=', $conf) );
+        use Pony::Stash;
+        
+        # touch
+        open F, '>./resources/stash.dat';
+        print F '';
+        close F;
+        
+        my $stash = Pony::Stash->new('./resources/stash.dat');
+        my %conf;
+        
+        for my $conf ( @ARGV[1..4] )
+        {
+            %conf = ( %conf, split('=', $conf) );
+        }
+        
+        $stash->set( database => \%conf );
+        $stash->save;
+
+        exit;
     }
+
+    use Spaghetti::Defaults;
+
+    # Application
+    $ENV{MOJO_APP} ||= 'Spaghetti';
+
+    # Start commands
+    eval { Mojolicious::Commands->start };
     
-    $stash->set( database => \%conf );
-    $stash->save;
+    # Good looking error print
+    if ( defined $@ )
+    {
+        print color 'bold red';
+        print "\n[FAIL]";
+        print color 'reset';
+        print " $@\n";
+    }
 
-    exit;
-}
-
-use Spaghetti::Defaults;
-
-# Application
-$ENV{MOJO_APP} ||= 'Spaghetti';
-
-# Start commands
-Mojolicious::Commands->start;
