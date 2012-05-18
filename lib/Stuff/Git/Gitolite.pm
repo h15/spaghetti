@@ -31,7 +31,7 @@ use Pony::Object;
             my $this = shift;
             my $conf = Pony::Stash->get('git');
             
-            $this->dir   = $conf->{dir};
+            $this->dir   = shift;
             $this->allow = $conf->{all};
             $this->file  = $this->dir . '/conf/gitolite.conf';
             

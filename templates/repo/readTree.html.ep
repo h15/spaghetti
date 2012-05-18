@@ -1,14 +1,43 @@
 % layout 'default';
 %
-% title l('Tree') . " /$project/" . $repo->{url} . ".git";
+% my $dir = stash('dir') || '';
+%
+% title sprintf( '<a href="%s">%s</a> — <a href="%s">%s</a>',
+%				 	url_for( project_read => url => $project ),	$project,
+%					url_for( repo_read => repo => $repo->{url}, project => $project), $repo->{url} );
+%
 % stash ( tab => 'read' );
 % include 'repo/vertical_nav';
-                
+
+% my $path = mkPath($dir, param('project'), param('repo'), $object);
+
+% if ( $path )
+% {
+	<nav class="repo-path">
+		<%= $path %>
+	</nav>
+% }
+
 <article>
+	<!--
+		Dirs
+			-->
+    % for my $f ( @$dirs )
+    % {
+        <a href="<%= url_for( 'repo_readTreePath',
+                     project => param('project'), repo => param('repo'), object => $object, dir => $dir .'/'. $f->{name} ) %>">
+            <div class="tree-<%= $f->{type} %>">
+                <%= $f->{name} %>
+            </div>
+        </a>
+    % }
+
+    <!--
+		Files
+			-->
     % for my $f ( @$files )
     % {
-        <a href="<%= url_for( ($f->{type} eq 'tree' ? 'repo_readTree' : 'repo_readBlob'),
-                     project => param('project'), repo => param('repo'), object => $f->{obj} ) %>">
+        <a href="<%= url_for( 'repo_readBlob', project => param('project'), repo => param('repo'), object => $f->{obj} ) %>">
             <div class="tree-<%= $f->{type} %>">
                 <%= $f->{name} %>
             </div>

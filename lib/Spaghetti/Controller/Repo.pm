@@ -8,6 +8,9 @@ use Mojo::Base 'Mojolicious::Controller';
     use Spaghetti::Util;
     use Stuff::Git::Scanner;
     
+    # Create repo
+    #
+    
     sub create
         {
             my $this    = shift;
@@ -239,13 +242,55 @@ use Mojo::Base 'Mojolicious::Controller';
             $this->stop(418) if $@;
             
             my $files = $git->getTree($obj);
+            my @dirs = grep { $_->{type} eq 'tree' } @$files;
+             @$files = grep { $_->{type} eq 'blob' } @$files;
             
             $this->stash( files   => $files);
+            $this->stash( dirs    => \@dirs);
             $this->stash( repo    => $repo );
             $this->stash( project => $proj );
             $this->stash( object  => $obj  );
         }
     
+    sub readTreePath
+        {
+            my $this = shift;
+            my $tree = $this->param('tree');
+            my $obj  = $this->param('object');
+            my $repo = $this->param('repo');
+            my $proj = $this->param('project');
+            my $path = $this->param('dir');
+
+            $path = substr $path, 1;
+            
+            # Get repo.
+            #
+            
+            my $dbh = Pony::Model::Dbh::MySQL->new->dbh;
+            my $sth = $dbh->prepare( $Spaghetti::SQL::repo->{read} );
+               $sth->execute( $repo );
+            
+            $repo = $sth->fetchrow_hashref();
+            
+            # Get commit from git.
+            #
+            
+            my $git = eval { new Stuff::Git::Scanner($proj, $repo->{url} ) };
+            $this->stop(418) if $@;
+            
+            my $files = $git->getTree($obj, $path);
+            my @dirs = grep { $_->{type} eq 'tree' } @$files;
+             @$files = grep { $_->{type} eq 'blob' } @$files;
+            
+            $this->stash( files   => $files);
+            $this->stash( dirs    => \@dirs);
+            $this->stash( repo    => $repo );
+            $this->stash( project => $proj );
+            $this->stash( object  => $obj  );
+
+            $this->render('repo/readTree');
+        }
+
     sub update
         {
             my $this = shift;

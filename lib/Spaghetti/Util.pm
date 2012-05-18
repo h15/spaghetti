@@ -68,5 +68,11 @@ use utf8;
             
             $s;
         }
+    
+    sub toHtmlEntities
+        {
+            $_[0] =~ s/(["'<>])/sprintf('&#%x;', unpack('U', $1))/ge;
+            return $_[0];
+        }
 
 1;

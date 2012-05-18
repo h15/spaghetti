@@ -5,7 +5,7 @@
 % include 'repo/vertical_nav';
 
 <div class="alignright">
-    <a href="<%= url_for 'repo_readTree', project => param('project'),
+    <a href="<%= url_for 'repo_readTreePath', project => param('project'),
                         repo => param('repo'), object => $desc->{commit} %>">
     <%=l 'Tree' %></a>
 </div>

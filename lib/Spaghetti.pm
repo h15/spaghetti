@@ -46,6 +46,8 @@ use Mojo::Base 'Mojolicious';
             ##
             
             $this->plugin('B');
+            $this->plugin('StripTags');
+            $this->plugin('MkPath');
             $this->plugin('user');
             $this->plugin('access');
             $this->plugin('message');
@@ -296,7 +298,7 @@ use Mojo::Base 'Mojolicious';
                 ->to('project#create')
                   ->name('admin_project_create');
             
-            $r->route('/project/read/:url')
+            $r->route('/project/:url')
                 ->to('project#read')
                   ->name('project_read');
             $r->route('/project/edit/:url')
@@ -341,6 +343,9 @@ use Mojo::Base 'Mojolicious';
             $r->route('/:project/:repo/:object/tree')
                 ->to('repo#readTree')
                   ->name('repo_readTree');
+            $r->route('/:project/:repo/:object/tree*dir')
+                ->to('repo#readTreePath')
+                  ->name('repo_readTreePath');
             $r->route('/:project/:repo/:object/blob')
                 ->to('repo#readBlob')
                   ->name('repo_readBlob');

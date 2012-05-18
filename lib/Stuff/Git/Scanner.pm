@@ -4,6 +4,7 @@ use Pony::Object;
     use Git::Repository;
     use Pony::Stash;
     use Date::Parse;
+    use Spaghetti::Util;
     
     protected repo => undef;
     
@@ -39,11 +40,11 @@ use Pony::Object;
             
             eval
             {
-                local $SIG{ALRM} = sub { die "timeout" };
+            #    local $SIG{ALRM} = sub { die "timeout" };
                 
-                alarm 1;
+            #    alarm 1;
                 @out = $this->repo->run(@_);
-                alarm 0;
+            #    alarm 0;
             };
             
             #my $stdout = $cmd->stdout();
@@ -71,13 +72,37 @@ use Pony::Object;
             my @log = $this->run( qw/log -n/, $size );
             my @logs;
             
-            while ( @log )
+            for ( @log )
             {
-                push @logs, $this->getLogRow( @log[0..5] );
-                @log = @log[6..$#log];
-                
-                # trim
-                shift @log while @log && $log[0] =~ /^\s*$/;
+                given( $_ )
+                {
+                    when( /^\s+(.*)/s )
+                    {
+                        $logs[$#logs]{comment} .= $1 . ' ';
+                    }
+                    when( /Author:\s*(.*)/s )
+                    {
+                        my ( $name, $mail ) = ( $1 =~ /(.*?)\<(.*?)\>/s );
+                        
+                        $logs[$#logs]{name} = $name;
+                        $logs[$#logs]{mail} = $mail;
+                    }
+                    when( /Date:\s*(.*)/s )
+                    {
+                        $logs[$#logs]{date} = str2time $1;
+                    }
+                    when( /commit\s*(.*)/s )
+                    {
+                        push @logs,
+                            {
+                                commit  => $1,
+                                date    => 0,
+                                name    => '',
+                                mail    => '',
+                                comment => '',
+                            };
+                    }
+                }
             }
             
             return @logs;
@@ -90,6 +115,9 @@ use Pony::Object;
         {
             my $this = shift;
             my $id   = shift;
+            my $path = shift;
+
+            $id .= ':' . $path if defined $path;
             
             my @c = $this->run( 'ls-tree', $id );
             
@@ -128,8 +156,57 @@ use Pony::Object;
             my $id   = shift;
             
             my @c = $this->repo->run( 'show', $id );
-            my $i = $this->getLogRow(@c);
-            @c = @c[6 .. $#c];
+            my %log;
+                 
+            # Parse log
+            #
+            
+            while ( @c )
+            {
+                my $line = shift @c;
+                
+                given ( $line )
+                {
+                    when( /^\s+(.*)/s )
+                    {
+                        $log{comment} .= $1 . ' ';
+                    }
+                    
+                    when( /Author:\s*(.*)/s )
+                    {
+                        my ( $name, $mail ) = ( $1 =~ /(.*?)\<(.*?)\>/s );
+                        
+                        $log{name} = $name;
+                        $log{mail} = $mail;
+                    }
+                    
+                    when( /Date:\s*(.*)/s )
+                    {
+                        $log{date} = str2time $1;
+                    }
+                    
+                    when( /commit\s*(.*)/s )
+                    {
+                        %log =
+                            (
+                                commit  => $1,
+                                date    => 0,
+                                name    => '',
+                                mail    => '',
+                                comment => '',
+                            );
+                    }
+                    
+                    when (/^diff/)
+                    {
+                        unshift @c, $line;
+                        last;
+                    }
+                }
+            }
+            
+            # Parse diff
+            #
             
             my @files;
             
@@ -216,40 +293,7 @@ use Pony::Object;
                 }
             }
             
-            return $i, \@files, \@c;
-        }
-    
-    # Parse rows, make log's line hash.
-    # @access protected
-    
-    sub getLogRow : Protected
-        {
-            my $this = shift;
-            my $i = 0;
-            
-            # Get commit
-            my ( $commit ) = ( $_[ $i++ ] =~ /commit\s*(.*)/s );
-            
-            # Skip 'rubbish' lines
-            ++$i if $_[$i] =~ /Merge:\s*(.*)/s;
-            
-            my ( $author ) = ( $_[ $i++ ] =~ /Author:\s*(.*)/s );
-            my ( $date   ) = ( $_[ $i++ ] =~ /Date:\s*(.*)/s );
-            
-            # Skip empty line
-            ++$i;
-            
-            my ( $comment ) = ( $_[ $i++ ] =~ /\s*(.*)/s );
-            
-            my ( $name, $mail ) = ( $author =~ /(.*?)\<(.*?)\>/s );
-            
-            return  {
-                        date   => str2time($date),
-                        name   => $name,
-                        mail   => $mail,
-                        commit => $commit,
-                        comment=> $comment
-                    };
+            return \%log, \@files, \@c;
         }
     
 1;

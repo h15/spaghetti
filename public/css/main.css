@@ -747,3 +747,15 @@
     {
         margin:0px 0px 0px -5px;
     }
+
+    /**
+     *  Repo nav
+     */
+    .repo-path
+    {
+        margin: 0px 0px 20px 0px;
+        padding: 5px;
+        background: #EDEDED;
+        border-top: 1px solid #C8C9CB;
+        border-bottom: 1px solid #C8C9CB;
+    }
