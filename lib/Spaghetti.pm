@@ -28,7 +28,7 @@ use Mojo::Base 'Mojolicious';
             # Preload lang hashes.
             #
             
-            for my $l ( split /\W/, Pony::Stash->get('defaultUserConf')->{langs} )
+            for my $l (split /\W/,Pony::Stash->get('defaultUserConf')->{langs})
             {
                 my $class = "Spaghetti::I18N::$l";
                 load $class;
@@ -247,7 +247,8 @@ use Mojo::Base 'Mojolicious';
             $a->route('/group/delete/:id', id => qr/\d+/)
                 ->to('group#delete')
                   ->name('admin_group_delete');
-            $a->route('/group/:group/access/type/:type', group => qr/\d+/, type => qr/\d+/)
+            $a->route('/group/:group/access/type/:type',
+                        group => qr/\d+/, type => qr/\d+/)
                 ->to('group#access')
                   ->name('admin_group_access');
             
@@ -311,7 +312,8 @@ use Mojo::Base 'Mojolicious';
             # Items
             #
             
-            $r->route('/item/give/:item/to/:user', item => qr/\d+/, user => qr/\d+/)
+            $r->route('/item/give/:item/to/:user',
+                        item => qr/\d+/, user => qr/\d+/)
                 ->to('item#giveByArchon')
                   ->name('item_giveByArchon');
             $r->route('/item/activate/:item', item => qr/\d+/)
@@ -324,22 +326,22 @@ use Mojo::Base 'Mojolicious';
             $r->route('/repo/create/:id', id => qr/\d+/)
                 ->to('repo#create')
                   ->name('repo_create');
-            $r->route('/:project/:repo.git')
+            $r->route('/:project/:repo')
                 ->to('repo#read')
                   ->name('repo_read');
-            $r->route('/:project/:repo.git/edit')
+            $r->route('/:project/:repo/edit')
                 ->to('repo#update')
                   ->name('repo_update');
-            $r->route('/:project/:repo.git/access')
+            $r->route('/:project/:repo/access')
                 ->to('repo#changeAccess')
                   ->name('repo_changeAccess');
-            $r->route('/:project/:repo.git/:object')
+            $r->route('/:project/:repo/:object')
                 ->to('repo#readObject')
                   ->name('repo_readObject');
-            $r->route('/:project/:repo.git/:object/tree')
+            $r->route('/:project/:repo/:object/tree')
                 ->to('repo#readTree')
                   ->name('repo_readTree');
-            $r->route('/:project/:repo.git/:object/blob')
+            $r->route('/:project/:repo/:object/blob')
                 ->to('repo#readBlob')
                   ->name('repo_readBlob');
             
@@ -384,17 +386,19 @@ use Mojo::Base 'Mojolicious';
                         $params = [] unless defined $params;
                         
                         $html .= ( $i == $cur ?
-                                        sprintf '<span>%s</span>', $cur :
-                                        sprintf '<a href="%s">%s</a>',
-                                        $self->url_for($urlName, @$params, page => $i), $i );
+                                    sprintf '<span>%s</span>', $cur :
+                                    sprintf '<a href="%s">%s</a>',
+                                    $self->url_for( $urlName, @$params,
+                                                    page => $i), $i );
                     }
                     
                     # Render last page.
                     #
                     $html .= sprintf '<a href="%s">&rArr;</a>',
-                             $self->url_for($urlName, page => $last) if $cur != $last;
+                             $self->url_for($urlName, page => $last)
+                                if $cur != $last;
                     
-                    new Mojo::ByteStream("<div class=\"paginator\">$html</div>");
+                    new Mojo::ByteStream("<div class=\"paginator\">$html</div>")
                 }
             );
             
@@ -420,7 +424,8 @@ use Mojo::Base 'Mojolicious';
                     
                     return '' unless defined $val;
                     
-                    my ($str,$year,$mon,$day,$hour,$min,$sec) = $this->getDateTime($val);
+                    my ($str,$year,$mon,$day,$hour,$min,$sec) =
+                                                    $this->getDateTime($val);
                     
                     $str ||= '';
                     

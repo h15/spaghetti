@@ -33,7 +33,8 @@ use Pony::Object qw/Pony::View::Form/;
                     label       => 'Url',
                     validators  =>
                     {
-                        Length    => [ 2, 128 ],
+                        Length  => [ 2, 128 ],
+                        Like    => qr/[a-zA-Z0-9\-]+/,
                     }
                 }
             );
