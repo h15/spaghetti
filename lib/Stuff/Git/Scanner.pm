@@ -142,6 +142,9 @@ use Pony::Object;
         {
             my $this = shift;
             my $id   = shift;
+            my $path = shift;
+            
+            $id .= ':' . $path if defined $path;
             
             my @c = $this->run( 'show', $id );
             return \@c;

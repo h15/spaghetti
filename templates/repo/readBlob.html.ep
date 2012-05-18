@@ -1,9 +1,23 @@
 % layout 'default';
 %
-% title "/$project/" . $repo->{url} . ".git " . substr($object, 0, 10);
+% my $dir = stash('dir') || '';
+%
+% title sprintf( '<a href="%s">%s</a> — <a href="%s">%s</a>',
+%                   url_for( project_read => url => $project ), $project,
+%                   url_for( repo_read => repo => $repo->{url}, project => $project), $repo->{url} );
+%
 % stash ( tab => 'read' );
 % include 'repo/vertical_nav';
-                
+
+% my $path = mkPath($dir, param('project'), param('repo'), $object);
+
+% if ( $path )
+% {
+    <nav class="repo-path">
+        <%= $path %>
+    </nav>
+% }
+
 <article>
     <table class="lines" border=0px rules="cols">
         % my $line = 0;

@@ -1,3 +1,70 @@
+commit 4ef7b29bd485ba4aad0dd86396b5301e2757b9ad
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Sat May 19 01:49:55 2012 +0600
+
+    new action for repo trees
+
+commit 4113f43bed868ef425a99362a06443836d355202
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Fri May 18 23:53:10 2012 +0600
+
+    small fixes && check url in create repo form
+
+commit 35124e87263310f7b6e1f6f5010e98a244b5b8d0
+Author: root <root@bugtop.(none)>
+Date:   Tue May 15 08:36:50 2012 +0600
+
+    add timeout for git "run"
+
+commit 893faf7b9ffa04fe83012abe16ee3bb7cd19be67
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Tue May 15 07:17:41 2012 +0600
+
+    add good looking error print
+
+commit d8bdb0ac5fdd04f8ad237096fa46a8f88a259d78
+Author: root <root@bugtop.(none)>
+Date:   Thu May 10 02:52:00 2012 +0600
+
+    fixes for Git::Scanner
+
+commit 3979e8efd6e06eaca37806f6918d83397865e287
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Wed May 9 01:59:02 2012 +0600
+
+    try to fix freeze on get huge git object attempt
+
+commit eca7d90f2182ba1f95a097133e5f6c3e9e60531e
+Merge: 65f0a4d cc4f8a4
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Mon May 7 00:50:55 2012 +0600
+
+    Merge branch 'master' of github.com:h15/spaghetti
+
+commit 65f0a4d2a45ed5229771f817f079dff2bffee94b
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Mon May 7 00:42:01 2012 +0600
+
+    show ads only on "code" sites
+
+commit 6635319a6dd9069d8790d821b24fc41615b30a06
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Mon May 7 00:41:28 2012 +0600
+
+    get stash init from Spaghetti.pm
+
+commit cc4f8a44a2806b51eacc4c7c42c8522b97f6f1d6
+Author: Georgy Bazhukov <helios_pro@mail.ru>
+Date:   Thu May 3 01:37:54 2012 -0700
+
+    Update docs/install.pod
+
+commit 403f589c0b00384ec00f4df3b7fd556b388220d4
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Thu May 3 00:33:11 2012 +0600
+
+    add vkusnoserver banner
+
 commit 0c1444e3585341bbc8ebbc6e51639efcfeb5a65b
 Author: Georgy Bazhukov <gosha@bugov.net>
 Date:   Wed May 2 22:38:37 2012 +0600

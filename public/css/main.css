@@ -759,3 +759,8 @@
         border-top: 1px solid #C8C9CB;
         border-bottom: 1px solid #C8C9CB;
     }
+
+    .repo-path a
+    {
+        text-decoration: none;
+    }

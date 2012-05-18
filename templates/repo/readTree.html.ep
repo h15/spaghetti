@@ -1,6 +1,7 @@
 % layout 'default';
 %
 % my $dir = stash('dir') || '';
+% $dir .= '/' unless $dir =~ /\/$/;
 %
 % title sprintf( '<a href="%s">%s</a> — <a href="%s">%s</a>',
 %				 	url_for( project_read => url => $project ),	$project,
@@ -25,7 +26,7 @@
     % for my $f ( @$dirs )
     % {
         <a href="<%= url_for( 'repo_readTreePath',
-                     project => param('project'), repo => param('repo'), object => $object, dir => $dir .'/'. $f->{name} ) %>">
+                     project => param('project'), repo => param('repo'), object => $object, dir => $dir . $f->{name} ) %>">
             <div class="tree-<%= $f->{type} %>">
                 <%= $f->{name} %>
             </div>
@@ -37,7 +38,8 @@
 			-->
     % for my $f ( @$files )
     % {
-        <a href="<%= url_for( 'repo_readBlob', project => param('project'), repo => param('repo'), object => $f->{obj} ) %>">
+        <a href="<%= url_for( 'repo_readBlobPath', project => param('project'), repo => param('repo'),
+        			object => $object, dir => $dir . $f->{name}) %>">
             <div class="tree-<%= $f->{type} %>">
                 <%= $f->{name} %>
             </div>

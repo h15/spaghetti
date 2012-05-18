@@ -146,13 +146,22 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->stop(418) if $@;
             
-            my @logs = eval { $git->getLog(10) };
+            my @logs = eval { $git->getLog(3) };
+
+            # Get commit from git.
+            #
+            
+            my $files = $git->getTree('HEAD');
+            my @dirs = grep { $_->{type} eq 'tree' } @$files;
+             @$files = grep { $_->{type} eq 'blob' } @$files;
             
             # Prepare to render.
             #
-            
-            $this->stash( pm => $pm );
-            $this->stash( repo => $repo );
+
+            $this->stash( files=> $files );
+            $this->stash( dirs => \@dirs );
+            $this->stash( pm   => $pm    );
+            $this->stash( repo => $repo  );
             $this->stash( logs => \@logs );
         }
     
@@ -216,6 +225,41 @@ use Mojo::Base 'Mojolicious::Controller';
             $this->stash( repo    => $repo );
             $this->stash( project => $proj );
             $this->stash( object  => $obj  );
+        }
+    
+    sub readBlobPath
+        {
+            my $this = shift;
+            my $obj  = $this->param('object');
+            my $repo = $this->param('repo');
+            my $proj = $this->param('project');
+            my $path = $this->param('dir');
+            say $this->stash('format');
+            $path = substr $path, 1;
+
+            # Get repo.
+            #
+            
+            my $dbh = Pony::Model::Dbh::MySQL->new->dbh;
+            my $sth = $dbh->prepare( $Spaghetti::SQL::repo->{read} );
+               $sth->execute( $repo );
+            
+            $repo = $sth->fetchrow_hashref();
+            
+            # Get commit from git.
+            #
+            
+            my $git = eval { new Stuff::Git::Scanner($proj, $repo->{url}) };
+            $this->stop(418) if $@;
+            
+            my $data = eval { $git->getBlob($obj, $path) };
+            
+            $this->stash( blob    => $data );
+            $this->stash( repo    => $repo );
+            $this->stash( project => $proj );
+            $this->stash( object  => $obj  );
+
+            $this->render('repo/readBlob');
         }
     
     sub readTree

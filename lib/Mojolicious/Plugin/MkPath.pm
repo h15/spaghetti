@@ -17,17 +17,28 @@ use Mojo::Base 'Mojolicious::Plugin';
                     my @out;
                     my $dir;
 
-                    for my $way ( split '/', $str )
+                    my @way = split '/', $str;
+
+                    # First
+
+                    my $url = $this->url_for('repo_readTreePath', project => $project,
+                                              repo => $repo, object => $object, dir => '/' );
+                    
+                    push @out, sprintf( '<a href="%s">%s</a>', $url, '&bull;' );
+
+                    # Other
+
+                    for my $i ( 1 .. $#way - 1 )
                     {
-                        next if $way eq '';
-                        
-                        $dir .= '/' . $way;
+                        $dir .= '/' . $way[$i];
 
                         my $url = $this->url_for('repo_readTreePath', project => $project,
                                                   repo => $repo, object => $object, dir => $dir );
 
-                        push @out, sprintf('<a href="%s">%s</a>', $url, $way);
+                        push @out, sprintf( '<a href="%s">%s</a>', $url, $way[$i] );
                     }
+
+                    push @out, $way[$#way];
 
                     return new Mojo::ByteStream( join ' / ', @out );
                 }

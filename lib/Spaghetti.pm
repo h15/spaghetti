@@ -340,15 +340,18 @@ use Mojo::Base 'Mojolicious';
             $r->route('/:project/:repo/:object')
                 ->to('repo#readObject')
                   ->name('repo_readObject');
-            $r->route('/:project/:repo/:object/tree')
-                ->to('repo#readTree')
-                  ->name('repo_readTree');
+            #$r->route('/:project/:repo/:object/tree')
+            #    ->to('repo#readTree', format => '0')
+            #      ->name('repo_readTree');
             $r->route('/:project/:repo/:object/tree*dir')
-                ->to('repo#readTreePath')
+                ->to('repo#readTreePath', format => '0')
                   ->name('repo_readTreePath');
-            $r->route('/:project/:repo/:object/blob')
-                ->to('repo#readBlob')
-                  ->name('repo_readBlob');
+            #$r->route('/:project/:repo/:object/blob')
+            #    ->to('repo#readBlob', format => '0')
+            #      ->name('repo_readBlob');
+            $r->route('/:project/:repo/:object/blob*dir')
+                ->to('repo#readBlobPath', format => '0')
+                  ->name('repo_readBlobPath');
             
             ##
             ##  Helpers
