@@ -1,7 +1,7 @@
 package Spaghetti;
 use Mojo::Base 'Mojolicious';
     
-    our $VERSION = '0.000011';
+    our $VERSION = '0.000012';
     our $COMMIT  = '';
     
     use Pony::Model::Crud;
