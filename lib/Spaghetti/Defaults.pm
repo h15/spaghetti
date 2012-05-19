@@ -50,8 +50,8 @@ package Spaghetti::Defaults;
             ( defaultUserConf =>
               {
                 isTreeView => 0,
-                lang  => 'en',
-                langs => 'en ru'
+                lang  => 'ru',
+                langs => 'ru'
               }
             );
             
