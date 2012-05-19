@@ -11,6 +11,7 @@
 <table style="width:100%">
     <tr valign=top>
         <td style="width:49%">
+
 <article>
     <dl>
         <dt><%=l 'Owner' %></dt>
@@ -42,7 +43,7 @@
 
 % for my $l ( @$logs )
 % {
-    <article class="rounded" style="width:90%;margin-top:10px;padding-right:-10px;">
+    <article class="rounded" style="width:90%;margin-top:15px;padding-right:-10px;">
         <div class="alignright">
             <%=b render_userpic $l->{mail}, 20 %>
         </div>
@@ -52,10 +53,15 @@
     </article>
 % }
 
-        </td>
-        <td style="width:50%">
+        <div style="margin-top:20px;">
+            <a href="<%= url_for('repo_readLogs', project => param('project'), repo => param('repo') ) %>">
+                <%=l 'Logs' %> &rarr;</a>
+        </div>
 
-            <article>
+        </td>
+        <td style="width:50%; padding-left:10px;">
+
+            <article class="rounded" style="background:#f8f8ff;">
                 <!--
                     Dirs
                         -->

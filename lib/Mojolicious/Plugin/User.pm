@@ -77,7 +77,7 @@ use Pony::Object 'Mojolicious::Plugin';
                             }
                         }
                             
-                        $conf = ( defined $conf ? thaw $conf : {} );
+                        $conf = eval{ defined $conf ? thaw $conf : {} } || {};
                         
                         for my $k ( keys %$default )
                         {

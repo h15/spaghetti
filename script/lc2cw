@@ -1,0 +1,166 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use feature ':5.10';
+
+use Pony::Stash;
+use Pony::Model::Dbh::MySQL;
+use Pony::Model::Crud::MySQL;
+
+    sub users
+        {
+            my @users = Pony::Model::Crud::MySQL->new('forum__users')->list(undef, undef, 'user_id', undef, 0, 100_000);
+            my $model = Pony::Model::Crud::MySQL->new('user');
+
+            for my $u ( @users )
+            {
+            	next unless $u->{user_email};
+
+            	$model->create
+        		({
+        			'id'   => 1000 + $u->{user_id},
+					'mail' => $u->{user_email},
+					'name' => $u->{username},
+					'createAt' => time,
+					'modifyAt' => time,
+					'accessAt' => time
+        		});
+            }
+        }
+
+    sub forums
+    	{
+            my @forums  = Pony::Model::Crud::MySQL->new('forum__forums')->list(undef, undef, 'forum_id', undef, 0, 100_000);
+            my $thModel = Pony::Model::Crud::MySQL->new('thread');
+            my $toModel = Pony::Model::Crud::MySQL->new('topic');
+            my $teModel = Pony::Model::Crud::MySQL->new('text');
+            my $t2dt = Pony::Model::Crud::MySQL->new('threadToDataType');
+
+            for my $f ( @forums )
+            {
+            	my($pid, $tid);
+
+            	$pid = ( $f->{parent_id} ? 1000 + $f->{parent_id} : 0 );
+            	$tid = ( $f->{parent_id} ? 1000 + $f->{parent_id} : 0 );
+
+            	$t2dt->create({ threadId => 1000 + $f->{forum_id}, dataTypeId => 1 });
+
+            	$thModel->create
+        		({
+        			'id' => 1000 + $f->{forum_id},
+					'createAt' => time,
+					'modifyAt' => time,
+					'parentId' => $pid,
+					'topicId'  => $tid,
+					'textId'   => 1000 + $f->{forum_id},
+        		});
+
+            	$teModel->create
+        		({
+        			'id' => 1000 + $f->{forum_id},
+					'threadId' => 1000 + $f->{forum_id},
+					'text' => $f->{forum_desc},
+        		});
+
+            	$toModel->create
+        		({
+        			'url' => 1000 + $f->{forum_id},
+					'threadId' => 1000 + $f->{forum_id},
+					'title' => $f->{forum_name},
+        		});
+
+
+            }
+    	}
+
+    sub topics
+    	{
+            my @forums  = Pony::Model::Crud::MySQL->new('forum__topics')->list(undef, undef, 'topic_id', undef, 0, 100_000);
+            my $thModel = Pony::Model::Crud::MySQL->new('thread');
+            my $toModel = Pony::Model::Crud::MySQL->new('topic');
+            my $teModel = Pony::Model::Crud::MySQL->new('text');
+            my $t2dt = Pony::Model::Crud::MySQL->new('threadToDataType');
+
+            for my $f ( @forums )
+            {
+            	my($pid, $tid);
+
+            	$pid = ( $f->{forum_id} ? 1000 + $f->{forum_id} : 0 );
+            	$tid = ( $f->{forum_id} ? 1000 + $f->{forum_id} : 0 );
+
+            	$t2dt->create({ threadId => 2000 + $f->{topic_id}, dataTypeId => 1 });
+
+            	$thModel->create
+        		({
+        			'id' => 2000 + $f->{topic_id},
+					'createAt' => time,
+					'modifyAt' => time,
+					'parentId' => $pid,
+					'topicId'  => $tid,
+					'textId'   => 2000 + $f->{topic_id},
+        		});
+
+            	$teModel->create
+        		({
+        			'id' => 2000 + $f->{topic_id},
+					'threadId' => 2000 + $f->{topic_id},
+					'text' => '',
+        		});
+
+            	$toModel->create
+        		({
+        			'url' => 2000 + $f->{topic_id},
+					'threadId' => 2000 + $f->{topic_id},
+					'title' => $f->{topic_title},
+        		});
+        	}
+    	}
+
+    sub posts
+    	{
+            my @forums  = Pony::Model::Crud::MySQL->new('forum__posts')->list(undef, undef, 'post_id', undef, 0, 100_000);
+            my $thModel = Pony::Model::Crud::MySQL->new('thread');
+            my $toModel = Pony::Model::Crud::MySQL->new('topic');
+            my $teModel = Pony::Model::Crud::MySQL->new('text');
+            my $t2dt = Pony::Model::Crud::MySQL->new('threadToDataType');
+
+            for my $f ( @forums )
+            {
+            	my($pid, $tid);
+
+            	$pid = ( $f->{post_id} ? 10000 + $f->{post_id} : 0 );
+            	$tid = ( $f->{post_id} ? 10000 + $f->{post_id} : 0 );
+
+            	$t2dt->create({ threadId => 10000 + $f->{post_id}, dataTypeId => 1 });
+
+            	$thModel->create
+        		({
+        			'id' => 10000 + $f->{post_id},
+        			'author'   => 1000 + $f->{poster_id},
+					'createAt' => time,
+					'modifyAt' => time,
+					'parentId' => $pid,
+					'topicId'  => $tid,
+					'textId'   => 10000 + $f->{post_id},
+        		});
+
+            	$teModel->create
+        		({
+        			'id' => 10000 + $f->{post_id},
+					'threadId' => 10000 + $f->{post_id},
+					'text' => $f->{post_text},
+        		});
+        	}
+    	}
+
+Pony::Model::Dbh::MySQL->new( { dbname => 'test',
+								host => 'localhost',
+							 	user => 'root',
+							 	password => '',
+                            } );
+
+&users;
+&forums;
+&topics;
+&posts;

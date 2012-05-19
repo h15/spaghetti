@@ -188,7 +188,7 @@ use Mojo::Base 'Mojolicious::Controller';
             $this->stop(418) if $@;
             
             my ( $desc, $files, $data ) = $git->getCommit($obj);
-            
+            say $this->dumper($data);
             $this->stash( files   => $files);
             $this->stash( desc    => $desc );
             $this->stash( diff    => $data );

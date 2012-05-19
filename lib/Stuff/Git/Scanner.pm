@@ -58,7 +58,7 @@ use Pony::Object;
             #    chomp $out;
             #    push @out, $out;
             #}
-            
+
             return @out;
         }
     
@@ -292,6 +292,11 @@ use Pony::Object;
                                  };
                                                 
                         unshift @files, $f;
+                    }
+
+                    default
+                    {
+                        $c[$i] = '';
                     }
                 }
             }
