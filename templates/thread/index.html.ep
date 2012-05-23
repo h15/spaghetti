@@ -10,19 +10,21 @@
         <a href="<%= url_for('thread_show', url => $f->{url}) %>"><%= $f->{title} %></a>
     </header>
     
-    % for my $s ( sort{ $b->{prioritet} <=> $a->{prioritet} } values %{ $f->{subforums} } )
-    % {
+    <div class="subforums">
+        % for my $s ( sort{ $b->{prioritet} <=> $a->{prioritet} } values %{ $f->{subforums} } )
+        % {
 
-    <article class="subforum" id="thread-<%= $s->{id} %>">
-        <header>
-            <a href="<%= url_for('thread_show', url => $s->{url}) %>"><%= $s->{title} %></a>
-        </header>
-        <article class="desc">
-            <%=b $s->{text} %>
+        <article class="subforum" id="thread-<%= $s->{id} %>">
+            <header>
+                <a href="<%= url_for('thread_show', url => $s->{url}) %>"><%= $s->{title} %></a>
+            </header>
+            <article class="desc">
+                <%=b $s->{text} %>
+            </article>
         </article>
-    </article>
 
-    % }
+        % }
+    </div>
 
 </article>
 

@@ -67,22 +67,34 @@
     {
         text-decoration:none;    
     }
-
-    .subforum
-    {        
+    
+    .subforums
+    {
         -moz-border-radius:5px;
 	    -webkit-border-radius:5px;
 	    border-radius:5px;
 	    -khtml-border-radius:5px;
-        
-        margin: 10px 0px;
-        padding: 10px;
-        background: #cecfd0;
+        background: #e8e9eb;
+        padding: 5px 20px;
     }
-
+    
+    .subforum
+    {
+        margin: 0px 0px;
+        padding: 5px 0px 0px 0px;
+        border-top: 1px solid #C8C9CB;
+    }
+    
     .subforum .desc, .forum .desc
     {
-        font-size:12px;
+        font-size:10px;
+        margin: -5px 0px;
+    }
+    
+    
+    .subforums :first-child
+    {
+        border-top: 0px;
     }
     
     quote
