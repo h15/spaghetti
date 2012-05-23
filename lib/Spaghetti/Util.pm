@@ -54,7 +54,7 @@ use utf8;
                             header|footer|nav|article|table|tr|td|th|strong|
                             strike|blockquote|cite|br|img|hr|code|pre)/x;
                 
-            my $attr = qr/(?:href|style|class|title|alt|src|for)/;
+            my $attr = qr/(?:href|style|class|title|alt|src|for|id|unselectable)/;
             
             # Parse pair tag
             $s =~ s/\&lt;($tag)((?:\s+$attr="[^\\\"]*")*)\&gt;/<\1\2>/igs;
