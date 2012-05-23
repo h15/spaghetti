@@ -76,6 +76,7 @@
 	    -khtml-border-radius:5px;
         background: #e8e9eb;
         padding: 5px 20px;
+        color: #555;
     }
     
     .subforum
@@ -212,6 +213,11 @@
     nav.overall a
     {
         text-decoration:none;
+    }
+    
+    header.overall
+    {
+        margin-left:10px;
     }
     
     footer.overall
