@@ -9,7 +9,7 @@
     %= javascript '/js/redactor/redactor.js'
     <meta charset="utf-8">
     <script type="text/javascript">
-        $(document).ready(function(){$('textarea').redactor()});
+        $(document).ready(function(){ $('textarea').each(function(i){ $(this).redactor(); }) });
     </script>
   </head>
   <body>

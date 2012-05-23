@@ -86,14 +86,30 @@
 %
 % }
 
+% if ( $create && $topic->{treeOfTree} )
+% {
+%   $topicForm->elements->{parentId}->value = $topic->{id};
+%   $topicForm->elements->{topicId}->value  = $topic->{id};
+
+<div>
+    <a href="#" class=showButton id="showButton-<%= $topic->{id} %>"><%=l 'New topic' %></a>
+    <a href="#" class="hidden hideButton" id="hideButton-<%= $topic->{id} %>"><%=l 'hide' %></a>
+
+    <div class=hidden id="hiddenArea-<%= $topic->{id} %>">
+        %=b $topicForm->render
+    </div>
+</div>
+
+% }
+
 %#
 %#  SubThreads
 %#
 
-% if ( user->{conf}->{isTreeView} )
+% if ( !$topic->{treeOfTree} && user->{conf}->{isTreeView} )
 % {
 
-%=b render_thread($roots, $threads, $topicForm, $form, $create);
+%=b render_thread($roots, $threads, $form, $create);
 
 % }
 % else

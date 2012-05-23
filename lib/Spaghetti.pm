@@ -1,7 +1,7 @@
 package Spaghetti;
 use Mojo::Base 'Mojolicious';
     
-    our $VERSION = '0.000012';
+    our $VERSION = '0.000013';
     our $COMMIT  = '';
     
     use Pony::Model::Crud;
@@ -170,7 +170,7 @@ use Mojo::Base 'Mojolicious';
                 ->to('thread#editTopic')
                   ->name('topic_edit');
             $r->route('/thread')
-                ->to('thread#show')
+                ->to('thread#index')
                   ->name('thread_index');
             $r->route( '/thread/:url/page/:page',
                        url => qr/[\w\d\-]+/, page => qr/\d+/ )

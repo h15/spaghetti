@@ -25,7 +25,7 @@ use Pony::Object 'Mojolicious::Plugin';
     
     sub subTree
         {
-            my ( $this, $ids, $threads, $topicForm, $form, $create ) = @_;
+            my ( $this, $ids, $threads, $form, $create ) = @_;
             my $html = '';
             my $b = new Mojo::ByteStream;
             
@@ -96,31 +96,22 @@ use Pony::Object 'Mojolicious::Plugin';
                 {
                     $form->elements->{parentId}->value = $t->{id};
                     $form->elements->{topicId}->value  = $t->{topicId};
-                    $topicForm->elements->{parentId}->value = $t->{id};
-                    $topicForm->elements->{topicId}->value  = $t->{topicId};
                     
                     $html .= sprintf qq{
                                 <a href="#" class=showButton id="showButton-%d">%s</a>
                                 <a href="#" class="hidden hideButton" id="hideButton-%d">%s</a>
                                 
-                                <a href="#" class=showButton id="showButton-createTopic%d">%s</a>
-                                <a href="#" class="hidden hideButton" id="hideButton-createTopic%d">%s</a>
-                                
                                 <div class=hidden id="hiddenArea-%d">%s</div>
-                                <div class=hidden id="hiddenArea-createTopic%d">%s</div>
                             },
                             $t->{id}, $this->l('response'),
                             $t->{id}, $this->l('hide'),
-                            $t->{id}, $this->l('create topic'),
-                            $t->{id}, $this->l('hide'),
                             $t->{id}, Mojo::ByteStream->new( $form->render ),
-                            $t->{id}, Mojo::ByteStream->new( $topicForm->render );
                 }
                 
                 if ( defined $t->{childs} && @{ $t->{childs} })
                 {
                     $html .= sprintf qq{<div style="margin:5px 0px 5px 20px">%s</div>},
-                             subTree($this, $t->{childs}, $threads, $topicForm, $form, $create);
+                             subTree($this, $t->{childs}, $threads, $form, $create);
                 }
                 
                 $html .= '</article>';

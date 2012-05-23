@@ -10,7 +10,8 @@ use Pony::Model::Crud::MySQL;
 
     sub users
         {
-            my @users = Pony::Model::Crud::MySQL->new('forum__users')->list(undef, undef, 'user_id', undef, 0, 100_000);
+            my @users = Pony::Model::Crud::MySQL->new('forum__users')
+                          ->list(undef, undef, 'user_id', undef, 0, 100_000);
             my $model = Pony::Model::Crud::MySQL->new('user');
 
             for my $u ( @users )
@@ -31,7 +32,9 @@ use Pony::Model::Crud::MySQL;
 
     sub forums
     	{
-            my @forums  = Pony::Model::Crud::MySQL->new('forum__forums')->list(undef, undef, 'forum_id', undef, 0, 100_000);
+            my @forums  = Pony::Model::Crud::MySQL->new('forum__forums')
+                            ->list(undef, undef, 'forum_id', undef, 0, 100_000);
+
             my $thModel = Pony::Model::Crud::MySQL->new('thread');
             my $toModel = Pony::Model::Crud::MySQL->new('topic');
             my $teModel = Pony::Model::Crud::MySQL->new('text');
@@ -49,8 +52,8 @@ use Pony::Model::Crud::MySQL;
             	$thModel->create
         		({
         			'id' => 1000 + $f->{forum_id},
-					'createAt' => time,
-					'modifyAt' => time,
+					'createAt' => 0,
+					'modifyAt' => 0,
 					'parentId' => $pid,
 					'topicId'  => $tid,
 					'textId'   => 1000 + $f->{forum_id},
@@ -60,14 +63,15 @@ use Pony::Model::Crud::MySQL;
         		({
         			'id' => 1000 + $f->{forum_id},
 					'threadId' => 1000 + $f->{forum_id},
-					'text' => $f->{forum_desc},
+					'text' => escape( $f->{forum_desc} ),
         		});
 
             	$toModel->create
         		({
-        			'url' => 1000 + $f->{forum_id},
-					'threadId' => 1000 + $f->{forum_id},
-					'title' => $f->{forum_name},
+        			'url'       => 1000 + $f->{forum_id},
+					'threadId'  => 1000 + $f->{forum_id},
+					'title'     => $f->{forum_name},
+                    'treeOfTree'=> 1,
         		});
 
 
@@ -76,7 +80,9 @@ use Pony::Model::Crud::MySQL;
 
     sub topics
     	{
-            my @forums  = Pony::Model::Crud::MySQL->new('forum__topics')->list(undef, undef, 'topic_id', undef, 0, 100_000);
+            my @forums  = Pony::Model::Crud::MySQL->new('forum__topics')
+                            ->list(undef, undef, 'topic_id', undef, 0, 100_000);
+
             my $thModel = Pony::Model::Crud::MySQL->new('thread');
             my $toModel = Pony::Model::Crud::MySQL->new('topic');
             my $teModel = Pony::Model::Crud::MySQL->new('text');
@@ -89,37 +95,40 @@ use Pony::Model::Crud::MySQL;
             	$pid = ( $f->{forum_id} ? 1000 + $f->{forum_id} : 0 );
             	$tid = ( $f->{forum_id} ? 1000 + $f->{forum_id} : 0 );
 
-            	$t2dt->create({ threadId => 2000 + $f->{topic_id}, dataTypeId => 1 });
+            	$t2dt->create({ threadId => 2000 + $f->{topic_id}, dataTypeId => 2 });
 
             	$thModel->create
         		({
-        			'id' => 2000 + $f->{topic_id},
-					'createAt' => time,
-					'modifyAt' => time,
-					'parentId' => $pid,
-					'topicId'  => $tid,
-					'textId'   => 2000 + $f->{topic_id},
+        			'id'        => 2000 + $f->{topic_id},
+					'createAt'  => $f->{topic_time},
+					'modifyAt'  => $f->{topic_time},
+					'parentId'  => $pid,
+					'topicId'   => $tid,
+					'textId'    => 2000 + $f->{topic_id},
         		});
 
             	$teModel->create
         		({
-        			'id' => 2000 + $f->{topic_id},
-					'threadId' => 2000 + $f->{topic_id},
-					'text' => '',
+        			'id'        => 2000 + $f->{topic_id},
+					'threadId'  => 2000 + $f->{topic_id},
+					'text'      => '',
         		});
 
             	$toModel->create
         		({
-        			'url' => 2000 + $f->{topic_id},
-					'threadId' => 2000 + $f->{topic_id},
-					'title' => $f->{topic_title},
+        			'url'       => 2000 + $f->{topic_id},
+					'threadId'  => 2000 + $f->{topic_id},
+					'title'     => $f->{topic_title},
+                    'treeOfTree'=> 0,
         		});
         	}
     	}
 
     sub posts
     	{
-            my @forums  = Pony::Model::Crud::MySQL->new('forum__posts')->list(undef, undef, 'post_id', undef, 0, 100_000);
+            my @forums  = Pony::Model::Crud::MySQL->new('forum__posts')
+                            ->list(undef, undef, 'post_id', undef, 0, 100_000);
+
             my $thModel = Pony::Model::Crud::MySQL->new('thread');
             my $toModel = Pony::Model::Crud::MySQL->new('topic');
             my $teModel = Pony::Model::Crud::MySQL->new('text');
@@ -129,17 +138,17 @@ use Pony::Model::Crud::MySQL;
             {
             	my($pid, $tid);
 
-            	$pid = ( $f->{post_id} ? 10000 + $f->{post_id} : 0 );
-            	$tid = ( $f->{post_id} ? 10000 + $f->{post_id} : 0 );
+            	$pid = ( $f->{topic_id} ? 2000 + $f->{topic_id} : 0 );
+            	$tid = ( $f->{topic_id} ? 2000 + $f->{topic_id} : 0 );
 
-            	$t2dt->create({ threadId => 10000 + $f->{post_id}, dataTypeId => 1 });
+            	$t2dt->create({ threadId => 10000 + $f->{post_id}, dataTypeId => 3 });
 
             	$thModel->create
         		({
         			'id' => 10000 + $f->{post_id},
         			'author'   => 1000 + $f->{poster_id},
-					'createAt' => time,
-					'modifyAt' => time,
+					'createAt' => $f->{post_time},
+					'modifyAt' => $f->{post_time},
 					'parentId' => $pid,
 					'topicId'  => $tid,
 					'textId'   => 10000 + $f->{post_id},
@@ -149,10 +158,27 @@ use Pony::Model::Crud::MySQL;
         		({
         			'id' => 10000 + $f->{post_id},
 					'threadId' => 10000 + $f->{post_id},
-					'text' => $f->{post_text},
+					'text' => escape( $f->{post_text} ),
         		});
         	}
     	}
+
+    sub escape
+        {
+            my $str = shift;
+            
+            $str = "<p>$str</p>";
+            $str =~ s/\[img.*?\](.*?)\[\/url.*?\]/<img src="$1">/gi;
+            $str =~ s/\[url=(.*?):.*?\](.*?)\[\/url.*?\]/<a href="$1">$2<\/a>/gi;
+            $str =~ s/\[(\/?(?:quote|code|b|i|u)).*?\]/<$1>/gi;
+            $str =~ s/\[(\/?)\*.*?\]/<$1li>/g;
+            $str =~ s/\[(\/?)list.*?\]/<$1ul>/g;
+            $str =~ s/\n/\n<\/p><p>/g;
+            $str =~ s/\[size.*?\](.*?)\[\/size.*?\]/<h2>$1<\/h2>/gi;
+            $str =~ s/\[[a-z0-9:\/=#]+\]//gi;
+
+            return $str;
+        }
 
 Pony::Model::Dbh::MySQL->new( { dbname => 'test',
 								host => 'localhost',

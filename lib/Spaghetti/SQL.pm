@@ -2,7 +2,7 @@ package Spaghetti::SQL;
 
 our $thread =
 {
-    show => q{SELECT th.id, th.createAt, th.modifyAt, th.parentId,
+    show => q{SELECT th.id, th.createAt, th.modifyAt, th.parentId, t1.prioritet,
                 th.topicId, th.author, th.owner, t.`text`, t1.title,
                 t1.url, u.name, u.mail, u.banId, th.author,
                 (

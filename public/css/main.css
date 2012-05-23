@@ -52,9 +52,37 @@
 	    -khtml-border-radius:5px;
 
         margin: 10px 0px;
-        padding: 5px;
+        padding: 0px;
         border:1px solid #E8E9EB;
         background: #E8E9EB;
+    }
+
+    .superforum>header
+    {
+        margin: 20px 0px 0px 10px;
+        font-size: 18px;
+    }
+
+    .superforum>header>a
+    {
+        text-decoration:none;    
+    }
+
+    .subforum
+    {        
+        -moz-border-radius:5px;
+	    -webkit-border-radius:5px;
+	    border-radius:5px;
+	    -khtml-border-radius:5px;
+        
+        margin: 10px 0px;
+        padding: 10px;
+        background: #cecfd0;
+    }
+
+    .subforum .desc, .forum .desc
+    {
+        font-size:12px;
     }
     
     quote
@@ -133,6 +161,7 @@
     a
     {
         color:#28699B;
+        text-decoration: none;
     }
     
     a:hover
@@ -368,6 +397,7 @@
     .pony-form
     {
         margin:10px;
+        width:650px;
     }
     
     .pony-form .error

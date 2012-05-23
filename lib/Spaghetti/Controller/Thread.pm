@@ -9,6 +9,38 @@ use Mojo::Base 'Mojolicious::Controller';
     use Pony::Stash;
     use Net::Akismet;
     
+    our $firstPage = {};
+
+    sub index
+        {
+            my $this = shift;
+
+            # Caching
+            unless ( keys %$firstPage )
+            {
+                my $dbh = Pony::Model::Dbh::MySQL->new->dbh;
+                my $sth = $dbh->prepare( $Spaghetti::SQL::thread->{'show'} );
+                $sth->execute( 0, 0, 0, 0, 20 );
+
+                $firstPage = $sth->fetchall_hashref('id');
+                
+                # Subforums
+                for my $id ( keys %$firstPage )
+                {
+                    my $sth = $dbh->prepare( $Spaghetti::SQL::thread->{'show'} );
+                    $sth->execute( 0, $id, 0, 0, 20 );
+                    
+                    $firstPage->{$id} =
+                    {
+                        %{ $firstPage->{$id} },
+                        subforums => $sth->fetchall_hashref('id')
+                    };
+                }
+            }
+            
+            $this->stash( firstPage => $firstPage );
+        }
+
     sub show
         {
             my $this = shift;
@@ -22,15 +54,6 @@ use Mojo::Base 'Mojolicious::Controller';
             my $id = ( $url =~ /^\d*$/ ? int $url :
                             $topicModel->read({url=>$url})->{threadId} );
             
-            # Paginator
-            #
-            
-            my $page = int ( $this->param('page') || 0 );
-               $page = 1 if $page < 1;
-            
-            my $size = Pony::Stash->get('thread')->{size};
-               $size = 100_000 if $this->user->{conf}->{isTreeView};
-            
             # Get topic post.
             #
             
@@ -39,13 +62,23 @@ use Mojo::Base 'Mojolicious::Controller';
             
             my $topic = $sth->fetchrow_hashref();
             
+            # Paginator
+            #
+            
+            my $page = int ( $this->param('page') || 0 );
+               $page = 1 if $page < 1;
+            
+            my $size = Pony::Stash->get('thread')->{size};
+               $size = 100_000 if $this->user->{conf}->{isTreeView}
+                                  &&  !$topic->{treeOfTree} ;
+
             # Get thread list.
             #
             
             my $request = ( $topic->{treeOfTree} ? 'show_desc' : 'show' );
 
-            my $sth = $dbh->prepare( $Spaghetti::SQL::thread->{$request} );
-               $sth->execute( $this->user->{id}, $id, $this->user->{id},
+            $sth = $dbh->prepare( $Spaghetti::SQL::thread->{$request} );
+            $sth->execute( $this->user->{id}, $id, $this->user->{id},
                                      ($page-1) * $size, $size );
             
             my $threads = $sth->fetchall_hashref('id');
@@ -60,7 +93,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             # TREE VIEW
             #
-            if ( $this->user->{conf}->{isTreeView} )
+            if ( !$topic->{treeOfTree} && $this->user->{conf}->{isTreeView} )
             {
                 for my $t ( sort {$a->{id} <=> $b->{id}} values %$threads )
                 {
@@ -104,8 +137,19 @@ use Mojo::Base 'Mojolicious::Controller';
             $this->stash( form      => $form      );
             $this->stash( topicForm => $topicForm );
             
-            defined $topic->{legend} ?
-                $this->render('news/show') : $this->render;
+            # Select view script:
+            # * news
+            # * topic
+            # * index
+
+            if ( defined $topic->{legend} )
+            {
+                $this->render('news/show');
+            }
+            else
+            {
+                $this->render;
+            }
         }
     
     # Create thread.

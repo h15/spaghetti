@@ -49,7 +49,7 @@ package Spaghetti::Defaults;
             Pony::Stash->findOrCreate
             ( defaultUserConf =>
               {
-                isTreeView => 0,
+                isTreeView => 1,
                 lang  => 'ru',
                 langs => 'ru'
               }
