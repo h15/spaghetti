@@ -320,7 +320,11 @@ var RTOOLBAR = {};
 			if (this.doc !== null)
 			{
 				this.write(this.setDoc(html));
-				//if ($.browser.mozilla) this.doc.execCommand("useCSS", false, true);
+				try
+				{
+				    if ($.browser.mozilla) this.doc.execCommand("useCSS", false, true);
+				}
+				catch(e){}
 				return $(this.doc).find('#page');
 			}
 			else return false;
@@ -405,7 +409,11 @@ var RTOOLBAR = {};
 		// OBSERVERS
 		observeImages: function()
 		{
-			//if ($.browser.mozilla) this.doc.execCommand("enableObjectResizing", false, "false");
+		    try
+		    {
+			    if ($.browser.mozilla) this.doc.execCommand("enableObjectResizing", false, "false");
+			}
+			catch(e){}
 			
 			$(this.doc).find('img').attr('unselectable', 'on').each($.proxy(function(i,s)
 			{

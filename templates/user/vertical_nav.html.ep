@@ -44,11 +44,13 @@
     </div>
 </a>
 
-%# <a href="<%= url_for 'user_config' %>">
-%#    <div class="item <%= 'selected' if $tab eq 'config' %>">
-%#        <%=l 'Config' %>
+<!--
+%# <a href="<%#= url_for 'user_config' %>">
+%#    <div class="item <%#= 'selected' if $tab eq 'config' %>">
+%#        <%#=l 'Config' %>
 %#    </div>
 %# </a>
+-->
 
 <a href="<%= url_for 'user_logout' %>">
     <div class="item red <%= 'selected' if $tab eq 'logout' %>">

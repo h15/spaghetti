@@ -1,3 +1,33 @@
+commit 1845fe762e238b69ad8cbde70db334743798eca9
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Wed May 23 11:02:11 2012 +0600
+
+    new rendering style for topics, add redactor
+
+commit 0c4cfa389de86606bb5c46f7e4ddbfc5d6336885
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Sat May 19 12:48:35 2012 +0600
+
+    v0.0.12
+
+commit ab62ee201b8f6500953a1cdbabef1677610c0fcc
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Sat May 19 12:33:34 2012 +0600
+
+    turn off multilang
+
+commit 4e92e8eb5eb7af10bd4721401c04972f02e3469b
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Sat May 19 12:19:48 2012 +0600
+
+    phpbb base -> spaghetti base && small fix for user plugin
+
+commit 0356a471f0e9839ced6403b88bcf855d99e745ad
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Sat May 19 03:17:32 2012 +0600
+
+    many changes in repos
+
 commit 4ef7b29bd485ba4aad0dd86396b5301e2757b9ad
 Author: Georgy Bazhukov <gosha@bugov.net>
 Date:   Sat May 19 01:49:55 2012 +0600
