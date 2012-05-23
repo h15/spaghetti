@@ -4,7 +4,93 @@ our $thread =
 {
     show => q{SELECT th.id, th.createAt, th.modifyAt, th.parentId,
                 th.topicId, th.author, th.owner, t.`text`, t1.title,
-                t1.url, u.name, u.mail, u.banId, n.legend, th.author,
+                t1.url, u.name, u.mail, u.banId, th.author,
+                (
+                SELECT COUNT(*) FROM `thread` a 
+                    WHERE ( a.id = th.id )
+                        AND a.id IN
+                        (
+                            SELECT `threadId` FROM `threadToDataType`
+                            WHERE `dataTypeId` IN
+                            (
+                                SELECT `dataTypeId` FROM `access`
+                                WHERE `RWCD` & 2 != 0 AND `groupId` IN
+                                (
+                                    SELECT `groupId` FROM `userToGroup`
+                                    WHERE `userId` = ?
+                                )
+                            )
+                        ) 
+                ) as W
+            FROM `thread` th
+            LEFT OUTER JOIN `text`    t    ON ( th.textId    = t.id  )
+            LEFT OUTER JOIN `topic`   t1   ON ( t1.threadId  = th.id )
+            LEFT OUTER JOIN `user`    u    ON ( th.author    = u.id  )
+                WHERE ( th.topicId = ? )
+                    AND th.id IN
+                        (
+                            SELECT `threadId` FROM `threadToDataType`
+                            WHERE `dataTypeId` IN
+                            (
+                                SELECT `dataTypeId` FROM `access`
+                                WHERE `RWCD` & 1 != 0 AND `groupId` IN
+                                (
+                                    SELECT `groupId` FROM `userToGroup`
+                                    WHERE `userId` = ?
+                                )
+                            )
+                        )
+                ORDER BY th.id ASC
+                LIMIT ?, ?},
+    
+    show_desc =>
+        q{
+            SELECT th.id, th.createAt, th.modifyAt, th.parentId,
+                th.topicId, th.author, th.owner, t.`text`, t1.title,
+                t1.url, u.name, u.mail, u.banId, th.author,
+                (
+                SELECT COUNT(*) FROM `thread` a 
+                    WHERE ( a.id = th.id )
+                        AND a.id IN
+                        (
+                            SELECT `threadId` FROM `threadToDataType`
+                            WHERE `dataTypeId` IN
+                            (
+                                SELECT `dataTypeId` FROM `access`
+                                WHERE `RWCD` & 2 != 0 AND `groupId` IN
+                                (
+                                    SELECT `groupId` FROM `userToGroup`
+                                    WHERE `userId` = ?
+                                )
+                            )
+                        ) 
+                ) as W
+            FROM `thread` th
+            LEFT OUTER JOIN `text`    t    ON ( th.textId    = t.id  )
+            LEFT OUTER JOIN `topic`   t1   ON ( t1.threadId  = th.id )
+            LEFT OUTER JOIN `user`    u    ON ( th.author    = u.id  )
+                WHERE ( th.topicId = ? )
+                    AND th.id IN
+                        (
+                            SELECT `threadId` FROM `threadToDataType`
+                            WHERE `dataTypeId` IN
+                            (
+                                SELECT `dataTypeId` FROM `access`
+                                WHERE `RWCD` & 1 != 0 AND `groupId` IN
+                                (
+                                    SELECT `groupId` FROM `userToGroup`
+                                    WHERE `userId` = ?
+                                )
+                            )
+                        )
+                ORDER BY th.id DESC
+                LIMIT ?, ?
+        },
+
+    show_topic => q{
+            SELECT th.id, th.createAt, th.modifyAt, th.parentId,
+                th.topicId, th.author, th.owner, t.`text`, t1.title,
+                t1.url, t1.treeOfTree, u.name, u.mail, u.banId, n.legend,
                 (
                 SELECT COUNT(*) FROM `thread` a 
                     WHERE ( a.id = th.id )
@@ -27,7 +113,7 @@ our $thread =
             LEFT OUTER JOIN `topic`   t1   ON ( t1.threadId  = th.id )
             LEFT OUTER JOIN `user`    u    ON ( th.author    = u.id  )
             LEFT OUTER JOIN `news`    n    ON ( n.threadId   = th.id )
-                WHERE ( th.topicId = ? or th.id = ? )
+                WHERE ( th.id = ? )
                     AND th.id IN
                         (
                             SELECT `threadId` FROM `threadToDataType`
@@ -41,8 +127,8 @@ our $thread =
                                 )
                             )
                         )
-                ORDER BY th.id ASC
-                LIMIT ?, ?},
+                LIMIT 1
+        },
     
     show_admin => q{SELECT th.id, th.createAt, th.modifyAt, th.parentId,
                         th.topicId, th.author, t.`text`, t1.title,

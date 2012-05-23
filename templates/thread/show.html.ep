@@ -67,28 +67,17 @@
         <%=b $t->{text} %>
     </div>
 
-    %   if ( $create )
+    %   if ( $create && !$topic->{treeOfTree} )
     %   {
             <a href="#" class=showButton id="showButton-<%= $t->{id} %>"><%=l 'response' %></a>
             <a href="#" class="hidden hideButton" id="hideButton-<%= $t->{id} %>"><%=l 'hide' %></a>
-            
-            <a href="#" class=showButton id="showButton-createTopic<%= $t->{id} %>"><%=l 'create topic' %></a>
-            <a href="#" class="hidden hideButton" id="hideButton-createTopic<%= $t->{id} %>"><%=l 'hide' %></a>
-            
+    
             <div class=hidden id="hiddenArea-<%= $t->{id} %>">
                 % $form->elements->{parentId}->value = $t->{id};
                 % $form->elements->{topicId}->value  = $t->{id};
             
                 %
                 %=b $form->render
-            </div>
-            
-            <div class=hidden id="hiddenArea-createTopic<%= $t->{id} %>">
-                % $topicForm->elements->{parentId}->value = $t->{id};
-                % $topicForm->elements->{topicId}->value  = $t->{id};
-                
-                %
-                %=b $topicForm->render
             </div>
     %   }
 </header>
@@ -112,13 +101,58 @@
 
 %=b $paginator
 
-% for my $k ( sort keys %$threads )
+% if ( $topic->{treeOfTree} )
 % {
-%   my $t = $threads->{$k};
+%     for my $k ( sort { $b <=> $a } keys %$threads )
+%     {
+%         my $t = $threads->{$k};
 %
-%   my $class = 'other';
-%      $class = 'hot' if $t->{modifyAt} + 3600 > time;
-%      $class = 'me'  if user->{id} && $t->{author} == user->{id};
+
+<article class="forum" id="thread-<%= $t->{id} %>">
+  <table style="width: 100%">
+     <tr>
+        <td style="width:500px;">
+            <a href="<%= url_for('thread_show', url => ( $t->{url} ? $t->{url} : $t->{id} ) )
+                 %>"><%= ( defined $t->{title} && length $t->{title} ) ? $t->{title} : '#' %></a>
+        </td>
+        
+        <td style="text-align:right">
+            <div class="time">
+                % if ( $t->{modifyAt} == $t->{createAt} ) {
+                %
+                    <%= render_datetime($t->{modifyAt}) %>
+                %
+                % } else {
+                %
+                    <acronym title="<%= format_datetime($t->{createAt}) %>">
+                        <%= render_datetime($t->{modifyAt}) %>
+                    </acronym>
+                %
+                % }
+            </div>
+        
+            <div class="user">
+                <%= render_user({ id => $t->{author},
+                                  name => $t->{name},
+                                  mail => $t->{mail},
+                                  banId => $t->{banId} }) %>
+            </div>
+        </td>
+     </tr>
+  </table>
+</article>
+
+%     }
+% }
+% else
+% {
+%     for my $k ( sort keys %$threads )
+%     {
+%         my $t = $threads->{$k};
+%
+%         my $class = 'other';
+%            $class = 'hot' if $t->{modifyAt} + 3600 > time;
+%            $class = 'me'  if user->{id} && $t->{author} == user->{id};
 
 <article class="post <%= $class %>" id="thread-<%= $t->{id} %>">
     <nav>
@@ -179,10 +213,6 @@
     % {
             <a href="#" class=showButton id="showButton-<%= $t->{id} %>"><%=l 'response' %></a>
             <a href="#" class="hidden hideButton" id="hideButton-<%= $t->{id} %>"><%=l 'hide' %></a>
-            
-            <a href="#" class=showButton id="showButton-createTopic<%= $t->{id} %>"><%=l 'create topic' %></a>
-            <a href="#" class="hidden hideButton" id="hideButton-createTopic<%= $t->{id} %>"><%=l 'hide' %></a>
-            
             <div class=hidden id="hiddenArea-<%= $t->{id} %>">
                 % $form->elements->{parentId}->value = $t->{id};
                 
@@ -196,24 +226,12 @@
                 %
                 %=b $form->render
             </div>
-            
-            <div class=hidden id="hiddenArea-createTopic<%= $t->{id} %>">
-                % $topicForm->elements->{parentId}->value = $t->{id};
-                
-                % if ( defined $t->{title} )
-                % {
-                    % $topicForm->elements->{topicId}->value = $t->{id};
-                % }else {
-                    % $topicForm->elements->{topicId}->value = $t->{topicId};
-                % }
-                
-                %
-                %=b $topicForm->render
-            </div>
     % }
 </article>
 
+%     }
 % }
+
 
 %=b $paginator
 

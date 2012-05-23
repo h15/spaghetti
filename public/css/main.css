@@ -43,7 +43,28 @@
         margin:5px 0px 5px 0px;
         border:1px solid #E8E9EB;
     }
+
+    .forum
+    {
+        -moz-border-radius:5px;
+	    -webkit-border-radius:5px;
+	    border-radius:5px;
+	    -khtml-border-radius:5px;
+
+        margin: 10px 0px;
+        padding: 5px;
+        border:1px solid #E8E9EB;
+        background: #E8E9EB;
+    }
     
+    quote
+    {
+        padding-left: 20px;
+        font-style: italic;
+        display: block;
+        border-left: 3px solid #ccc;
+    }
+
     article.post:nth-child(2n)
     {
         border:1px solid #D8D9DB;
@@ -79,6 +100,7 @@
     {
         float:left;
         padding-right:5px;
+        color: #555;
     }
     
     div.user, div.controlls

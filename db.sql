@@ -212,6 +212,7 @@ create table `topic`
     `threadId`  int(11) unsigned not null,
     `title`     varchar(64) character set utf8 collate utf8_general_ci not null,
     `url`       varchar(64) character set ascii collate ascii_general_ci not null primary key,
+    `treeOfTree`tinyint(1) unsigned not null default 0,
     
     FOREIGN KEY (`threadId`)  REFERENCES `thread`(`id`)
 ) ENGINE = MYISAM;

@@ -164,6 +164,12 @@ use Mojo::Base 'Mojolicious::Controller';
             $this->stash( repo => $repo  );
             $this->stash( logs => \@logs );
         }
+
+    sub readLogs
+        {
+            my $this = shift;
+            my $page = $this->param('page');
+        }
     
     sub readObject
         {

@@ -31,11 +31,21 @@ use Mojo::Base 'Mojolicious::Controller';
             my $size = Pony::Stash->get('thread')->{size};
                $size = 100_000 if $this->user->{conf}->{isTreeView};
             
+            # Get topic post.
+            #
+            
+            my $sth = $dbh->prepare( $Spaghetti::SQL::thread->{show_topic} );
+               $sth->execute( $this->user->{id}, $id, $this->user->{id} );
+            
+            my $topic = $sth->fetchrow_hashref();
+            
             # Get thread list.
             #
             
-            my $sth = $dbh->prepare( $Spaghetti::SQL::thread->{show} );
-               $sth->execute( $this->user->{id}, $id, $id, $this->user->{id},
+            my $request = ( $topic->{treeOfTree} ? 'show_desc' : 'show' );
+
+            my $sth = $dbh->prepare( $Spaghetti::SQL::thread->{$request} );
+               $sth->execute( $this->user->{id}, $id, $this->user->{id},
                                      ($page-1) * $size, $size );
             
             my $threads = $sth->fetchall_hashref('id');
@@ -43,11 +53,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # Is empty?
             #
             
-            $this->stop(404) unless keys %$threads;
-            
-            my ($topic) = grep { $_->{id} eq $id } values %$threads;
-            
-            delete $threads->{ $topic->{id} } if defined $topic;
+            $this->stop(404) unless keys %$threads || keys %$topic;
             
             my @roots;
             my $count;
