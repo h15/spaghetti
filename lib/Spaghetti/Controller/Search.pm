@@ -35,11 +35,16 @@ use Mojo::Base 'Mojolicious::Controller';
             # Get data by IDs
             #
             
-            my $sql = sprintf $Spaghetti::SQL::thread->{search}, join(',',@IDs);
+            my $threads = {};
             
-            my $sth = Pony::Model::Dbh::MySQL->new->dbh->prepare($sql);
-               $sth->execute();
-            my $threads = $sth->fetchall_hashref('id');
+            if ( @IDs )
+            {
+                my $sql = sprintf $Spaghetti::SQL::thread->{search}, join(',',@IDs);
+                
+                my $sth = Pony::Model::Dbh::MySQL->new->dbh->prepare($sql);
+                   $sth->execute();
+                $threads = $sth->fetchall_hashref('id');
+            }
             
             # Prepare to render.
             #
