@@ -152,6 +152,8 @@ use Encode 'decode';
                 'Responses'     => 'Ответы',
                 'Response'      => 'Ответ',
                 'Repo is empty' => 'Репозиторий пуст',
+                'more'          => 'далее',
+                'Search'        => 'Поиск',
             };
             
             $lang->{$_} = decode('utf8', $lang->{$_}) for keys %$lang;

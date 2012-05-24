@@ -2,6 +2,19 @@ package Spaghetti::SQL;
 
 our $thread =
 {
+    search =>
+        q{
+            SELECT th.id, th.createAt, th.modifyAt, th.parentId, t1.prioritet,
+                th.topicId, th.author, th.owner, t.`text`, t1.title,
+                t1.url, u.name, u.mail, u.banId
+            FROM `thread` th
+                LEFT OUTER JOIN `text`    t    ON ( th.textId    = t.id  )
+                LEFT OUTER JOIN `topic`   t1   ON ( t1.threadId  = th.id )
+                LEFT OUTER JOIN `user`    u    ON ( th.author    = u.id  )
+            WHERE th.id IN (%s)
+                ORDER BY th.id ASC
+        },
+        
     show => q{SELECT th.id, th.createAt, th.modifyAt, th.parentId, t1.prioritet,
                 th.topicId, th.author, th.owner, t.`text`, t1.title,
                 t1.url, u.name, u.mail, u.banId, th.author,

@@ -1,0 +1,52 @@
+% layout 'default';
+%
+% title l('Search') . ': ' . stash('q');
+
+<div style="text-align:center;margin-bottom:20px;">
+    <input style="font-size:20px;width:500px" id="text" type="text">
+    <input style="font-size:20px;" type="button" onClick="document.location = '/search/' + $('#text').val()" value="<%=l 'Search' %>">
+</div>
+
+% for my $t ( values %$threads )
+% {
+%
+
+<article class="topic" id="thread-<%= $t->{id} %>">
+    <nav>
+        <div class="sefl">
+            <a href="<%= url_for('thread_show', url => ( defined $t->{title} ? $t->{url} : $t->{topicId} ) )
+                 %>#thread-<%= $t->{id} %>"><%=l 'more' %> &rarr;</a>
+        </div>
+        <div class="time">
+            % if ( $t->{modifyAt} == $t->{createAt} ) {
+            %
+                <%= render_datetime($t->{modifyAt}) %>
+            %
+            % } else {
+            %
+                <acronym title="<%= format_datetime($t->{createAt}) %>">
+                    <%= render_datetime($t->{modifyAt}) %>
+                </acronym>
+            %
+            % }
+        </div>
+        <div class="user">
+            <%= render_user({ id => $t->{author},
+                              name => $t->{name},
+                              mail => $t->{mail},
+                              banId => $t->{banId} }) %>
+        </div>
+        <div class=cb></div>
+    </nav>
+    
+    <div class="postContent">
+        % if ( defined $t->{title} )
+        % {
+            <h3><%= $t->{title} %></h3>
+        % }
+        <%=b shortify( strip($t->{text}), 300 ) %> ...
+    </div>
+</article>
+
+% }
+

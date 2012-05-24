@@ -322,6 +322,17 @@ use Mojo::Base 'Mojolicious';
                 ->to('item#activate')
                   ->name('item_activate');
             
+            # Search
+            #
+            
+            $r->route('/search')
+                ->to(cb => sub{ shift->render('search/index') })
+                  ->name('search_index');
+            
+            $r->route('/search/:q')
+                ->to('search#search')
+                  ->name('search_search');
+            
             # Repos
             #
             

@@ -26,6 +26,9 @@
         <div class="alignleft">
             <a href="<%= url_for 'project_list' %>"><%=l 'Projects' %></a>
         </div>
+        <div class="alignleft">
+            <a href="<%= url_for 'search_index' %>"><%=l 'Search' %></a>
+        </div>
         
         % if ( user->{id} )
         % {

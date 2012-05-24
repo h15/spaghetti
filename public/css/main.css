@@ -33,7 +33,7 @@
             -10px 0 10px -10px rgba(0,0,0,0.5);
     }
     
-    article.post, header.topic
+    article.post, .topic
     {
 	    -moz-border-radius:5px;
 	    -webkit-border-radius:5px;
@@ -111,7 +111,7 @@
         border:1px solid #D8D9DB;
     }
     
-    article.post nav, header.topic nav
+    article.post nav, .topic nav
     {
 	    -moz-border-radius:5px 5px 0px 0px;
 	    -webkit-border-radius:5px 5px 0px 0px;
@@ -122,12 +122,12 @@
         background:#E8E9EB;
     }
     
-    header.topic nav
+    .topic nav
     {
         background:#D0C9DB;
     }
     
-    header.topic
+    .topic
     {
         border:1px solid #D0C9DB;
     }
