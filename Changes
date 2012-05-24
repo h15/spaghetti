@@ -1,3 +1,51 @@
+commit dc009a12fbd67aafd102e69d35ebef248db770db
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Fri May 25 02:29:47 2012 +0600
+
+    add Search actions
+
+commit baa06e392c204ddc61ac902b67a5aa24ab927924
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Thu May 24 23:48:42 2012 +0600
+
+    add Sphinx::Search ( still in beta :( )
+
+commit da3935b03c35ec8ff91a3058d11771695a9ef0fb
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Thu May 24 22:48:53 2012 +0600
+
+    add sphinx config
+
+commit 43ef32a2a22bf40d6c4d38e0dcad045b974e937c
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Thu May 24 04:02:25 2012 +0600
+
+    small fix for redactor
+
+commit d78b7622ea39a1d5cd1351cd4675b33963e1ab2a
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Thu May 24 02:40:33 2012 +0600
+
+    add hypnotoad to spaghetti ^_^
+
+commit 7aeba87137c7fe3778c4dcc53b83d5bb0cee1d19
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Thu May 24 01:22:05 2012 +0600
+
+    change thread-index style
+
+commit cd57061b1315dc8f501968f3120426a219e06da5
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Thu May 24 00:45:33 2012 +0600
+
+    fix redactor for FF
+
+commit 569d02113e6b161c93046a83cb46d7161d7f81d9
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Wed May 23 23:52:11 2012 +0600
+
+    a lot fixes
+
 commit 1845fe762e238b69ad8cbde70db334743798eca9
 Author: Georgy Bazhukov <gosha@bugov.net>
 Date:   Wed May 23 11:02:11 2012 +0600
