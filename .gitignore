@@ -2,4 +2,15 @@
 *.dat
 *.swp
 *~
+*.log
+*.spa
+*.spd
+*.sph
+*.spi
+*.spk
+*.spl
+*.spm
+*.spp
+*.sps
+*.pid
 
