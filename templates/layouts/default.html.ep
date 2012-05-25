@@ -8,7 +8,7 @@
     %= javascript 'http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js'
     %= javascript '/js/main.js'
     %= javascript '/js/redactor/redactor.js'
-    %= javascript '/js/prettify.js'
+    %= javascript '/js/prettify/prettify.js'
     
     <meta charset="utf-8">
     <script type="text/javascript">
