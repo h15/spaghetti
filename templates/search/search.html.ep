@@ -1,6 +1,6 @@
 % layout 'default';
 %
-% title l('Search') . ': ' . stash('q');
+% title l('Search') . ': ' . param('q');
 
 <div style="text-align:center;margin-bottom:20px;">
     <input style="font-size:20px;width:500px" id="text" type="text">
@@ -49,4 +49,6 @@
 </article>
 
 % }
+
+%=b $paginator
 

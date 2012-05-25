@@ -18,6 +18,14 @@ use Mojo::Base 'Mojolicious::Controller';
             
             my $query = $this->param('q');
             
+            # Paginator
+            #
+            
+            my $page = int ( $this->param('page') || 0 );
+               $page = 1 if $page < 1;
+            
+            my $size = Pony::Stash->get('thread')->{size};
+            
             # Get search result.
             #
             
@@ -26,11 +34,10 @@ use Mojo::Base 'Mojolicious::Controller';
             my $results = $sphinx->SetMatchMode(SPH_MATCH_ANY)
                                  ->SetSortMode(SPH_SORT_RELEVANCE)
                                  ->SetFieldWeights($weights)
-                                 ->SetLimits(0, 20)
+                                 ->SetLimits( ($page - 1) * $size, $size )
                                  ->Query($query, 'threads');
             
             my $count = $results->{total_found};
-            my $attrs = $results->{words};
             
             my @IDs;
             
@@ -50,11 +57,48 @@ use Mojo::Base 'Mojolicious::Controller';
                 $threads = $sth->fetchall_hashref('id');
             }
             
+            my $pager = $this->paginatorForSearch($page, $count, $size, $query);
+            
             # Prepare to render.
             #
             
+            $this->stash( paginator => $pager );
             $this->stash( threads => $threads );
             $this->render;
+        }
+        
+    sub paginatorForSearch
+        {
+            my ( $self, $cur, $count, $size, $query ) = @_;
+            my $html = '';
+            
+            return '' if not defined $count or $count <= $size;
+            
+            my $last = int ( $count / $size );
+             ++$last if $count % $size;
+            
+            # Render first page.
+            #
+            $html .= sprintf '<a href="%s?q=%s">&lArr;</a>',
+                     $self->url_for('search_index_p', page => 1), $query if $cur != 1;
+            
+            for my $i ( $cur - 5 .. $cur + 5 )
+            {
+                next if $i < 1 || $i > $last;
+                
+                $html .= ( $i == $cur ?
+                            sprintf '<span>%s</span>', $cur :
+                            sprintf '<a href="%s?q=%s">%s</a>',
+                            $self->url_for('search_index_p', page => $i), $query, $i );
+            }
+            
+            # Render last page.
+            #
+            $html .= sprintf '<a href="%s?q=%s">&rArr;</a>',
+                     $self->url_for('search_index_p', page => $last), $query
+                        if $cur != $last;
+            
+            new Mojo::ByteStream("<div class=\"paginator\">$html</div>")
         }
 
 1;

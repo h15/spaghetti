@@ -328,6 +328,10 @@ use Mojo::Base 'Mojolicious';
             $r->route('/search')
                 ->to('search#search')
                   ->name('search_index');
+                  
+            $r->route('/search/:page', page => qr/\d+/)
+                ->to('search#search')
+                  ->name('search_index_p');
             
             # Repos
             #

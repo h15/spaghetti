@@ -1,3 +1,51 @@
+commit 6dc91f6645b55fbb113ff46b399d2a8fccbca939
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Fri May 25 17:38:00 2012 +0600
+
+    fix search params
+
+commit a8bd9faeb5b003cdfa402b41f06e7c1729957e29
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Fri May 25 16:29:34 2012 +0600
+
+    fix url position in code-block
+
+commit 07c20b0ebd8f1c74f8d069f7be98c61666b27afd
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Fri May 25 16:07:54 2012 +0600
+
+    fix urls to tree on diff page
+
+commit b42a2ec72b6c54d4307da2fcff5738b986f0944c
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Fri May 25 16:02:22 2012 +0600
+
+    remove from css borders for code lines
+
+commit b18350787900b965d4e924cdb5015673c65b413c
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Fri May 25 15:39:26 2012 +0600
+
+    add prettify.js
+
+commit f8b1ceae7c9e4befe3a60f47b361bd537d3dbc0e
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Fri May 25 15:33:44 2012 +0600
+
+    add prettify for code highlighting
+
+commit 1359cd0f5938134074ae0f98c036224528311f9a
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Fri May 25 03:12:51 2012 +0600
+
+    search action fix
+
+commit ba19efa66cb999e17707a19e9f54cbc6574071dd
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Fri May 25 02:31:23 2012 +0600
+
+    v0.0.14
+
 commit dc009a12fbd67aafd102e69d35ebef248db770db
 Author: Georgy Bazhukov <gosha@bugov.net>
 Date:   Fri May 25 02:29:47 2012 +0600
