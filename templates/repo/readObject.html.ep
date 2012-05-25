@@ -6,7 +6,7 @@
 
 <div class="alignright">
     <a href="<%= url_for 'repo_readTreePath', project => param('project'),
-                        repo => param('repo'), object => $desc->{commit} %>">
+                        repo => param('repo'), object => $desc->{commit}, dir => '/' %>">
     <%=l 'Tree' %></a>
 </div>
 
