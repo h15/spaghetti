@@ -10,9 +10,13 @@ use Mojo::Base 'Mojolicious::Controller';
     sub search
         {
             my $this = shift;
-            my $query = $this->param('q');
             
-            my $conf = Pony::Stash->get('thread');
+            unless ( $this->param('q') )
+            {
+                return $this->render('search/index');
+            }
+            
+            my $query = $this->param('q');
             
             # Get search result.
             #
