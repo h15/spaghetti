@@ -25,7 +25,7 @@
 my $n = 0;
 for my $l ( @$blob )
 {
-%><a name="L<%= ++$n %>" href="#L<%= $n %>"><%= $l %></a>
+%><a name="L<%= ++$n %>" class="lineref" href="#L<%= $n %>"></a><%= $l %>
 % }
 </code></td>
             </tr>
