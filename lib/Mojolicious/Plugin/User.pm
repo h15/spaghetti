@@ -1,5 +1,5 @@
 package Mojolicious::Plugin::User;
-use Pony::Object 'Mojolicious::Plugin';
+use Mojo::Base 'Mojolicious::Plugin';
 
     # This is an Mojolicious plugin for work
     # with users. I mean, that it realises personal

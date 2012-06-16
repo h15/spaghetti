@@ -1,5 +1,5 @@
 package Mojolicious::Plugin::Thread;
-use Pony::Object 'Mojolicious::Plugin';
+use Mojo::Base 'Mojolicious::Plugin';
 
     use Pony::Stash;
 

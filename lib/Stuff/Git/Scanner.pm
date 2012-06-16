@@ -5,6 +5,7 @@ use Pony::Object;
     use Pony::Stash;
     use Date::Parse;
     use Spaghetti::Util;
+    use Time::Out qw/timeout/;
     
     protected repo => undef;
     
@@ -35,30 +36,8 @@ use Pony::Object;
     sub run : Protected
         {
             my $this = shift;
-            #my $cmd = $this->repo->command(@_);
-            my @out;
+            my @out = timeout 1 => sub { $this->repo->run(@_) };
             
-            eval
-            {
-            #    local $SIG{ALRM} = sub { die "timeout" };
-                
-            #    alarm 1;
-                @out = $this->repo->run(@_);
-            #    alarm 0;
-            };
-            
-            #my $stdout = $cmd->stdout();
-            #
-            #my $lineCount = 0;
-            #my @out;
-            #
-            #while ( my $out = <$stdout> )
-            #{
-            #    exit 'Too big' if ++$lineCount == 100_000;
-            #    chomp $out;
-            #    push @out, $out;
-            #}
-
             return @out;
         }
     

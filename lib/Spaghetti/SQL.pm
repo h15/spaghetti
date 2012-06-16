@@ -382,7 +382,7 @@ our $repo =
             INNER JOIN `text`   AS tx ON ( th.textId = tx.id )
             INNER JOIN `user`   AS u  ON ( u.id = th.owner )
             INNER JOIN `project`AS p  ON ( p.id = th.topicId )
-        WHERE r.url = ?
+        WHERE r.url = ? AND p.url = ?
     },
     
     userAccessList =>

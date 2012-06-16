@@ -1,3 +1,16 @@
+
+# Class: Spaghetti::Controller::Repo
+# | Repo controller. There are many actions
+# | for working with repositories.
+# | Access allows to all.
+# | Params provides by $this->param.
+# | Returns data to $this->stash.
+#
+# Extends: Mojolicious::Controller
+#
+# See Also:
+#   <Stuff::Git::Scanner>
+
 package Spaghetti::Controller::Repo;
 use Mojo::Base 'Mojolicious::Controller';
     
@@ -8,8 +21,20 @@ use Mojo::Base 'Mojolicious::Controller';
     use Spaghetti::Util;
     use Stuff::Git::Scanner;
     
-    # Create repo
+    
+    # Function: create
+    # | Action. Create repository using user's data.
+    # | Stops request with bad status if project does not exists
+    # | or when limit reachedl or user is not owner.
     #
+    # Parameters:
+    #   project - Id of project.
+    #
+    # Returns:
+    #   form - Generated html code.
+    #
+    # Events:
+    #   Redirect to "All done" page on success.
     
     sub create
         {
@@ -102,13 +127,30 @@ use Mojo::Base 'Mojolicious::Controller';
                     # All is done - let's see that!
                     #
                     
-                    return $this->redirect_to(repo_update => url => $url);
+                    return $this->redirect_to( repo_update => repo => $url,
+                                                project => $proj->{url} );
                 }
             }
             
             $this->stash( form => $form->render );
         }
-
+    
+    
+    # Function: read
+    # | Reads repository log and root tree
+    # | repository name and project name.
+    #
+    # Parametrs:
+    #   repo - repository url
+    #   proj - project url
+    #
+    # Returns:
+    #   files - Array ref to files in root tree.
+    #   dirs - Array ref to dirs in root tree.
+    #   pm - Project manager info (user).
+    #   repo - Repository info.
+    #   logs - Log list for last 3 records.
+    
     sub read
         {
             my $this = shift;
@@ -120,7 +162,7 @@ use Mojo::Base 'Mojolicious::Controller';
             #
             
             my $sth = $dbh->prepare( $Spaghetti::SQL::repo->{read} );
-               $sth->execute( $repo );
+               $sth->execute( $repo, $proj );
             
             $repo = $sth->fetchrow_hashref();
             
@@ -147,7 +189,7 @@ use Mojo::Base 'Mojolicious::Controller';
             $this->stop(418) if $@;
             
             my @logs = eval { $git->getLog(3) };
-
+            
             # Get commit from git.
             #
             
@@ -157,19 +199,42 @@ use Mojo::Base 'Mojolicious::Controller';
             
             # Prepare to render.
             #
-
+            
             $this->stash( files=> $files );
             $this->stash( dirs => \@dirs );
             $this->stash( pm   => $pm    );
             $this->stash( repo => $repo  );
             $this->stash( logs => \@logs );
         }
-
+    
+    
+    # Function: readLogs
+    #   In work.
+    # TODO: Show paged log list for this repo.
+    
     sub readLogs
         {
             my $this = shift;
             my $page = $this->param('page');
         }
+    
+    
+    # Function: readObject
+    # | Read git diff.
+    # | Will returns "I'm teapot" on git read error.
+    #
+    # Paramerts:
+    #   obj - Id of git object, where describes diff.
+    #   repo - Url of repo.
+    #   proj - Url of project.
+    #
+    # Returns:
+    #   files - List of changed files.
+    #   desc - Commit comment.
+    #   diff - Lines of diff.
+    #   repo - Repo url.
+    #   project - Project url.
+    #   object - Git object id.
     
     sub readObject
         {
@@ -183,7 +248,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             my $dbh = Pony::Model::Dbh::MySQL->new->dbh;
             my $sth = $dbh->prepare( $Spaghetti::SQL::repo->{read} );
-               $sth->execute( $repo );
+               $sth->execute( $repo, $proj );
             
             $repo = $sth->fetchrow_hashref();
             
@@ -194,7 +259,7 @@ use Mojo::Base 'Mojolicious::Controller';
             $this->stop(418) if $@;
             
             my ( $desc, $files, $data ) = $git->getCommit($obj);
-            say $this->dumper($data);
+            
             $this->stash( files   => $files);
             $this->stash( desc    => $desc );
             $this->stash( diff    => $data );
@@ -202,6 +267,22 @@ use Mojo::Base 'Mojolicious::Controller';
             $this->stash( project => $proj );
             $this->stash( object  => $obj  );
         }
+    
+    
+    # Function: readBlob
+    # | Read file of git tree.
+    # | Will returns "I'm teapot" on git read error.
+    #
+    # Paramerts:
+    #   obj - Git object id.
+    #   repo - Repo url.
+    #   proj - project url.
+    #
+    # Returns:
+    #   blob - Lines of file.
+    #   repo - Repo url.
+    #   project - Project url.
+    #   object - Git object id.
     
     sub readBlob
         {
@@ -215,7 +296,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             my $dbh = Pony::Model::Dbh::MySQL->new->dbh;
             my $sth = $dbh->prepare( $Spaghetti::SQL::repo->{read} );
-               $sth->execute( $repo );
+               $sth->execute( $repo, $proj );
             
             $repo = $sth->fetchrow_hashref();
             
@@ -233,6 +314,23 @@ use Mojo::Base 'Mojolicious::Controller';
             $this->stash( object  => $obj  );
         }
     
+    
+    # Function: readBlobPath
+    # | Read file of git tree.
+    # | Will returns "I'm teapot" on git read error.
+    # | It's more sapient version of readBlob.
+    #
+    # Paramerts:
+    #   obj - Git object id.
+    #   repo - Repo url.
+    #   proj - project url.
+    #
+    # Returns:
+    #   blob - Lines of file.
+    #   repo - Repo url.
+    #   project - Project url.
+    #   object - Git object id.
+    
     sub readBlobPath
         {
             my $this = shift;
@@ -240,15 +338,15 @@ use Mojo::Base 'Mojolicious::Controller';
             my $repo = $this->param('repo');
             my $proj = $this->param('project');
             my $path = $this->param('dir');
-            say $this->stash('format');
+            
             $path = substr $path, 1;
-
+            
             # Get repo.
             #
             
             my $dbh = Pony::Model::Dbh::MySQL->new->dbh;
             my $sth = $dbh->prepare( $Spaghetti::SQL::repo->{read} );
-               $sth->execute( $repo );
+               $sth->execute( $repo, $proj );
             
             $repo = $sth->fetchrow_hashref();
             
@@ -264,9 +362,27 @@ use Mojo::Base 'Mojolicious::Controller';
             $this->stash( repo    => $repo );
             $this->stash( project => $proj );
             $this->stash( object  => $obj  );
-
+            
             $this->render('repo/readBlob');
         }
+    
+    
+    # Function: readTree
+    # | Read tree's directory.
+    # | Returns "I'm teapot" on git read error.
+    #
+    # Parametrs:
+    #   tree - Git id of tree.
+    #   obj - Object Id.
+    #   repo - Repo url.
+    #   proj - Project url.
+    #
+    # Returns:
+    #   files - List of files in this dir.
+    #   dirs - List of dirs in this dir.
+    #   repo - Repo info.
+    #   project - Project url.
+    #   object - Object url.
     
     sub readTree
         {
@@ -281,7 +397,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             my $dbh = Pony::Model::Dbh::MySQL->new->dbh;
             my $sth = $dbh->prepare( $Spaghetti::SQL::repo->{read} );
-               $sth->execute( $repo );
+               $sth->execute( $repo, $proj );
             
             $repo = $sth->fetchrow_hashref();
             
@@ -302,6 +418,25 @@ use Mojo::Base 'Mojolicious::Controller';
             $this->stash( object  => $obj  );
         }
     
+    
+    # Function: readTreePath
+    # | Read tree's directory.
+    # | Returns "I'm teapot" on git read error.
+    # | It's more sapient version of readTree.
+    #
+    # Parametrs:
+    #   tree - Git id of tree.
+    #   obj - Object Id.
+    #   repo - Repo url.
+    #   proj - Project url.
+    #
+    # Returns:
+    #   files - List of files in this dir.
+    #   dirs - List of dirs in this dir.
+    #   repo - Repo info.
+    #   project - Project url.
+    #   object - Object url.
+    
     sub readTreePath
         {
             my $this = shift;
@@ -310,7 +445,7 @@ use Mojo::Base 'Mojolicious::Controller';
             my $repo = $this->param('repo');
             my $proj = $this->param('project');
             my $path = $this->param('dir');
-
+            
             $path = substr $path, 1;
             
             # Get repo.
@@ -318,7 +453,7 @@ use Mojo::Base 'Mojolicious::Controller';
             
             my $dbh = Pony::Model::Dbh::MySQL->new->dbh;
             my $sth = $dbh->prepare( $Spaghetti::SQL::repo->{read} );
-               $sth->execute( $repo );
+               $sth->execute( $repo, $proj );
             
             $repo = $sth->fetchrow_hashref();
             
@@ -337,23 +472,40 @@ use Mojo::Base 'Mojolicious::Controller';
             $this->stash( repo    => $repo );
             $this->stash( project => $proj );
             $this->stash( object  => $obj  );
-
+            
             $this->render('repo/readTree');
         }
-
+    
+    
+    # Function: update
+    #   Update repo info.
+    #
+    # Parametrs:
+    #   url - Repo url.
+    #   proj - Project url.
+    #
+    # Returns:
+    #   repo - Repository info.
+    #   form - Html form.
+    #
+    # Events:
+    #   Redirect on success.
+    
     sub update
         {
             my $this = shift;
             my $url  = $this->param('repo');
+            my $proj = $this->param('project');
             my $dbh  = Pony::Model::Dbh::MySQL->new->dbh;
             my $form = new Spaghetti::Form::Repo::Create;
-               $form->action = $this->url_for(repo_update => url => $url);
+               $form->action = $this->url_for( repo_update => repo => $url,
+                                                            project => $proj );
             
             # Get repo
             #
             
             my $sth = $dbh->prepare( $Spaghetti::SQL::repo->{read} );
-               $sth->execute( $url );
+               $sth->execute( $url, $proj );
             
             my $repo = $sth->fetchrow_hashref();
             my $id   = $repo->{id};
@@ -441,17 +593,31 @@ use Mojo::Base 'Mojolicious::Controller';
             $this->stash( form => $form->render );
         }
     
+    
+    # Function: changeAccess
+    #   Change repo ACL.
+    #
+    # Paramerts:
+    #   url - Repo url.
+    #   proj - Project url.
+    #
+    # Returns:
+    #   repo - Reposytory info.
+    #   url - Repo url.
+    #   accessList - ACL for this repo.
+    
     sub changeAccess
         {
             my $this = shift;
             my $url  = $this->param('repo');
+            my $proj = $this->param('project');
             my $dbh  = Pony::Model::Dbh::MySQL->new->dbh;
             
             # Get repo
             #
             
             my $sth = $dbh->prepare( $Spaghetti::SQL::repo->{read} );
-               $sth->execute( $url );
+               $sth->execute( $url, $proj );
             
             my $repo = $sth->fetchrow_hashref();
             my $id   = $repo->{id};
@@ -481,7 +647,7 @@ use Mojo::Base 'Mojolicious::Controller';
             if ( $this->req->method eq 'POST' )
             {
                 my $user = $this->param('user');
-            
+                
                 my $r = ( $this->param('r') ? 1 : 0 );
                 my $w = ( $this->param('w') ? 1 : 0 );
                 my $p = ( $this->param('p') ? 1 : 0 );
@@ -540,4 +706,3 @@ This program is free software, you can redistribute it and/or modify it under
 the terms of the Artistic License version 2.0.
 
 =cut
-

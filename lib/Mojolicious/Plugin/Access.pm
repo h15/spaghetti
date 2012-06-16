@@ -1,5 +1,5 @@
 package Mojolicious::Plugin::Access;
-use Pony::Object 'Mojolicious::Plugin';
+use Mojo::Base 'Mojolicious::Plugin';
 
     use Pony::Stash;
     use Pony::Model::Crud::MySQL;
@@ -20,12 +20,12 @@ use Pony::Object 'Mojolicious::Plugin';
                     )
                 ';
     
-    has const => {
+    has const => sub {{
                     r   => 1,
                     w   => 2,
                     c   => 4,
                     d   => 8
-                 };
+                 }};
     
     sub register
         {
