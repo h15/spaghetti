@@ -57,6 +57,7 @@ use Pony::Object;
                 {
                     when( /^\s+(.*)/s )
                     {
+                        next unless @logs;
                         $logs[$#logs]{comment} .= $1 . ' ';
                     }
                     when( /Author:\s*(.*)/s )
@@ -95,7 +96,7 @@ use Pony::Object;
             my $this = shift;
             my $id   = shift;
             my $path = shift;
-
+            
             $id .= ':' . $path if defined $path;
             
             my @c = $this->run( 'ls-tree', $id );
@@ -272,7 +273,7 @@ use Pony::Object;
                                                 
                         unshift @files, $f;
                     }
-
+                    
                     default
                     {
                         $c[$i] = '';
