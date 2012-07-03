@@ -226,6 +226,14 @@ use Mojo::Base 'Mojolicious::Controller';
             my $proj = $this->param('project');
             my $page = $this->param('page');
             
+            # Get repo.
+            #
+            
+            my $sth = $dbh->prepare( $Spaghetti::SQL::repo->{read} );
+               $sth->execute( $repo, $proj );
+            
+            $repo = $sth->fetchrow_hashref();
+            
             # Paginator.
             #
             
@@ -237,18 +245,28 @@ use Mojo::Base 'Mojolicious::Controller';
             # Get data from git.
             #
             
-            my $git = eval {
-                new Stuff::Git::Scanner(@$repo{ qw/projectUrl url/ })
+            my $git;
+            
+            try
+            {
+                $git = new Stuff::Git::Scanner(@$repo{ qw/projectUrl url/ })
+            }
+            catch Stuff::Exception::IO with
+            {
+                my $exc = shift;
+                $this->stop(418);
             };
             
             $this->stop(418) if $@;
             
-            my @logs = eval { $git->getLog(3) };
-            my $count = {count => 100};
+            my @logs = eval { $git->getLog(1000) };
+            my $count = {count => 0};
             
             # Rendering.
             #
             
+            $this->stash( logs => \@logs );
+            $this->stash( repo => $repo  );
             $this->stash( paginator =>
                             $this->paginator( repo_readLogs =>
                                 $page, $count->{count}, $size,
