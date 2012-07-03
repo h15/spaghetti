@@ -10,7 +10,6 @@ use Error qw(:try);
     use Pony::Stash;
     use Date::Parse;
     use Spaghetti::Util;
-    use Time::Out qw/timeout/;
     use Stuff::Exception::IO;
     
     protected repo => undef;
@@ -40,15 +39,14 @@ use Error qw(:try);
     # Function: run
     # | Special C<run> method to prevent server
     # | overload by huge git objects.
-    #
+    # TODO: timeout
     # @access protected
     # @raises "Too big"
     
     sub run : Protected
         {
             my $this = shift;
-            my @out = timeout 1 => sub { $this->repo->run(@_) };
-            
+            my @out = $this->repo->run(@_);
             return @out;
         }
     
