@@ -225,6 +225,7 @@ use Mojo::Base 'Mojolicious::Controller';
             my $repo = $this->param('repo');
             my $proj = $this->param('project');
             my $page = $this->param('page');
+            my $dbh  = Pony::Model::Dbh::MySQL->new->dbh;
             
             # Get repo.
             #
