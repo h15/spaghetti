@@ -1,9 +1,15 @@
 % layout 'default';
 %
 % title l('Forum');
-% 
-% for my $f ( sort{ $b->{prioritet} <=> $a->{prioritet} } values %$firstPage )
-% {
+
+<div class="alignright button">
+    <form method="POST" action="<%= url_for('thread_createTopic') %>">
+        <input type="submit" value="<%=l 'Add' %>">
+        <input type="hidden" value="0" name="parentId">
+    </form>
+</div>
+
+% for my $f ( sort{ $b->{prioritet} <=> $a->{prioritet} } values %$firstPage ) {
 
 <article class="superforum" id="thread-<%= $f->{id} %>">
     <header>

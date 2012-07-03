@@ -14,14 +14,14 @@ use Mojo::Base 'Mojolicious::Controller';
     sub index
         {
             my $this = shift;
-
+            
             # Caching
             unless ( keys %$firstPage )
             {
                 my $dbh = Pony::Model::Dbh::MySQL->new->dbh;
                 my $sth = $dbh->prepare( $Spaghetti::SQL::thread->{'show'} );
                 $sth->execute( 0, 0, 0, 0, 20 );
-
+                
                 $firstPage = $sth->fetchall_hashref('id');
                 
                 # Subforums

@@ -20,6 +20,7 @@ use Mojo::Base 'Mojolicious::Controller';
     use Spaghetti::Form::Repo::Create;
     use Spaghetti::Util;
     use Stuff::Git::Scanner;
+    use Error ':try';
     
     
     # Function: create
@@ -182,11 +183,17 @@ use Mojo::Base 'Mojolicious::Controller';
             # Get data from git.
             #
             
-            my $git = eval {
-                new Stuff::Git::Scanner(@$repo{ qw/projectUrl url/ })
-            };
+            my $git;
             
-            $this->stop(418) if $@;
+            try
+            {
+                $git = new Stuff::Git::Scanner(@$repo{ qw/projectUrl url/ })
+            }
+            catch Stuff::Exception::IO with
+            {
+                my $exc = shift;
+                $this->stop(418);
+            };
             
             my @logs = eval { $git->getLog(3) };
             
@@ -215,7 +222,38 @@ use Mojo::Base 'Mojolicious::Controller';
     sub readLogs
         {
             my $this = shift;
+            my $repo = $this->param('repo');
+            my $proj = $this->param('project');
             my $page = $this->param('page');
+            
+            # Paginator.
+            #
+            
+            my $page = int ( $this->param('page') || 0 );
+               $page = 1 if $page < 1;
+            
+            my $size = Pony::Stash->get('thread')->{size};
+            
+            # Get data from git.
+            #
+            
+            my $git = eval {
+                new Stuff::Git::Scanner(@$repo{ qw/projectUrl url/ })
+            };
+            
+            $this->stop(418) if $@;
+            
+            my @logs = eval { $git->getLog(3) };
+            my $count = {count => 100};
+            
+            # Rendering.
+            #
+            
+            $this->stash( paginator =>
+                            $this->paginator( repo_readLogs =>
+                                $page, $count->{count}, $size,
+                                [ repo => $repo, project => $proj ] ) );
+            
         }
     
     
@@ -580,7 +618,8 @@ use Mojo::Base 'Mojolicious::Controller';
                     # All is done - let's see that!
                     #
                     
-                    return $this->redirect_to(repo_read => url => $url);
+                    return $this->redirect_to( repo_read => repo => $url,
+                                                    project => $proj );
                 }
             }
             

@@ -1,18 +1,27 @@
+
+# Class: Stuff::Git::Scanner
+# Stuff for getting data for git repositories.
+
 package Stuff::Git::Scanner;
 use Pony::Object;
+use Error qw(:try);
 
     use Git::Repository;
     use Pony::Stash;
     use Date::Parse;
     use Spaghetti::Util;
     use Time::Out qw/timeout/;
+    use Stuff::Exception::IO;
     
     protected repo => undef;
     
-    # Init one repo.
-    # @access public
-    # @raises "Can't find dir ..."
-    # @raises "Repo does not exist"
+    # Function: init
+    # Constructor. Reads one git repo.
+    # 
+    # access: public
+    # raises:
+    #   Stuff::Exception::IO - "Can't find dir ..."
+    #   Stuff::Exception::IO - "Repo does not exist"
     
     sub init : Public
         {
@@ -21,15 +30,17 @@ use Pony::Object;
             my $repo = shift;
             my $dir  = Pony::Stash->get('git')->{dir};
             
-            die "Can't find dir $dir" unless -d $dir;
-            die "Repo does not exist" unless -d "$dir/$proj/$repo.git";
+            throw Stuff::Exception::IO("Can't find dir $dir") unless -d $dir;
+            throw Stuff::Exception::IO("Repo does not exist") unless -d "$dir/$proj/$repo.git";
             
             $this->repo = Git::Repository
                             ->new( git_dir => "$dir/$proj/$repo.git" );
         }
     
-    # Special C<run> method to prevent server
-    # overload by huge git objects.
+    # Function: run
+    # | Special C<run> method to prevent server
+    # | overload by huge git objects.
+    #
     # @access protected
     # @raises "Too big"
     

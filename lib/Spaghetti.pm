@@ -163,6 +163,10 @@ use Mojo::Base 'Mojolicious';
             $r->route('/thread/new/topic')
                 ->to('thread#createTopic')
                   ->name('thread_createTopic');
+            $r->route('/thread/topic/form')
+                ->to('thread#topicForm')
+                  ->name('thread_topicForm');
+            
             $r->route('/thread/edit/:id')
                 ->to('thread#edit')
                   ->name('thread_edit');
@@ -348,6 +352,9 @@ use Mojo::Base 'Mojolicious';
             $r->route('/:project/:repo/access')
                 ->to('repo#changeAccess')
                   ->name('repo_changeAccess');
+            $r->route('/:project/:repo/logs/page/:page', page => qr/\d*/)
+                ->to('repo#readLogs')
+                  ->name('repo_readLogs');
             $r->route('/:project/:repo/:object')
                 ->to('repo#readObject')
                   ->name('repo_readObject');
