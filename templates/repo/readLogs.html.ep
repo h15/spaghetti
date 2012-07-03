@@ -8,10 +8,7 @@
 % {
     <article class="rounded" style="width:90%;margin-top:15px;padding-right:-10px;">
         <div class="alignright">
-            <%=b render_userpic $l->{mail}, 20 %>
-            <div>
-                <%= $l->{date} %>
-            </div>
+            <%= render_datetime $l->{date} %> <%=b render_userpic $l->{mail}, 20 %>
         </div>
         <a href="<%= url_for 'repo_readObject', project => param('project'), repo => param('repo'), object => $l->{commit} %>">
             <div><%= $l->{comment} %></div>
