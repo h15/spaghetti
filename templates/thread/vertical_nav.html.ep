@@ -1,0 +1,23 @@
+% content_for vertical_nav => begin
+%
+% my $tab = stash('tab');
+
+<!-- MENU -->
+
+% if ( $create )
+% {
+<a href="<%= url_for 'thread_createTopic', parentId => $id, topicId => $id, tree => 1 %>">
+    <div class="item red <%= 'selected' if $tab eq 'topicForm' %>">
+        <%=l 'Create tree' %>
+    </div>
+</a>
+
+<a href="<%= url_for 'thread_createTopic', parentId => $id, topicId => $id %>">
+    <div class="item red <%= 'selected' if $tab eq 'topicForm' %>">
+        <%=l 'Create topic' %>
+    </div>
+</a>
+% }
+    
+% end
+

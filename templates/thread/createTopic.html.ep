@@ -1,4 +1,4 @@
 % layout 'default';
-% title l('Create new topic');
+% title $tree ? l('Create new tree') : l('Create new topic');
 
 %=b $form

@@ -14,7 +14,34 @@ our $thread =
             WHERE th.id IN (%s)
                 ORDER BY th.id ASC
         },
-        
+    
+    index =>
+        q{
+            SELECT th.id, th.createAt, th.modifyAt, th.parentId, t1.prioritet,
+                th.topicId, th.author, th.owner, t.`text`, t1.title,
+                t1.url, u.name, u.mail, u.banId, th.author
+            FROM `thread` th
+            LEFT OUTER JOIN `text`    t    ON ( th.textId    = t.id  )
+            LEFT OUTER JOIN `topic`   t1   ON ( t1.threadId  = th.id )
+            LEFT OUTER JOIN `user`    u    ON ( th.author    = u.id  )
+                WHERE ( th.topicId = ? )
+                    AND th.id IN
+                        (
+                            SELECT `threadId` FROM `threadToDataType`
+                            WHERE `dataTypeId` IN
+                            (
+                                SELECT `dataTypeId` FROM `access`
+                                WHERE `RWCD` & 1 != 0 AND `groupId` IN
+                                (
+                                    SELECT `groupId` FROM `userToGroup`
+                                    WHERE `userId` = 0
+                                )
+                            )
+                        )
+                ORDER BY t1.prioritet DESC
+                LIMIT ?, ?
+        },
+    
     show => q{SELECT th.id, th.createAt, th.modifyAt, th.parentId, t1.prioritet,
                 th.topicId, th.author, th.owner, t.`text`, t1.title,
                 t1.url, u.name, u.mail, u.banId, th.author,

@@ -160,10 +160,10 @@ use Mojo::Base 'Mojolicious';
             $r->route('/thread/create')
                 ->to('thread#create')
                   ->name('thread_create');
-            $r->route('/thread/new/topic')
+            $r->route('/thread/new/topic/:parentId/:topicId/:tree')
                 ->to('thread#createTopic')
                   ->name('thread_createTopic');
-            $r->route('/thread/topic/form')
+            $r->route('/thread/topic/form/:parent', parent => qr/\d+/)
                 ->to('thread#topicForm')
                   ->name('thread_topicForm');
             
@@ -189,6 +189,13 @@ use Mojo::Base 'Mojolicious';
             $r->route('/thread/:url')
                 ->to('thread#show')
                   ->name('thread_show');
+                  
+            $r->route('/thread/up/:parent/:id', parent => qr/\d+/, id => qr/\d+/)
+                ->to('thread#topicUp')
+                  ->name('thread_topicUp');
+            $r->route('/thread/down/:parent/:id', parent => qr/\d+/, id => qr/\d+/)
+                ->to('thread#topicDown')
+                  ->name('thread_topicDown');
             
             $a->route('/thread/edit/:id')
                 ->to('thread#edit')
@@ -343,31 +350,31 @@ use Mojo::Base 'Mojolicious';
             $r->route('/repo/create/:id', id => qr/\d+/)
                 ->to('repo#create')
                   ->name('repo_create');
-            $r->route('/:project/:repo')
+            $r->route('/repo/:project/:repo')
                 ->to('repo#read')
                   ->name('repo_read');
-            $r->route('/:project/:repo/edit')
+            $r->route('/repo/:project/:repo/edit')
                 ->to('repo#update')
                   ->name('repo_update');
-            $r->route('/:project/:repo/access')
+            $r->route('/repo/:project/:repo/access')
                 ->to('repo#changeAccess')
                   ->name('repo_changeAccess');
-            $r->route('/:project/:repo/logs/page/:page', page => qr/\d*/)
+            $r->route('/repo/:project/:repo/logs/page/:page', page => qr/\d*/)
                 ->to('repo#readLogs')
                   ->name('repo_readLogs');
-            $r->route('/:project/:repo/:object')
+            $r->route('/repo/:project/:repo/:object')
                 ->to('repo#readObject')
                   ->name('repo_readObject');
             #$r->route('/:project/:repo/:object/tree')
             #    ->to('repo#readTree', format => '0')
             #      ->name('repo_readTree');
-            $r->route('/:project/:repo/:object/tree*dir')
+            $r->route('/repo/:project/:repo/:object/tree*dir')
                 ->to('repo#readTreePath', format => '0')
                   ->name('repo_readTreePath');
             #$r->route('/:project/:repo/:object/blob')
             #    ->to('repo#readBlob', format => '0')
             #      ->name('repo_readBlob');
-            $r->route('/:project/:repo/:object/blob*dir')
+            $r->route('/repo/:project/:repo/:object/blob*dir')
                 ->to('repo#readBlobPath', format => '0')
                   ->name('repo_readBlobPath');
             

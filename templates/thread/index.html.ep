@@ -1,19 +1,23 @@
 % layout 'default';
 %
 % title l('Forum');
+% stash(tab => 'index');
+% include 'thread/vertical_nav';
 
-<div class="alignright button">
-    <form method="POST" action="<%= url_for('thread_createTopic') %>">
-        <input type="submit" value="<%=l 'Add' %>">
-        <input type="hidden" value="0" name="parentId">
-    </form>
-</div>
-
-% for my $f ( sort{ $b->{prioritet} <=> $a->{prioritet} } values %$firstPage ) {
+% for my $f ( sort{ $b->{prioritet} <=> $a->{prioritet} } values %$firstPage )
+% {
 
 <article class="superforum" id="thread-<%= $f->{id} %>">
     <header>
         <a href="<%= url_for('thread_show', url => $f->{url}) %>"><%= $f->{title} %></a>
+        
+        % if ( $create )
+        % {
+            <div class="alignright">
+                <a href="<%= url_for('thread_topicUp', parent => 0, id => $f->{id} ) %>">&nbsp;&uarr;&nbsp;</a>
+                <a href="<%= url_for('thread_topicDown', parent => 0, id => $f->{id} ) %>">&nbsp;&darr;&nbsp;</a>
+            </div>
+        % }
     </header>
     
     <div class="subforums">
@@ -27,6 +31,14 @@
             <article class="desc">
                 <%=b $s->{text} %>
             </article>
+            
+            % if ( $create )
+            % {
+                <div class="alignright">
+                    <a href="<%= url_for('thread_topicUp', parent => $f->{id}, id => $s->{id} ) %>">&nbsp;&uarr;&nbsp;</a>
+                    <a href="<%= url_for('thread_topicDown', parent => $f->{id}, id => $s->{id} ) %>">&nbsp;&darr;&nbsp;</a>
+                </div>
+            % }
         </article>
 
         % }

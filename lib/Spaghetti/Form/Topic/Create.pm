@@ -34,15 +34,11 @@ use Pony::Object qw/Pony::View::Form/;
                 }
             );
             
-            $this->addElement
-            (
-                parentId => hidden =>
-            );
+            $this->addElement( parentId => 'hidden' );
             
-            $this->addElement
-            (
-                topicId => hidden =>
-            );
+            $this->addElement( topicId => 'hidden' );
+            
+            $this->addElement( tree => 'hidden' );
             
             $this->addElement( submit => submit => {ignore => 1} );
         }

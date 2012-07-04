@@ -1,3 +1,57 @@
+commit 28a922658c4defc5ed5df82c2112bcda6ba22a0f
+Author: Gosha Bugov <gosha.bugov@gmail.com>
+Date:   Tue Jul 3 10:33:15 2012 +0600
+
+    fix datetime in readLogs
+
+commit 19311b720e4091a502664d889dbeea42192a5ea7
+Author: Gosha Bugov <gosha.bugov@gmail.com>
+Date:   Tue Jul 3 10:29:27 2012 +0600
+
+    fix Git output. Time::Out is crap ><
+
+commit 60a16524c5dd44928b7b25e2bfb7dafdb0410728
+Author: Gosha Bugov <gosha.bugov@gmail.com>
+Date:   Tue Jul 3 10:07:32 2012 +0600
+
+    small fix
+
+commit 3285d49c00354a2b6644121847681f34a0aafa6b
+Author: Gosha Bugov <gosha.bugov@gmail.com>
+Date:   Tue Jul 3 10:01:39 2012 +0600
+
+    readLogs should works
+
+commit 538502824ba9cea94222ea21b9bdb1e8bfff086c
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Tue Jul 3 06:11:28 2012 +0600
+
+    just save
+
+commit c05bbdccf473a1cecb0cb7154838102dec39413b
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Tue Jun 26 16:58:23 2012 +0600
+
+    small fix on git scanner
+
+commit e5afd6fa56db349b3de155761aaa879da066a3fe
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Sat Jun 16 13:56:45 2012 +0600
+
+    chmod && remote Pony::Object as base for plugins && use pair (project, repo) for indetify repo && add docs-api && more docs for Spaghetti::Controller::Repo
+
+commit ff848c2e6594053584df2c31eed0826af43a580b
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Fri May 25 18:24:38 2012 +0600
+
+    fix search results
+
+commit ab38e74f494b47719afb2a1c62dab1439e8cd5b5
+Author: root <root@bugtop.(none)>
+Date:   Fri May 25 18:21:05 2012 +0600
+
+    add paginator for search
+
 commit 6dc91f6645b55fbb113ff46b399d2a8fccbca939
 Author: Georgy Bazhukov <gosha@bugov.net>
 Date:   Fri May 25 17:38:00 2012 +0600

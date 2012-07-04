@@ -10,25 +10,26 @@ use Mojo::Base 'Mojolicious::Controller';
     use Net::Akismet;
     
     our $firstPage = {};
+    our $rebuildFirstPage = 0;
 
     sub index
         {
             my $this = shift;
             
             # Caching
-            unless ( keys %$firstPage )
+            unless ( keys %$firstPage || $rebuildFirstPage )
             {
                 my $dbh = Pony::Model::Dbh::MySQL->new->dbh;
-                my $sth = $dbh->prepare( $Spaghetti::SQL::thread->{'show'} );
-                $sth->execute( 0, 0, 0, 0, 20 );
+                my $sth = $dbh->prepare( $Spaghetti::SQL::thread->{'index'} );
+                $sth->execute( 0, 0, 20 );
                 
                 $firstPage = $sth->fetchall_hashref('id');
                 
                 # Subforums
                 for my $id ( keys %$firstPage )
                 {
-                    my $sth = $dbh->prepare( $Spaghetti::SQL::thread->{'show'} );
-                    $sth->execute( 0, $id, 0, 0, 20 );
+                    my $sth = $dbh->prepare( $Spaghetti::SQL::thread->{'index'} );
+                    $sth->execute( $id, 0, 20 );
                     
                     $firstPage->{$id} =
                     {
@@ -36,9 +37,13 @@ use Mojo::Base 'Mojolicious::Controller';
                         subforums => $sth->fetchall_hashref('id')
                     };
                 }
+                
+                $rebuildFirstPage = 0;
             }
             
             $this->stash( firstPage => $firstPage );
+            $this->stash( create => $this->access(0, 'c') );
+            $this->stash( id => 0 );
         }
 
     sub show
@@ -71,12 +76,12 @@ use Mojo::Base 'Mojolicious::Controller';
             my $size = Pony::Stash->get('thread')->{size};
                $size = 100_000 if $this->user->{conf}->{isTreeView}
                                   &&  !$topic->{treeOfTree} ;
-
+            
             # Get thread list.
             #
             
             my $request = ( $topic->{treeOfTree} ? 'show_desc' : 'show' );
-
+            
             $sth = $dbh->prepare( $Spaghetti::SQL::thread->{$request} );
             $sth->execute( $this->user->{id}, $id, $this->user->{id},
                                      ($page-1) * $size, $size );
@@ -141,7 +146,7 @@ use Mojo::Base 'Mojolicious::Controller';
             # * news
             # * topic
             # * index
-
+            
             if ( defined $topic->{legend} )
             {
                 $this->render('news/show');
@@ -205,7 +210,7 @@ use Mojo::Base 'Mojolicious::Controller';
                             KEY => $site->{akismetApi},
                             URL => $site->{root},
                         ) or die('Key verification failure!');
-
+                        
                         my $fail = $akismet->check
                         (
                                 USER_IP                 => $this->tx->remote_address,
@@ -216,7 +221,7 @@ use Mojo::Base 'Mojolicious::Controller';
                                 REFERRER                => $this->req->headers->referrer,
                         )
                         or die('Is the Akismet server dead?');
-        
+                        
                         $this->stop(401) if 'true' eq $fail;
                     }
                     
@@ -255,7 +260,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     
                     my $thread = Pony::Model::Crud::MySQL
                                     ->new('thread')->read({id => $parent});
-
+                    
                     Pony::Model::Crud::MySQL->new('responses')->create
                     ({
                         userId   => $thread->{author},
@@ -323,16 +328,19 @@ use Mojo::Base 'Mojolicious::Controller';
             my $this = shift;
             my $pid  = int ( $this->param('parentId') || 0 );
             my $tid  = int ( $this->param('topicId' ) || 0 );
+            my $tree = int ( $this->param('tree'    ) || 0 );
             
             # Access denied.
             #
             
-            $this->stop(403) unless $this->access($tid, 'c');
+            $this->stop(403) unless $tree ? $this->access(0, 'c')
+                                          : $this->access($tid, 'c');
             
             my $form = new Spaghetti::Form::Topic::Create;
                $form->action = $this->url_for('thread_createTopic');
                $form->elements->{parentId}->value = $pid;
                $form->elements->{topicId}->value  = $tid;
+               $form->elements->{tree}->value     = $tree;
             
             if ( $this->req->method eq 'POST' )
             {
@@ -365,7 +373,8 @@ use Mojo::Base 'Mojolicious::Controller';
                                ({
                                     threadId    => $thId,
                                     title       => $title,
-                                    url         => "$thId-$url"
+                                    url         => "$thId-$url",
+                                    treeOfTree  => $tree
                                });
                                
                     my $teId = $textModel->create
@@ -564,6 +573,13 @@ use Mojo::Base 'Mojolicious::Controller';
             
             $this->stash( threads => $threads );
             $this->render;
+        }
+    
+    sub topicUp
+        {
+            my $this = shift;
+            my $parent = $this->param('parent');
+            my $id = $this->param('id');
         }
 
 1;
