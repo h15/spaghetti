@@ -1,0 +1,42 @@
+---
+accessFilter:
+  allow:
+    - 192.168.105.*
+  deny:
+    - '*.*.*.*'
+database:
+  dbname: spaghetti
+  host: localhost
+  password: secret
+  user: spaghetti
+dbDriver: MySQL
+defaultUserConf:
+  isTreeView: 1
+  lang: ru
+  langs:
+    - ru
+git:
+  all: 1
+  dir: '/home/git/repositories'
+mail:
+  from: no-reply@lorcode.org
+  site: http://codewars.ru
+news:
+  size: 20
+project:
+  repos: 10
+  topic: 1
+site:
+  akismetApi: ''
+  isAkismet: 0
+  root: http://codewars.ru
+thread:
+  size: 20
+user:
+  attempts: 3
+  cookies: 'some random string'
+  enable_registration: 1
+  expairMail: 86400
+  mailAttempts: 3
+  salt: 'some random string'
+  sshKeyLimit: 5

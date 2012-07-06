@@ -8,6 +8,8 @@ use Term::ANSIColor;
 use lib join '/', File::Spec->splitdir(dirname(__FILE__)), 'lib';
 use lib join '/', File::Spec->splitdir(dirname(__FILE__)), '..', 'lib';
 
+my $app = join '/', File::Spec->splitdir(dirname(__FILE__)), '..';
+
 # Check if Mojolicious is installed;
 die <<EOF unless eval 'use Mojolicious::Commands; 1';
 It looks like you don't have the Mojolicious framework installed.
@@ -15,34 +17,59 @@ Please visit http://mojolicio.us for detailed installation instructions.
 
 EOF
 
-    # ./script/spaghetti install host=localhost dbname=gitty \
-    # user=gitty password=secret
-
-    if ( $ARGV[0] eq 'install' )
+    given ( $ARGV[0] )
     {
-        use Pony::Stash;
-        
-        # touch
-        open F, '>./resources/stash.dat';
-        print F '';
-        close F;
-        
-        my $stash = Pony::Stash->new('./resources/stash.dat');
-        my %conf;
-        
-        for my $conf ( @ARGV[1..4] )
+        # ./script/spaghetti install host=localhost dbname=gitty \
+        # user=gitty password=secret
+        when ( /install/i )
         {
-            %conf = ( %conf, split('=', $conf) );
+            use Pony::Stash;
+            use Spaghetti::Defaults;
+            use YAML::Tiny;
+            
+            my $dflt = new Spaghetti::Defaults;
+            
+            # touch
+            open F, ">$app/config/application.yaml";
+            print F '';
+            close F;
+            
+            my $stash = Pony::Stash->new("$app/config/application.yaml");
+            $stash->set( $_ => $dflt->conf->{$_} ) for keys %{ $dflt->conf };
+            
+            my %conf;
+            
+            for my $conf ( @ARGV[1..4] )
+            {
+                %conf = ( %conf, split('=', $conf) );
+            }
+            
+            $stash->set( database => \%conf );
+            $stash->save;
+            
+            print color 'bold green';
+            print "\n[DONE]";
+            print color 'reset';
+            print " Application installed!\n";
+            
+            exit;
         }
+    }
+    
+    if ( -r "$app/config/application.yaml" )
+    {
+        Pony::Stash->new("$app/config/application.yaml");
+    }
+    else
+    {
+        print color 'bold red';
+        print "\n[FAIL]";
+        print color 'reset';
+        print " Can't read application config '$app/config/application.yaml'\n";
         
-        $stash->set( database => \%conf );
-        $stash->save;
-
         exit;
     }
-
-    use Spaghetti::Defaults;
-
+    
     # Application
     $ENV{MOJO_APP} ||= 'Spaghetti';
 
