@@ -6,7 +6,7 @@ use Mojo::Base 'Mojolicious::Controller';
     sub edit
         {
             my $this = shift;
-            my $conf = Pony::Stash->new->conf;
+            my $conf = Pony::Stash->new->{conf};
             
             $conf = \%$conf;
             
@@ -36,7 +36,7 @@ use Mojo::Base 'Mojolicious::Controller';
         {
             my $this = shift;
             
-            Pony::Stash->save;  
+            Pony::Stash->save();  
             
             $this->redirect_to('admin_config_edit');
         }

@@ -1,9 +1,11 @@
 ---
 accessFilter:
-  allow:
-    - 192.168.105.*
-  deny:
-    - '*.*.*.*'
+  1:
+    192.168.105.*: allow
+  2:
+    127.*.*.*: allow
+  99:
+    *.*.*.*: deny
 database:
   dbname: spaghetti
   host: localhost

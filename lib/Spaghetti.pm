@@ -59,6 +59,8 @@ use Mojo::Base 'Mojolicious';
             ##
             
             my $r = $this->routes->namespace('Spaghetti::Controller');
+               $r = $r->bridge->to('admin#access')->route('/');
+            
             my $a = $r->bridge->to('admin#auth')->route('/admin')
                       ->to( namespace => 'Spaghetti::Controller::Admin' );
             
