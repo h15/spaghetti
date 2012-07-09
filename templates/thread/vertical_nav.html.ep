@@ -12,7 +12,7 @@
     </div>
 </a>
 
-<a href="<%= url_for 'thread_createTopic', parentId => $id, topicId => $id %>">
+<a href="<%= url_for 'thread_createTopic', parentId => $id, topicId => $id, tree => 0 %>">
     <div class="item red <%= 'selected' if $tab eq 'topicForm' %>">
         <%=l 'Create topic' %>
     </div>

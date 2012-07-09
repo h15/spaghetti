@@ -43,7 +43,7 @@ use Mojo::Base 'Mojolicious::Controller';
                     my $conf = Pony::Stash->get('user');
                     my $user = $model->read({mail => $mail}, ['id','attempts']);
                     my $att  = $user->{attempts};
-
+                    
                     # Too much attempts.
                     #
                     

@@ -76,7 +76,7 @@ use Encode 'decode';
                 'Group list'        => 'Список групп',
                 'Thread type list'  => 'Список типов тредов',
                 'Data type list'    => 'Список типов данных',
-
+                
                 'response'          => 'ответить',
                 'create topic'      => 'создать тему',
                 'hide'              => 'скрыть',
@@ -126,7 +126,7 @@ use Encode 'decode';
                 'You have not rights to do it'  => 'У Вас не хватает прав, чтобы совершить это действие',
                 'The data, which you send us, is not valid or not actual' => 'Данные, которые вы отправили, не верны или устарели.',
                 'You have not permission to get this page' => 'Не хватает прав для получения запрошенной страницы',
-    
+                
                 'Value must have %s like %s'        => 'Значение должно содержать %s, например, %s',
                 'latin chars in lower case'         => 'латинские символы в нижнем регистре',
                 'latin chars in upper case'         => 'латинские символы в верхнем регистре',

@@ -580,6 +580,23 @@ use Mojo::Base 'Mojolicious::Controller';
             my $this = shift;
             my $parent = $this->param('parent');
             my $id = $this->param('id');
+            
+            my $threadModel= new Pony::Model::Crud::MySQL('thread');
+            my @threads = $threadModel->read({parent => $parent});
+            
+            @threads = sort { $a->{prioritet} <=> $b->{prioritet} } @threads;
+            
+            for my $i ( 0 .. $#threads )
+            {
+                next u
+            }
+        }
+    
+    sub topicDown
+        {
+            my $this = shift;
+            my $parent = $this->param('parent');
+            my $id = $this->param('id');
         }
 
 1;

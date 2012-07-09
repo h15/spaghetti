@@ -37,6 +37,7 @@ user:
   cookies: 'some random string'
   enable_registration: 1
   expairMail: 86400
+  expiration: 86400
   mailAttempts: 3
   salt: 'some random string'
   sshKeyLimit: 5

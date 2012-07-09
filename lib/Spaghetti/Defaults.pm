@@ -29,6 +29,7 @@ use Pony::Object;
             {
               cookies => 'some random string',
               salt => 'some random string',
+              expiration => 86400,
               enable_registration => 1,
               attempts => 3,
               mailAttempts => 3,
