@@ -26,62 +26,56 @@
     </script>
   </head>
   <body onload="prettyPrint()">
-    <nav class=overall>
-        <div class="alignleft">
-            <a href="/news"><%=l 'News list' %></a>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          
+          <a class="brand" href="/">Spaghetti</a>
+          
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li class="active"><a href="/news"><%=l 'News list' %></a></li>
+              <li><a href="/thread"><%=l 'Forum' %></a></li>
+              <li><a href="/thread/tracker"><%=l 'Tracker' %></a></li>
+              <li><a href="<%= url_for 'project_list' %>"><%=l 'Projects' %></a></li>
+              <li><a href="<%= url_for 'search_index' %>"><%=l 'Search' %></a></li>
+              
+              % if ( user->{id} )
+              % {
+                 <li><a href="<%= url_for 'user_responses' %>"><%=l 'Responses' %><span class="num"><%= user->{responses} %></span></a></li>
+                 
+                    % if ( grep { $_ == 1 } @{ user->{groups} } )
+                    % {
+                        <li><a href="/admin"><%=l 'Admin panel' %></a></li>
+                    % }
+              % }
+            </ul>
+          </div><!--/.nav-collapse -->
+          
+          <div class="btn-group pull-right">
+            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+              <i class="icon-user"></i> <%= user->{name} %>
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="/user/home"><%=l 'Profile' %></a></li>
+              <li class="divider"></li>
+              <li><a href="/user/logout">Sign Out</a></li>
+            </ul>
+          </div>
+          
         </div>
-        <div class="alignleft">
-            <a href="/thread"><%=l 'Forum' %></a>
-        </div>
-        <div class="alignleft">
-            <a href="/thread/tracker"><%=l 'Tracker' %></a>
-        </div>
-        <div class="alignleft">
-            <a href="<%= url_for 'project_list' %>"><%=l 'Projects' %></a>
-        </div>
-        <div class="alignleft">
-            <a href="<%= url_for 'search_index' %>"><%=l 'Search' %></a>
-        </div>
-        
-        % if ( user->{id} )
-        % {
-        
-            <div class="alignright">
-                <a href="<%= url_for 'user_responses' %>">
-                    <div class="alignleft <%= user->{responses} ? 'hot-responses' : 'responses' %>">
-                        <span style="font-weight:400"><%=l 'Responses' %></span>
-                            <%= user->{responses} %>
-                    </div>
-                </a>
-                
-                <%= render_user(user) %>
-            </div>
-        
-        %
-        % } else {
-        %
-        
-            <div class="alignright">
-                <a href="<%= url_for('user_login')
-                        %>"><%=l 'Login' %></a>
-            </div>
-        
-        %
-        % }
-        
-        % if ( grep { $_ == 1 } @{ user->{groups} } )
-        % {
-        
-            <div class="alignright">
-                <a href="/admin"><%=l 'Admin panel' %></a>
-            </div>
-        
-        %
-        % }
-        
-        <div class=cb></div>
-    </nav>
-    
+      </div>
+    </div>
+  
 <div class=wrap>
 
         
