@@ -1,8 +1,13 @@
 % layout 'default';
 %
-% title "/$project/" . $repo->{url} . ".git " . substr($object, 0, 10);
+% title "/$project/" . $repo->{url} . " " . substr($object, 0, 10);
 % stash ( tab => 'read' );
 % include 'repo/vertical_nav';
+
+<div>
+commit:
+<input value="<%= $object %>" style="width:100%;font-size:20px;">
+</div>
 
 <div class="alignright">
     <a href="<%= url_for 'repo_readTreePath', project => param('project'),

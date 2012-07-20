@@ -21,8 +21,8 @@ our $thread =
                 th.topicId, th.author, th.owner, t.`text`, t1.title,
                 t1.url, u.name, u.mail, u.banId, th.author
             FROM `thread` th
+            INNER JOIN      `topic`   t1   ON ( t1.threadId  = th.id )
             LEFT OUTER JOIN `text`    t    ON ( th.textId    = t.id  )
-            LEFT OUTER JOIN `topic`   t1   ON ( t1.threadId  = th.id )
             LEFT OUTER JOIN `user`    u    ON ( th.author    = u.id  )
                 WHERE ( th.topicId = ? )
                     AND th.id IN

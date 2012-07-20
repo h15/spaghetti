@@ -15,7 +15,6 @@
         % {
             <div class="alignright">
                 <a href="<%= url_for('thread_topicUp', parent => 0, id => $f->{id} ) %>">&nbsp;&uarr;&nbsp;</a>
-                <a href="<%= url_for('thread_topicDown', parent => 0, id => $f->{id} ) %>">&nbsp;&darr;&nbsp;</a>
             </div>
         % }
     </header>
@@ -36,7 +35,6 @@
             % {
                 <div class="alignright">
                     <a href="<%= url_for('thread_topicUp', parent => $f->{id}, id => $s->{id} ) %>">&nbsp;&uarr;&nbsp;</a>
-                    <a href="<%= url_for('thread_topicDown', parent => $f->{id}, id => $s->{id} ) %>">&nbsp;&darr;&nbsp;</a>
                 </div>
             % }
         </article>

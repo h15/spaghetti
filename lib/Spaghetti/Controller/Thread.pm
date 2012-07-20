@@ -17,7 +17,7 @@ use Mojo::Base 'Mojolicious::Controller';
             my $this = shift;
             
             # Caching
-            unless ( keys %$firstPage || $rebuildFirstPage )
+            if ( !%$firstPage || $rebuildFirstPage )
             {
                 my $dbh = Pony::Model::Dbh::MySQL->new->dbh;
                 my $sth = $dbh->prepare( $Spaghetti::SQL::thread->{'index'} );
@@ -581,22 +581,52 @@ use Mojo::Base 'Mojolicious::Controller';
             my $parent = $this->param('parent');
             my $id = $this->param('id');
             
-            my $threadModel= new Pony::Model::Crud::MySQL('thread');
-            my @threads = $threadModel->read({parent => $parent});
+            # Access denied.
+            #
             
-            @threads = sort { $a->{prioritet} <=> $b->{prioritet} } @threads;
+            $this->stop(403) unless $this->access(0, 'w');
+            
+            # Get data.
+            my $model= new Pony::Model::Crud::MySQL('topic');
+            
+            my $dbh = Pony::Model::Dbh::MySQL->new->dbh;
+            my $sth = $dbh->prepare( $Spaghetti::SQL::thread->{'index'} );
+               $sth->execute( $parent, 0, 1000 );
+            
+            my $threads = $sth->fetchall_hashref('id');
+            my @threads = sort { $a->{prioritet} <=> $b->{prioritet} } values %$threads;
             
             for my $i ( 0 .. $#threads )
             {
-                next u
+                next unless $threads[$i]->{id} != $id;
+                my $next = $threads[$i + 1];
+                
+                # Rebuild if smth wrong.
+                if ( $next->{prioritet} == 0
+                    || $next->{prioritet} == $threads[$i]->{prioritet}
+                    || $threads[$i]->{prioritet} == 0 )
+                {
+                    my $prio = 0;
+                    
+                    for my $t ( @threads )
+                    {
+                        say ++$prio;say $t->{id};
+                        $model->update({prioritet => $prio}, { threadId => $t->{id} });
+                    }
+                    
+                    $this->redirect_to( $this->req->headers->referrer );
+                }
+                
+                # swap
+                $model->update({prioritet => $next->{prioritet}}, {threadId => $id});
+                $model->update({prioritet => $threads[$i]->{prioritet}}, {threadId => $next->{id}});
+                
+                $rebuildFirstPage = 1;
+                
+                last;
             }
-        }
-    
-    sub topicDown
-        {
-            my $this = shift;
-            my $parent = $this->param('parent');
-            my $id = $this->param('id');
+            
+            $this->redirect_to( $this->req->headers->referrer );
         }
 
 1;
