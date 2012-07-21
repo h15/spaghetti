@@ -1,12 +1,17 @@
-#!/usr/bin/env perl
+#!/usr/bin/perl
 
-use strict;
-use warnings;
+use File::Basename 'dirname';
+use File::Spec;
 
-# Load application class
-use lib 'lib';
-use Spaghetti::Defaults;
+use constant APP_PATH =>
+  join '/', File::Spec->splitdir(dirname(__FILE__)), '..';
+
+use lib APP_PATH . '/lib';
+use lib APP_PATH . '/meatballs';
+
+use Pony::Stash;
 use Spaghetti;
 
-# Start application
+Pony::Stash->new(APP_PATH . '/config/application.yaml');
+
 Spaghetti->start;
