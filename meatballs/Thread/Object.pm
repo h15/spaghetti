@@ -1,11 +1,11 @@
 
-# Class: User::Object
+# Class: Thread::Object
 # | Spaghetti's meatball.
-# | Defines user model and some actions.
+# | Defines thread model and some actions.
 # Uses:
 #   Pony::Model::ActiveRecord::MySQL
 
-package User::Object;
+package Thread::Object;
 use Pony::Object qw/Pony::Model::ActiveRecord::MySQL/;
 
   protected _id => undef;

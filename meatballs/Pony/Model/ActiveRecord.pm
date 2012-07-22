@@ -1,7 +1,7 @@
-package Pony::Model::Crud;
+package Pony::Model::ActiveRecord;
 use Pony::Object;
 
-    # Adaptor for Pony::Model::Crud drivers.
+    # Adaptor for Pony::Model::ActiveRecord drivers.
     # Define driver in Pony::Stash 'dbDriver'.
     # Case sensitive.
 
@@ -9,7 +9,7 @@ use Pony::Object;
         {
             my $this = shift;
             my $dbd  = Pony::Stash->get('dbDriver');
-            my $pkg  = "Pony::Model::Crud::$dbd";
+            my $pkg  = "Pony::Model::ActiveRecord::$dbd";
             
             return $pkg->new(@_);
         }
