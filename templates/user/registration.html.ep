@@ -1,8 +1,6 @@
 % layout 'default';
 % title l('Registration');
 
-<script src="http://code.jquery.com/jquery-1.7.min.js"></script>
-
 <script>
     $(document).ready( function() {
         $('#form-registration-show').click(function(){

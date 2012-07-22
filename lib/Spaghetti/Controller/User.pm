@@ -1,897 +1,155 @@
 package Spaghetti::Controller::User;
 use Mojo::Base 'Mojolicious::Controller';
-    
-    # Forms.
-    use Spaghetti::Form::User::Login;
-    use Spaghetti::Form::User::LoginViaMail;
-    use Spaghetti::Form::User::Registration;
-    use Spaghetti::Form::User::ChangePassword;
-    use Spaghetti::Form::User::ChangeMail;
-    use Spaghetti::Form::User::AddSshKey;
+  
+  # Forms.
+  use Spaghetti::Form::User::Login;
+  use Spaghetti::Form::User::LoginViaMail;
+  use Spaghetti::Form::User::Registration;
+  use Spaghetti::Form::User::ChangePassword;
+  use Spaghetti::Form::User::ChangeMail;
+  use Spaghetti::Form::User::AddSshKey;
 
-    use Pony::Model::Crud::MySQL;
-    use Pony::Stash;
-    use Digest::MD5 "md5_hex";
-    use Storable qw(thaw freeze);
-    
-    # Login action.
-    # Here is user can enter to the site.
-    # On GET it shows login form.
-    # On POST we'll try to login user.
-    
-    sub login
-        {
-            my $this = shift;
-            my $form = new Spaghetti::Form::User::Login;
-            
-            if ( $this->req->method eq 'POST' )
-            {
-                $form->data->{$_} = $this->param($_) for keys %{$form->elements};
-                
-                if ( $form->isValid )
-                {
-                    # Get fields.
-                    #
-                    
-                    my $mail = $form->elements->{mail}->value;
-                    my $pass = $form->elements->{password}->value;
-                    
-                    # Get user info such as
-                    # login attempts.
-                    
-                    my $model= new Pony::Model::Crud::MySQL('user');
-                    my $conf = Pony::Stash->get('user');
-                    my $user = $model->read({mail => $mail}, ['id','attempts']);
-                    my $att  = $user->{attempts};
-                    
-                    # Too much attempts.
-                    #
-                    
-                    if ( $att > $conf->{attempts} )
-                    {
-                        $form->elements->{submit}->errors
-                                = ['Too much login attempts'];
-                    }
-                    else
-                    {
-                        # Does user with this
-                        # mail and password exists?
-                        
-                        my $where = { 'mail' => $mail,
-                                      'password' => md5_hex( $mail . $pass ) };
-                                     
-                        $user = $model->read( $where, ['id'] );
-                    
-                        if ( defined $user && $user->{id} > 0 )
-                        {
-                            # All fine.
-                            # Flush attempt count.
-                            
-                            $model->update
-                            ( { accessAt => time,
-                                attempts => 0     },
-                              { id => $user->{id} } );
-                            
-                            $this->session( userId => $user->{id} )
-                                 ->redirect_to('user_home');
-                        }
-                        else
-                        {
-                            # User does not exist.
-                            # Inc attempt count.
-                            
-                            $model->update
-                            ( { attempts => ++$att },
-                              { mail     => $mail  } );
-                            
-                            $form->elements->{password}->errors
-                                    = ['Invalid mail or password'];
-                        }
-                    }
-                }
-            }
-            
-            $this->stash( form => $form->render );
-        }
-    
-    # User registration.
-    # Upgrade anonymous to registrant.
-    # GET - show form, POST - create user.
-    
-    sub registration
-        {
-            my $this = shift;
-            my $form = new Spaghetti::Form::User::Registration;
-            
-            if ( $this->req->method eq 'POST' )
-            {
-                $form->data->{$_} = $this->param($_) for keys %{$form->elements};
-                
-                if ( $form->isValid )
-                {
-                    # Get fields' value.
-                    #
-                    
-                    my $name = $form->elements->{name}->value;
-                    my $mail = $form->elements->{mail}->value;
-                    my $pass = $form->elements->{password}->value;
-                    
-                    # Does NAME and E-MAIL are free?
-                    #
-                    
-                    my $model = new Pony::Model::Crud::MySQL('user');
-                    my $user1 = $model->read( {'mail' => $mail}, ['id'] );
-                    my $user2 = $model->read( {'name' => $name}, ['id'] );
-                    
-                    if ( $user1->{id} > 0 || $user2->{id} > 0 )
-                    {
-                        $form->elements->{mail}->errors
-                                = ['Mail is already used'] if $user1->{id} > 0;
-                        $form->elements->{name}->errors
-                                = ['Name is already used'] if $user2->{id} > 0;
-                    }
-                    else
-                    {
-                        # All fine.
-                        #
-                        
-                        my $time = time;
-                        
-                        # Create user's private thread.
-                        #
-                        
-                        my $threadModel= new Pony::Model::Crud::MySQL('thread');
-                        my $topicModel = new Pony::Model::Crud::MySQL('topic');
-                        my $textModel  = new Pony::Model::Crud::MySQL('text');
-                        
-                        my $thId = $threadModel->create
-                                   ({
-                                        author   => 1,
-                                        owner    => 1,
-                                        createAt => $time,
-                                        modifyAt => $time,
-                                        parentId => 0,
-                                        topicId  => 0,
-                                   });
-                        
-                        $topicModel->create
-                        ({
-                            threadId => $thId,
-                            title    => $name.' - '.$this->l('personal thread'),
-                            url      => $thId,
-                        });
-                                   
-                        my $teId = $textModel->create
-                                   ({
-                                        threadId => $thId,
-                                        text     => '',
-                                   });
-                        
-                        $threadModel->update( { textId => $teId },
-                                              { id     => $thId } );
-                        
-                        # Create user.
-                        #
-                        
-                        my $id = $model->create
-                                 ({ 
-                                     name     => $name,
-                                     mail     => $mail,
-                                     createAt => $time,
-                                     accessAt => $time,
-                                     modifyAt => $time,
-                                     password => md5_hex( $mail . $pass ),
-                                     threadId => $thId,
-                                 });
-                        
-                        # Add user to default group.
-                        #
-                        
-                        my $u2gModel = new Pony::Model::Crud::MySQL('userToGroup');
-                        
-                        # Default group.
-                        #
-                        
-                        $u2gModel->create({ userId  => $id,
-                                            groupId => 999 });
-                        
-                        $this->session( userId  => $id )
-                             ->redirect_to('user_home');
-                    }
-                }
-            }
-            
-            $this->stash( form => $form->render );
-        }
-    
-    # Create 
-    #
-    
-    sub createPrivateThread
-        {
-            my $this = shift;
-            
-            my $model = new Pony::Model::Crud::MySQL('user');
-            my $threadModel= new Pony::Model::Crud::MySQL('thread');
-            my $topicModel = new Pony::Model::Crud::MySQL('topic');
-            my $textModel  = new Pony::Model::Crud::MySQL('text');
-            
-            my $name = $this->user->{name};
-            my $time = time;
-            
-            my $thId = $threadModel->create
-                       ({
-                            author   => 1,
-                            owner    => 1,
-                            createAt => $time,
-                            modifyAt => $time,
-                            parentId => 0,
-                            topicId  => 0,
-                       });
-            
-            $topicModel->create
-            ({
-                threadId => $thId,
-                title    => $name.' - '.$this->l('personal thread'),
-                url      => $thId,
-            });
-                       
-            my $teId = $textModel->create
-                       ({
-                            threadId => $thId,
-                            text     => '',
-                       });
-            
-            $threadModel->update( { textId => $teId },
-                                  { id     => $thId } );
-            
-            $model->update( { threadId => $thId },
-                            { id => $this->user->{id} } );
+  use Pony::Model::Crud::MySQL;
+  use Pony::Stash;
+  use Digest::MD5 "md5_hex";
+  use Storable qw(thaw freeze);
+  
+  use User::Object;
+  
+  # Login action.
+  # Here is user can enter to the site.
+  # On GET it shows login form.
+  # On POST we'll try to login user.
+  
+  sub login
+    {
+    }
+  
+  # User registration.
+  # Upgrade anonymous to registrant.
+  # GET - show form, POST - create user.
+  
+  sub registration
+    {
+      my $this = shift;
+      my $form = new Spaghetti::Form::User::Registration;
+      
+      if ( $this->req->method eq 'POST' )
+      {
+        $form->data->{$_} = $this->param($_) for keys %{$form->elements};
         
-            $this->redirect_to('user_home');
+        if ( $form->isValid )
+        {
+          my $e = $form->elements;
+          my $user = new User::Object;
+          
+          $e->{name}->errors = ['Name is already used'], break
+            if $user->load({name => $e->{name}->value})->getId();
+          $e->{mail}->errors = ['Mail is already used'], break
+            if $user->load({mail => $e->{mail}->value})->getId();
+          
+          $user->setStorable( $form->data );
+          $user->setPassword( $user->password );
+          $user->set({createAt => time, modifyAt => time, accessAt => time,
+                      attempts => 0, sshKeyCount => 0,
+                      banId => 0, banTime => 0})->save();
+          
+          $this->session( userId => $user->getId() )->redirect_to('user_home');
         }
+      }
+      
+      $this->stash( form => $form->render );
+    }
+  
+  # Get responses to user's messages.
+  # Flush response count.
+  # 
+  # @see Spaghetti::Thread::Create
+  
+  sub responses
+    {
+    }
+  
+  # Private user thread.
+  # 
+  # It uses for private messages from other
+  # users and some system messages.
+  # Thread owner can response to messages.
+  # User has not rights for this messages.
+  #
+  # In this context author is a sender,
+  # owner is a receiver.
+  #
+  # @param int page -- param for paginator.
+  
+  sub thread
+    {
+    }
+  
+  sub home
+    {
+      my $this = shift;
+      
+      # Not found for anonymous.
+      #
+      
+      $this->stop(404) unless $this->user->{id};
+      
+      $this->stash( user => $this->user );
+      $this->render;
+    }
+  
+  sub config
+    {
+    }
+  
+  sub profile
+    {
+    }
+  
+  sub logout
+    {
+    }
+
+  sub changePassword
+    {
+    }
+  
+  sub flushPassword
+    {
+    }
+  
+  sub genPassword
+    {
+    }
+
+  sub changeMail
+    {
+    }
     
-    # Get responses to user's messages.
-    # Flush response count.
-    # 
-    # @see Spaghetti::Thread::Create
-    
-    sub responses
-        {
-            my $this = shift;
-            
-            # Not found for anonymous.
-            #
+  sub loginViaMail
+    {
+    }
 
-            $this->stop(404) unless $this->user->{id};
+  sub mailConfirm
+    {
+    }
+  
+  sub projects
+    {
+    }
+  
+  sub items
+    {
+    }
 
-            my $dbh = Pony::Model::Dbh::MySQL->new->dbh;
-            my $sth = $dbh->prepare($Spaghetti::SQL::user->{responses});
-               $sth->execute( $this->user->{id}, 0, 20 );
-               
-            my $resps = $sth->fetchall_hashref('id');
-            
-            # Flush response count.
-            #
-            
-            Pony::Model::Crud::MySQL->new('userInfo')
-                ->update({ responses => 0 }, { id => $this->user->{id} });
-            
-            $this->stash(responses => $resps);
-        }
-    
-    # Private user thread.
-    # 
-    # It uses for private messages from other
-    # users and some system messages.
-    # Thread owner can response to messages.
-    # User has not rights for this messages.
-    #
-    # In this context author is a sender,
-    # owner is a receiver.
-    #
-    # @param int page -- param for paginator.
-    
-    sub thread
-        {
-            my $this = shift;
-            
-            # Not found for anonymous.
-            #
-            
-            $this->stop(404) unless $this->user->{id};
-            
-            my $dbh  = Pony::Model::Dbh::MySQL->new->dbh;
-            
-            # Paginator
-            #
-            
-            my $page = int ( $this->param('page') || 0 );
-               $page = 1 if $page < 1;
-            
-            my $size = Pony::Stash->get('thread')->{size};
-            
-            # Get personal threads.
-            #
-            
-            my $user = Pony::Model::Crud::MySQL->new('user')
-                           ->read({ id => $this->user->{id} });
-            
-            # Does thread exist?
-            #
-            
-            $this->stop(404) if $user->{threadId} == 0;
-            
-            # Yes, it does!
-            #
-            
-            my $sth = $dbh->prepare($Spaghetti::SQL::user->{private_thread});
-               $sth->execute( $user->{threadId}, $user->{threadId}, ($page - 1) * $size, $size );
-            my $threads = $sth->fetchall_hashref('id');
-            
-            $sth = $dbh->prepare($Spaghetti::SQL::user->{private_thread_count});
-            $sth->execute( $user->{threadId}, $user->{threadId} );
-            my $count = $sth->fetchrow_hashref()->{count};
-            
-            # Flush response count.
-            #
-            #Pony::Model::Crud::MySQL->new('userInfo')
-            #    ->update({ responses => 0 }, { id => $user->{id} });
-            
-            # Prepare to render.
-            #
-            
-            $this->stash( paginator =>
-                      $this->paginator('user_thread', $page, $count, $size) );
-            
-            $this->stash( threads => $threads );
-        }
-    
-    sub home
-        {
-            my $this = shift;
-            
-            # Not found for anonymous.
-            #
-            
-            $this->stop(404) unless $this->user->{id};
-            
-            $this->stash( user => $this->user );
-            $this->render;
-        }
-    
-    sub config
-        {
-            my $this = shift;
-            
-            # Not found for anonymous.
-            #
-            
-            $this->stop(404) unless $this->user->{id};
-            
-            if ( $this->req->method eq 'POST' )
-            {
-                my $default = Pony::Stash->get('defaultUserConf');
-                my $data;
-                my $model = new Pony::Model::Crud::MySQL('userInfo');
-                
-                for my $k ( keys %$default )
-                {
-                    $data->{$k} = $this->param($k);
-                }
-                
-                my $id = $model->read({id => $this->user->{id}}, ['id']);
-                
-                if ( defined $id )
-                {
-                    $model->update({ conf => freeze($data) },
-                                   { id   => $this->user->{id} });
-                }
-                else
-                {
-                    $model->create({ conf => freeze($data),
-                                     id   => $this->user->{id} });
-                }
-                
-                $this->session( conf => freeze($data) );
-            }
-            
-            # Get config
-            #
-            
-            my $default = Pony::Stash->get('defaultUserConf');
-            my $conf = Pony::Model::Crud::MySQL
-                         ->new('userInfo')
-                           ->read({id => $this->user->{id}}, ['conf']);
-            
-            if ( defined $conf )
-            {
-                $conf = thaw $conf->{conf};
-                
-                for my $k ( keys %$default )
-                {
-                    $conf->{$k} = $default->{$k} unless exists $conf->{$k};
-                }
-            }
-            else
-            {
-                $conf = $default;
-            }
-            
-            $this->stash( conf => $conf );
-        }
-    
-    sub profile
-        {
-            my $this = shift;
-            my $id   = $this->param('id');
-            my $model= new Pony::Model::Crud::MySQL('user');
-            my $user = $model->read({ id => $id });
-            
-            # Does exist?
-            #
-            
-            $this->stop(404) unless $user;
-            
-            # Is Archon?
-            #
-            
-            if ( grep { $_ eq 2 } @{ $this->user->{groups} } )
-            {
-                my @items = Pony::Model::Crud::MySQL->new('item')->list();
-                
-                $this->stash( items => \@items );
-            }
-            else
-            {
-                $this->stash( items => undef );
-            }
-            
-            # Render
-            #
-            
-            $this->stash( user => $user );
-            $this->render;
-        }
-    
-    sub logout
-        {
-            my $this = shift;
-            
-            if ( $this->req->method eq 'POST' )
-            {
-                $this->session( userId  => 0 )
-                     ->redirect_to('thread_index');
-            }
-        }
+  sub ssh
+    {
+    }
 
-    sub changePassword
-        {
-            my $this = shift;
-            
-            # Anonymous has not password.
-            #
-            
-            $this->stop(403) unless $this->user->{id};
-            
-            my $form = new Spaghetti::Form::User::ChangePassword;
-            
-            if ( $this->req->method eq 'POST' )
-            {
-                $form->data->{$_} = $this->param($_) for keys %{$form->elements};
-                
-                my $flush   = $form->data->{flush};
-                my $generate= $form->data->{generate};
-                
-                return $this->genPassword   if $generate;
-                return $this->flushPassword if $flush;
-                
-                if ( $form->isValid )
-                {
-                    my $oldPass = $form->elements->{oldPassword}->value;
-                    my $newPass = $form->elements->{newPassword}->value;
-                    
-                    my $model = new Pony::Model::Crud::MySQL('user');
-                    
-                    my $where = { 'id'       => $this->user->{id},
-                                  'password' => md5_hex( $this->user->{mail} . $oldPass ) };
-                    
-                    my $user = $model->read( $where, ['id'] );
-                    
-                    if ( exists $user->{id} && $user->{id} > 0 )
-                    {
-                        # All fine.
-                        #
-                        $model->update
-                        ( {
-                            modifyAt => time,
-                            password => md5_hex($this->user->{mail}.$newPass)
-                          },
-                          { id => $user->{id} } );
-                        
-                        $this->redirect_to('user_home');
-                    }
-                    else
-                    {
-                        $form->elements->{oldPassword}->errors
-                                = ['Invalid password'];
-                    }
-                }
-            }
-            
-            $this->stash( form => $form->render() );
-            $this->render;
-        }
-    
-    sub flushPassword
-        {
-            my $this  = shift;
-            
-            # Anonymous has not password.
-            #
-            
-            $this->stop(403) unless $this->user->{id};
-            
-            my $model = new Pony::Model::Crud::MySQL('user');
-            
-            $model->update({ password => '',
-                             modifyAt => time },
-                           { id       => $this->user->{id} });
-            
-            $this->redirect_to('user_home');
-        }
-    
-    sub genPassword
-        {
-            my $this  = shift;
-            
-            # Anonymous has not password.
-            #
-            
-            $this->stop(403) unless $this->user->{id};
-            
-            my $model = new Pony::Model::Crud::MySQL('user');
-            my $pass  = md5_hex( rand );
-            my $mail  = $this->user->{mail};
-            
-            $model->update({ password => md5_hex($mail.$pass),
-                             modifyAt => time },
-                           { id       => $this->user->{id} });
-            
-            # Send mail.
-            #
-            $this->mail( new_password => $mail =>
-                         'New password' => { password => $pass } );
-            
-            $this->redirect_to('user_home');
-        }
-
-    sub changeMail
-        {
-            my $this = shift;
-            
-            # Anonymous has not mail.
-            #
-            
-            $this->stop(403) unless $this->user->{id};
-            
-            my $form = new Spaghetti::Form::User::ChangeMail;
-            
-            if ( $this->req->method eq 'POST' )
-            {
-                $form->data->{$_} = $this->param($_) for keys %{$form->elements};
-                
-                if ( $form->isValid )
-                {
-                    my $pass = $form->elements->{password}->value;
-                    my $mail = $form->elements->{mail}->value;
-                    
-                    my $model = new Pony::Model::Crud::MySQL('user');
-                    
-                    my $where = { 'id'       => $this->user->{id},
-                                  'password' => md5_hex( $this->user->{mail} . $pass ) };
-                    
-                    my $user = $model->read( $where, ['id'] );
-                    
-                    if ( exists $user->{id} && $user->{id} > 0 )
-                    {
-                        # Does this mail already use.
-                        #
-                        $user = $model->read({ mail => $mail }, ['id']);
-                        
-                        unless ( defined $user && $user->{id} > 0 )
-                        {
-                            # All fine.
-                            #
-                            $model->update
-                            ( {
-                                modifyAt => time,
-                                password => md5_hex($mail.$pass),
-                                mail     => $mail
-                              },
-                              { id => $this->user->{id} } );
-                            
-                            $this->redirect_to('user_home');
-                        }
-                        else
-                        {
-                            $form->elements->{mail}->errors
-                                    = ['E-mail is already used'];
-                        }
-                    }
-                    else
-                    {
-                        $form->elements->{password}->errors
-                                = ['Invalid password'];
-                    }
-                }
-            }
-            
-            $this->stash( form => $form->render() );
-            $this->render;
-        }
-        
-    sub loginViaMail
-        {
-            my $this = shift;
-            my $form = new Spaghetti::Form::User::LoginViaMail;
-            
-            if ( $this->req->method eq 'POST' )
-            {
-                $form->data->{$_} = $this->param($_) for keys %{$form->elements};
-                
-                if ( $form->isValid )
-                {
-                    my $conf = Pony::Stash->get('user');
-                    my $mail = $form->elements->{mail}->value;
-                    my $user = Pony::Model::Crud::MySQL
-                                 ->new('user')
-                                   ->read({mail => $mail}, ['id']);
-                
-                    if ( defined $user && $user->{id} > 0 )
-                    {
-                        # All fine.
-                        #
-                        my $key = md5_hex(rand);
-                        
-                        Pony::Model::Crud::MySQL
-                                 ->new('mailConfirm')
-                                   ->delete({ mail => $mail });
-                               
-                        Pony::Model::Crud::MySQL
-                          ->new('mailConfirm')
-                            ->create({ expair => time + $conf->{expairMail},
-                                       mail   => $mail, secret => $key  });
-                        
-                        # Send mail.
-                        #
-                        $this->mail( login => $mail => Login =>
-                                     { key  => $key, mail => $mail } );
-                        
-                        $form = new Spaghetti::Form::User::LoginViaMail;
-                        
-                        $this->done('Check your mail');
-                        $this->stash( form => $form->render() );
-                        
-                        return $this->render;
-                    }
-                    else
-                    {
-                        $form->elements->{mail}->errors = ['Invalid mail'];
-                    }
-                }
-            }
-            
-            $this->stash( form => $form->render() );
-            $this->render;
-        }
-
-    sub mailConfirm
-        {
-            my $this = shift;
-            my $mail = $this->param('mail');
-            my $key  = $this->param('key');
-            my $conf = Pony::Stash->get('user');
-            my $model= new Pony::Model::Crud::MySQL('mailConfirm');
-               $mail = $model->read({mail => $mail});
-                                       
-            my $userModel = new Pony::Model::Crud::MySQL('user');
-            
-            # Mail does not used for confirm.
-            #
-            
-            if ( not defined $mail )
-            {
-                $this->error("Does not exist");
-            }
-            
-            
-            # Too much attempts.
-            #
-            
-            elsif ( $mail->{attempts} > $conf->{mailAttempts} )
-            {
-                $this->error("Too much login attempts");
-            }
-            
-            # Too slow.
-            #
-            
-            elsif ( $mail->{expair} < time )
-            {
-                $this->error("Time expaired");
-            }
-            
-            # Wrong secret.
-            #
-            
-            elsif ( $mail->{secret} ne $key )
-            {
-                $model->update( {attempts => $mail->{attempts}+1},
-                                {mail     => $mail->{mail}      } );
-                
-                $this->error("Does not exist");
-            }
-            
-            # All fine.
-            #
-            
-            else
-            {
-                $model->update({attempts => 0}, {mail => $mail->{mail}});
-                $userModel->update
-                ({ attempts => 0,
-                   accessAt => time },
-                 { mail => $mail->{mail} });
-                
-                my $user = $userModel->read({ mail => $mail->{mail} }, ['id']);
-                
-                if ( defined $user )
-                {
-                    $model->delete({ mail => $mail->{mail} });
-                    
-                    $this->session( userId  => $user->{id} )
-                         ->redirect_to('user_home');
-                }
-            }
-            
-            my $form = new Spaghetti::Form::User::LoginViaMail;
-            
-            $this->stash( form => $form->render() );
-            $this->render('user_loginViaMail');
-        }
-    
-    sub projects
-        {
-            my $this = shift;
-            
-            # Anonymous has not projects.
-            #
-            
-            $this->stop(403) unless $this->user->{id};
-               
-            my $dbh = Pony::Model::Dbh::MySQL->new->dbh;
-            my $sth = $dbh->prepare($Spaghetti::SQL::user->{my_projects});
-               $sth->execute( $this->user->{id} );
-            my $projects = $sth->fetchall_hashref('id');
-            
-            $this->stash( projects => $projects );
-        }
-    
-    sub items
-        {
-            my $this = shift;
-            
-            # Anonymous has not items.
-            #
-            
-            $this->stop(403) unless $this->user->{id};
-            
-            my $dbh = Pony::Model::Dbh::MySQL->new->dbh;
-            
-            my $sth = $dbh->prepare($Spaghetti::SQL::user->{my_items});
-               $sth->execute( $this->user->{id} );
-            my $items = $sth->fetchall_hashref('id');
-            
-            $this->stash( items => $items );
-        }
-
-    sub ssh
-        {
-            my $this = shift;
-            
-            # Anonymous has not items.
-            #
-            
-            $this->stop(403) unless $this->user->{id};
-
-            my $form = new Spaghetti::Form::User::AddSshKey;
-
-            my @keys = Pony::Model::Crud::MySQL
-                         ->new('sshKey')
-                           ->list({ userId => $this->user->{id} });
-            
-            # Try to add key on POST.
-            #
-
-            if ( $this->req->method eq 'POST' )
-            {
-                $form->data->{$_} = $this->param($_) for keys %{$form->elements};
-                
-                if ( $form->isValid )
-                {
-                    my $key = $this->param('key');
-                    my $lim = Pony::Stash->get('user')->{sshKeyLimit};
-
-                    if ( $this->user->{sshKeyCount} < $lim )
-                    {
-                        Pony::Model::Crud::MySQL->new('sshKey')->create
-                        ({
-                            userId   => $this->user->{id},
-                            status   => 0,
-                            createAt => time,
-                            key      => $key,
-                        });
-
-                        Pony::Model::Crud::MySQL->new('user')->update
-                        ( {sshKeyCount => $this->user->{sshKeyCount} + 1},
-                          {id => $this->user->{id} } );
-
-                        $this->done('SSH key added');
-                    }
-                    else
-                    {
-                        $this->error('SSH key limit reached');
-                    }
-                }
-            }
-
-            $this->stash( keys => \@keys );
-            $this->stash( form => $form );
-        }
-
-    sub sshEdit
-        {
-            my $this = shift;
-            my $id   = int $this->param('id') || 0;
-            
-            # Anonymous has not items.
-            #
-            
-            $this->stop(403) unless $this->user->{id};
-
-            my $form = new Spaghetti::Form::User::AddSshKey;
-               $form->action = $this->url_for(user_sshEdit => id => $id);
-
-            # Is it my ssh key.
-            #
-
-            my $sshKey = Pony::Model::Crud::MySQL
-                           ->new('sshKey')->read({id => $id});
-
-            $this->stop(403) if not defined $sshKey
-                                || $sshKey->{userId} != $this->user->{id};
-
-            # Try to add key on POST.
-            #
-
-            if ( $this->req->method eq 'POST' )
-            {
-                $form->data->{$_} = $this->param($_) for keys %{$form->elements};
-                
-                if ( $form->isValid )
-                {
-                    my $key = $this->param('key');
-
-                    Pony::Model::Crud::MySQL->new('sshKey')
-                        ->update({key => $key, createAt => time}, {id => $id});
-
-                    return $this->redirect_to( $this->url_for('user_ssh') );
-                }
-            }
-
-            $this->error('Invalid request');
-        }
+  sub sshEdit
+    {
+    }
 
 1;
 

@@ -19,14 +19,16 @@ use Pony::Model::Crud;
   # Returns:
   #   User::Object
   
-  sub init : Protected
+  sub init : Public
     {
       my $this = shift;
       
       # Generate properties.
-      Pony::Object::addPublic($this, $_) for @{ $this->_storable };
+      public $_ for @{ $this->_storable };
       
-      $this->_model = new Pony::Model::Crud( $this->_table );
+      $this->_model = new Pony::Model::Crud::MySQL( $this->_table );
+      
+      return $this;
     }
   
   
@@ -57,6 +59,8 @@ use Pony::Model::Crud;
       {
         $this->setStorable( $this->_model->read($where) );
       }
+      
+      return $this;
     }
   
   
@@ -76,6 +80,8 @@ use Pony::Model::Crud;
       {
         $this->setId( $this->_model->create( $this->getStorable() ) );
       }
+      
+      return $this;
     }
   
   
@@ -88,6 +94,8 @@ use Pony::Model::Crud;
     {
       my $this = shift;
       $this->_id = shift;
+      
+      return $this;
     }
   
   
@@ -138,6 +146,16 @@ use Pony::Model::Crud;
       my $i_data = shift;
       
       $this->$_ = $i_data->{$_} for @{ $this->_storable };
+    }
+
+  sub set : Public
+    {
+      my $this = shift;
+      my $i_data = shift;
+      
+      $this->$_ = $i_data->{$_} for keys %$i_data;
+      
+      return $this;
     }
 
 1;

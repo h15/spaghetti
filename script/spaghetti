@@ -5,10 +5,11 @@ use File::Basename 'dirname';
 use File::Spec;
 use Term::ANSIColor;
 
-use lib join '/', File::Spec->splitdir(dirname(__FILE__)), 'lib';
-use lib join '/', File::Spec->splitdir(dirname(__FILE__)), '..', 'lib';
+use constant APP_PATH =>
+  join '/', File::Spec->splitdir(dirname(__FILE__)), '..';
 
-my $app = join '/', File::Spec->splitdir(dirname(__FILE__)), '..';
+use lib APP_PATH . '/lib';
+use lib APP_PATH . '/meatballs';
 
 # Check if Mojolicious is installed;
 die <<EOF unless eval 'use Mojolicious::Commands; 1';
@@ -17,71 +18,71 @@ Please visit http://mojolicio.us for detailed installation instructions.
 
 EOF
 
-    given ( $ARGV[0] )
+  given ( $ARGV[0] )
+  {
+    # ./script/spaghetti install host=localhost dbname=gitty \
+    # user=gitty password=secret
+    when ( /install/i )
     {
-        # ./script/spaghetti install host=localhost dbname=gitty \
-        # user=gitty password=secret
-        when ( /install/i )
-        {
-            use Pony::Stash;
-            use Spaghetti::Defaults;
-            use YAML::Tiny;
-            
-            my $dflt = new Spaghetti::Defaults;
-            
-            # touch
-            open F, ">$app/config/application.yaml";
-            print F '';
-            close F;
-            
-            my $stash = Pony::Stash->new("$app/config/application.yaml");
-            $stash->set( $_ => $dflt->conf->{$_} ) for keys %{ $dflt->conf };
-            
-            my %conf;
-            
-            for my $conf ( @ARGV[1..4] )
-            {
-                %conf = ( %conf, split('=', $conf) );
-            }
-            
-            $stash->set( database => \%conf );
-            $stash->save;
-            
-            print color 'bold green';
-            print "\n[DONE]";
-            print color 'reset';
-            print " Application installed!\n";
-            
-            exit;
-        }
+      use Pony::Stash;
+      use Spaghetti::Defaults;
+      use YAML::Tiny;
+      
+      my $dflt = new Spaghetti::Defaults;
+      
+      # touch
+      open F, '>', APP_PATH . '/config/application.yaml';
+      print F '';
+      close F;
+      
+      my $stash = Pony::Stash->new(APP_PATH . '/config/application.yaml');
+      $stash->set( $_ => $dflt->conf->{$_} ) for keys %{ $dflt->conf };
+      
+      my %conf;
+      
+      for my $conf ( @ARGV[1..4] )
+      {
+        %conf = ( %conf, split('=', $conf) );
+      }
+      
+      $stash->set( database => \%conf );
+      $stash->save;
+      
+      print color 'bold green';
+      print "\n[DONE]";
+      print color 'reset';
+      print " Application installed!\n";
+      
+      exit;
     }
+  }
+  
+  if ( -r APP_PATH . '/config/application.yaml' )
+  {
+    Pony::Stash->new(APP_PATH . '/config/application.yaml');
+  }
+  else
+  {
+    print color 'bold red';
+    print "\n[FAIL]";
+    print color 'reset';
+    print " Can't read application config '".APP_PATH."/config/application.yaml'\n";
     
-    if ( -r "$app/config/application.yaml" )
-    {
-        Pony::Stash->new("$app/config/application.yaml");
-    }
-    else
-    {
-        print color 'bold red';
-        print "\n[FAIL]";
-        print color 'reset';
-        print " Can't read application config '$app/config/application.yaml'\n";
-        
-        exit;
-    }
-    
-    # Application
-    $ENV{MOJO_APP} ||= 'Spaghetti';
+    exit;
+  }
+  
+  # Application
+  $ENV{MOJO_APP} ||= 'Spaghetti';
 
-    # Start commands
-    eval { Mojolicious::Commands->start };
-    
-    # Good looking error print
-    if ( defined $@ )
-    {
-        print color 'bold red';
-        print "\n[FAIL]";
-        print color 'reset';
-        print " $@\n";
-    }
+  # Start commands
+  eval { Mojolicious::Commands->start };
+  
+  # Good looking error print
+  if ( defined $@ )
+  {
+    print color 'bold red';
+    print "\n[FAIL]";
+    print color 'reset';
+    print " $@\n";
+  }
 

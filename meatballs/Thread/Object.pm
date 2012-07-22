@@ -10,8 +10,8 @@ use Pony::Object qw/Pony::Model::ActiveRecord::MySQL/;
 
   protected _id => undef;
   protected _model => undef;
-  protected _table => 'user';
-  protected _storable => [qw/mail password name createAt modifyAt accessAt
-                            banId banTime attempts threadId sshKeyCount/];
+  protected _table => 'thread';
+  protected _storable => [qw/owner author createAt modifyAt parentId legend
+                              topicId text title treeOfTree prioritet/];
 
 1;
