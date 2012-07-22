@@ -23,6 +23,43 @@ use Mojo::Base 'Mojolicious::Controller';
   
   sub login
     {
+      my $this = shift;
+      my $form = new Spaghetti::Form::User::Login;
+      
+      if ( $this->req->method eq 'POST' )
+      {
+        $form->data->{$_} = $this->param($_) for keys %{$form->elements};
+        
+        if ( $form->isValid )
+        {
+          my $e = $form->elements;
+          my $user = new User::Object;
+          $user->load({mail => $e->{mail}->value});
+          
+          # Too much attempts.
+          if ( $user->attempts > Pony::Stash->get('user')->{attempts} )
+          {
+            $e->{submit}->errors = ['Too much login attempts'];
+          }
+          else
+          {
+            # Does user with this mail and password exists?
+            if ( $user->password ne $user->cryptPassword($e->{password}->value) )
+            {
+              $user->set({attempts => $user->attempts + 1})->save();
+              $e->{password}->errors = ['Invalid mail or password'];
+            }
+            else
+            {
+              # All fine. Flush attempt count.
+              $user->set({attempts => 0, accessAt => time})->save();
+              $this->session( userId => $user->getId() )->redirect_to('user_home');
+            }
+          }
+        }
+      }
+      
+      $this->stash( form => $form->render );
     }
   
   # User registration.

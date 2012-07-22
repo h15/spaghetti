@@ -57,7 +57,13 @@ use Pony::Model::Crud;
       }
       else
       {
-        $this->setStorable( $this->_model->read($where) );
+        my $data = $this->_model->read($where);
+        
+        if ( defined $data )
+        {
+          $this->setStorable($data);
+          $this->setId( $data->{id} );
+        }
       }
       
       return $this;

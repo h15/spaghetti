@@ -25,7 +25,15 @@ use Digest::MD5 "md5_hex";
   sub setPassword : Public
     {
       my $this = shift;
-      $this->password = md5_hex( $this->mail . $this->password );
+      $this->password = $this->cryptPassword($this->password);
+    }
+  
+  sub cryptPassword : Public
+    {
+      my $this = shift;
+      my $password = shift;
+      
+      return md5_hex( $this->mail . $password );
     }
   
 1;
