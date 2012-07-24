@@ -11,7 +11,7 @@ use Pony::Object qw/Pony::Model::ActiveRecord::MySQL/;
   protected _id => undef;
   protected _model => undef;
   protected _table => 'thread';
-  protected _storable => [qw/owner author createAt modifyAt parentId legend
-                              topicId text title treeOfTree prioritet/];
+  protected _storable => [qw/owner author name mail createAt modifyAt parentId
+                            legend topicId text title treeOfTree prioritet/];
 
 1;

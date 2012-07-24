@@ -44,7 +44,7 @@ use Mojo::Base 'Mojolicious::Controller';
           else
           {
             # Does user with this mail and password exists?
-            if ( $user->password ne $user->cryptPassword($e->{password}->value) )
+            if ($user->password ne $user->cryptPassword($e->{password}->value))
             {
               $user->set({attempts => $user->attempts + 1})->save();
               $e->{password}->errors = ['Invalid mail or password'];
@@ -53,7 +53,7 @@ use Mojo::Base 'Mojolicious::Controller';
             {
               # All fine. Flush attempt count.
               $user->set({attempts => 0, accessAt => time})->save();
-              $this->session( userId => $user->getId() )->redirect_to('user_home');
+              $this->session(userId=>$user->getId())->redirect_to('user_home');
             }
           }
         }
