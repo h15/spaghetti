@@ -4,7 +4,8 @@ body
   margin:0px;
   font-family:"DejaVu Sans", Helvetica, Arial, Sans;
   color:#222;
-  font-size:16px;
+  font-size:14px;
+  background:#EDEDED;
 }
 
 html
@@ -896,10 +897,10 @@ li.L1, li.L3, li.L5, li.L7, li.L9
 .navbar-inner
 {
   background-color: #EDEDED;
-  background-image: -moz-linear-gradient(center top , #323232, #555555);
+  background-image: -moz-linear-gradient(center top , #DDDDDD, #EDEDED);
   background-repeat: repeat-x;
   border-radius: 0px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
+//  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
   min-height: 40px;
   padding-left: 20px;
   padding-right: 20px;
@@ -907,11 +908,24 @@ li.L1, li.L3, li.L5, li.L7, li.L9
 
 .navbar .nav > li > a
 {
-  color: #ccc;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  color: #28699B;
+  text-shadow: none;
 }
 
-.navbar .nav > li > a : hover
+.navbar .nav>li>a:hover
 {
-
+  color: #D31141;
+  text-shadow: none;
 }
+
+.navbar
+{
+  margin-bottom:0px;
+}
+
+.dropdown-menu>li>a:hover
+{
+  background-color: #ededed;
+  color: #222;
+}
+

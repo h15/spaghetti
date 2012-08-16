@@ -3,14 +3,14 @@ accessFilter:
   1:
     192.168.105.*: allow
   2:
-    127.*.*.*: allow
+    127.0.0.1: allow
   99:
     *.*.*.*: deny
 database:
-  dbname: spaghetti
+  dbname: spa
   host: localhost
-  password: secret
-  user: spaghetti
+  password: 1
+  user: spa
 dbDriver: MySQL
 defaultUserConf:
   isTreeView: 1
