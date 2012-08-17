@@ -1,4 +1,4 @@
-<h1><%=l $title %></h1>
+<h1><%= $title %></h1>
 <p>
-<a href="<%= $host . url_for( 'user_mailConfirm' ) %>?mail=<%= $mail %>&key=<%= $key %>"><%=l 'Login via e-mail' %></a>.
+<a href="<%= $host . url_for( 'user_mailConfirm' ) %>?mail=<%= $mail %>&key=<%= $key %>"><%= 'Login via e-mail' %></a>
 </p>
