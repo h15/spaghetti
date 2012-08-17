@@ -197,6 +197,45 @@ use Mojo::Base 'Mojolicious::Controller';
     
   sub loginViaMail
     {
+      my $this = shift;
+      my $form = new Spaghetti::Form::User::LoginViaMail;
+      
+      if ( $this->req->method eq 'POST' )
+      {
+        $form->data->{$_} = $this->param($_) for keys %{$form->elements};
+          
+        if ( $form->isValid )
+        {
+          my $conf = Pony::Stash->get('user');
+          my $mail = $form->elements->{mail}->value;
+          my $user = Pony::Model::Crud::MySQL->new('user')->read({mail => $mail}, ['id']);
+          
+          if ( defined $user && $user->{id} > 0 )
+          {
+            # All fine.
+            my $key = md5_hex(rand);
+            Pony::Model::Crud::MySQL->new('mailConfirm')->delete({ mail => $mail });
+            Pony::Model::Crud::MySQL->new('mailConfirm')->create({ expair => time + $conf->{expairMail},
+                                                                   mail   => $mail, secret => $key  });
+                  
+            # Send mail.
+            $this->mail( login => $mail => Login => { key  => $key, mail => $mail } );
+            
+            $form = new Spaghetti::Form::User::LoginViaMail;
+            
+            $this->done('Check your mail');
+            $this->stash( form => $form->render() );
+            
+            return $this->render;
+          }
+          else
+          {
+              $form->elements->{mail}->errors = ['Invalid mail'];
+          }
+        }
+      }
+      
+      $this->stash( form => $form->render() );
     }
 
   sub mailConfirm
