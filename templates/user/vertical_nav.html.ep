@@ -30,7 +30,7 @@
     <div class="item <%= 'selected' if $tab eq 'mail' %>">
         <%=l 'Change mail' %>
     </div>
-</a>
+</a-->
 
 <a href="<%= url_for 'user_change_password' %>">
     <div class="item <%= 'selected' if $tab eq 'password' %>">
@@ -38,7 +38,7 @@
     </div>
 </a>
 
-<a href="<%= url_for 'user_ssh' %>">
+<!--a href="<%= url_for 'user_ssh' %>">
     <div class="item <%= 'selected' if $tab eq 'sshKey' %>">
         <%=l 'Public keys' %>
     </div>
