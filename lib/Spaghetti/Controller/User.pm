@@ -240,6 +240,77 @@ use Mojo::Base 'Mojolicious::Controller';
 
   sub mailConfirm
     {
+      my $this = shift;
+      my $mail = $this->param('mail');
+      my $key  = $this->param('key');
+      my $conf = Pony::Stash->get('user');
+      my $model= new Pony::Model::Crud::MySQL('mailConfirm');
+         $mail = $model->read({mail => $mail});
+                                 
+      my $userModel = new Pony::Model::Crud::MySQL('user');
+      
+      # Mail does not used for confirm.
+      #
+      
+      if ( not defined $mail )
+      {
+        $this->error("Does not exist");
+      }
+      
+      
+      # Too much attempts.
+      #
+      
+      elsif ( $mail->{attempts} > $conf->{mailAttempts} )
+      {
+        $this->error("Too much login attempts");
+      }
+      
+      # Too slow.
+      #
+      
+      elsif ( $mail->{expair} < time )
+      {
+        $this->error("Time expaired");
+      }
+      
+      # Wrong secret.
+      #
+      
+      elsif ( $mail->{secret} ne $key )
+      {
+        $model->update( {attempts => $mail->{attempts}+1},
+                        {mail     => $mail->{mail}      } );
+          
+        $this->error("Does not exist");
+      }
+      
+      # All fine.
+      #
+      
+      else
+      {
+        $model->update({attempts => 0}, {mail => $mail->{mail}});
+        $userModel->update
+        ({ attempts => 0,
+           accessAt => time },
+         { mail => $mail->{mail} });
+          
+        my $user = $userModel->read({ mail => $mail->{mail} }, ['id']);
+          
+        if ( defined $user )
+        {
+          $model->delete({ mail => $mail->{mail} });
+              
+          $this->session( userId  => $user->{id} )
+               ->redirect_to('user_home');
+        }
+      }
+      
+      my $form = new Spaghetti::Form::User::LoginViaMail;
+      
+      $this->stash( form => $form->render() );
+      $this->render('user_loginViaMail');
     }
   
   sub projects
