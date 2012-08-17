@@ -6,9 +6,9 @@
         $('.showButton').click(function(){
             var id = $(this).attr('id').split('-').pop();
             
-            $(this).hide();
-            $('#hideButton-' + id).show();
-            $('#hiddenArea-' + id).slideDown();
+            $(this).hide().toggleClass('hidden');
+            $('#hideButton-' + id).show().toggleClass('hidden');
+            $('#hiddenArea-' + id).slideDown().toggleClass('hidden');
             
             return false;
         });
@@ -16,9 +16,9 @@
         $('.hideButton').click(function(){
             var id = $(this).attr('id').split('-').pop();
             
-            $(this).hide();
-            $('#showButton-' + id).show();
-            $('#hiddenArea-' + id).slideUp();
+            $(this).hide().toggleClass('hidden');
+            $('#showButton-' + id).show().toggleClass('hidden');
+            $('#hiddenArea-' + id).slideUp().toggleClass('hidden');
             
             return false;
         });
