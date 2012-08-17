@@ -139,7 +139,7 @@
             % {
                 <table style="width:700px">
                     <tr valign="top">
-                        <td style="border-right:1px solid #ccc;width:280px;">
+                        <td style="border-right:1px solid #aaa;width:280px;">
                 Spaghetti &mdash; forum system for developers<br>
                 Current version:
                 <acronym title="<%= $Spaghetti::COMMIT %>">

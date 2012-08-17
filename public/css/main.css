@@ -953,6 +953,11 @@ a.brand
   top:-6px;
 }
 
+footer.overall
+{
+  font-size:12px;
+}
+
 footer.overall a
 {
   color: #E35181;
