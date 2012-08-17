@@ -177,6 +177,12 @@ use Mojo::Base 'Mojolicious::Controller';
   
   sub logout
     {
+      my $this = shift;
+      
+      if ( $this->req->method eq 'POST' )
+      {
+        $this->session( userId  => 0 )->redirect_to('index_index');
+      }
     }
 
   sub changePassword
