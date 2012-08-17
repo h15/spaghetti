@@ -1,3 +1,81 @@
+commit 22a8a75884cba6e93645b10526b82a6bf722ee48
+Author: bug <bug@top.(none)>
+Date:   Thu Aug 16 21:16:49 2012 +0600
+
+    new header
+
+commit 649d9abd87923f97359e85dbd615b396c0bd68a3
+Author: bug <bug@top.(none)>
+Date:   Thu Aug 16 20:01:18 2012 +0600
+
+    new look
+
+commit 6719dd2e4ec5f717ad11e027056b380f3a2b9e05
+Author: Georgy.Bazhukov <gosha@bugov.net>
+Date:   Tue Jul 24 06:13:49 2012 +0600
+
+    some code for threads
+
+commit 1d2e993c74d7839126c16596c1c4cbc0cefe621b
+Author: Georgy.Bazhukov <gosha@bugov.net>
+Date:   Sun Jul 22 14:46:39 2012 +0600
+
+    fix AR && add action for User controller
+
+commit bb5160ef9dbea13acca40cbeb108b9a43230a6c6
+Author: Georgy.Bazhukov <gosha@bugov.net>
+Date:   Sun Jul 22 13:51:59 2012 +0600
+
+    add user meatball, but user controller is broken ^_^
+
+commit aabe3b75680cd9fcd299b643c4735cca2ba4f5f1
+Author: h <h@h.(none)>
+Date:   Sun Jul 22 11:06:56 2012 +0600
+
+    add ActiveRecord pattern support for MySQL driver
+
+commit 2be7fd9fce841038677ddece1ec3ff3cd8c69c48
+Author: h <h@h.(none)>
+Date:   Sat Jul 21 23:44:35 2012 +0600
+
+    change css theme && cleanup && create Users` meatball
+
+commit cf38503e513cc2bcc111d685971966bd8b37305e
+Author: Georgy.Bazhukov <gosha@bugov.net>
+Date:   Fri Jul 20 08:52:57 2012 +0600
+
+    bootstrap top nav firts try
+
+commit 68b62ae46224ba1fe7ae5effafc0829199d79b97
+Author: Georgy.Bazhukov <gosha@bugov.net>
+Date:   Fri Jul 20 08:25:09 2012 +0600
+
+    clean up && prepare goes to bootstrap.js
+
+commit b00f7feb1329e6af73ef15e2ea21b0a567f444be
+Author: Georgy Bazhukov <gosha@bugov.net>
+Date:   Mon Jul 9 23:45:26 2012 +0600
+
+    add block by ip mask
+
+commit 3b70e36b2a740c6a742ed019ecd85c348f4ab4cd
+Author: Georgy.Bazhukov <gosha@bugov.net>
+Date:   Mon Jul 9 15:59:04 2012 +0600
+
+    just save it
+
+commit e6684a9fd0147103f128b10f4463b4e54041f0f4
+Author: Gosha Bugov <gosha.bugov@gmail.com>
+Date:   Fri Jul 6 08:16:36 2012 +0600
+
+    spaghetti goes to YAML
+
+commit 8d629a43a4d800c96472d2f2436b8fbc79dedfdb
+Author: Gosha Bugov <gosha.bugov@gmail.com>
+Date:   Wed Jul 4 09:04:47 2012 +0600
+
+    add left menu for threads && more config for thread index page
+
 commit 28a922658c4defc5ed5df82c2112bcda6ba22a0f
 Author: Gosha Bugov <gosha.bugov@gmail.com>
 Date:   Tue Jul 3 10:33:15 2012 +0600

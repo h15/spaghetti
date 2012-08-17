@@ -4,6 +4,6 @@
 
 <div style="text-align:center;">
     <input style="font-size:20px;width:500px" id="text" type="text">
-    <input style="font-size:20px;" type="button" onClick="document.location = '/search?q=' + $('#text').val()" value="<%=l 'Search' %>">
+    <input style="font-size:20px;height:32px;position:relative;top:-4px;" type="button" onClick="document.location = '/search?q=' + $('#text').val()" value="<%=l 'Search' %>">
 </div>
 

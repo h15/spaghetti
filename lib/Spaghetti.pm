@@ -1,7 +1,7 @@
 package Spaghetti;
 use Mojo::Base 'Mojolicious';
   
-  our $VERSION = '0.000014';
+  our $VERSION = '0.000015';
   our $COMMIT  = '';
   
   use Pony::Model::Crud;
@@ -60,7 +60,8 @@ use Mojo::Base 'Mojolicious';
       
       my $r = $this->routes->namespace('Spaghetti::Controller');
          $r = $r->bridge->to('admin#access')->route('/');
-      
+         $r->route('/')->to('index#index')->name('index_index');
+          
       my $a = $r->bridge->to('admin#auth')->route('/admin')
             ->to( namespace => 'Spaghetti::Controller::Admin' );
       

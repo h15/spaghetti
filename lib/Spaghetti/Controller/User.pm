@@ -8,7 +8,8 @@ use Mojo::Base 'Mojolicious::Controller';
   use Spaghetti::Form::User::ChangePassword;
   use Spaghetti::Form::User::ChangeMail;
   use Spaghetti::Form::User::AddSshKey;
-
+  
+  use Pony::Model::Dbh::MySQL;
   use Pony::Model::Crud::MySQL;
   use Pony::Stash;
   use Digest::MD5 "md5_hex";
@@ -98,6 +99,7 @@ use Mojo::Base 'Mojolicious::Controller';
       $this->stash( form => $form->render );
     }
   
+  
   # Get responses to user's messages.
   # Flush response count.
   # 
@@ -105,7 +107,24 @@ use Mojo::Base 'Mojolicious::Controller';
   
   sub responses
     {
+      my $this = shift;
+      
+      # Not found for anonymous.
+      $this->stop(404) unless $this->user->{id};
+
+      my $dbh = Pony::Model::Dbh::MySQL->new->dbh;
+      my $sth = $dbh->prepare($Spaghetti::SQL::user->{responses});
+         $sth->execute( $this->user->{id}, 0, 20 );
+         
+      my $resps = $sth->fetchall_hashref('id');
+      
+      # Flush response count.
+      Pony::Model::Crud::MySQL->new('userInfo')
+          ->update({ responses => 0 }, { id => $this->user->{id} });
+      
+      $this->stash(responses => $resps);
     }
+  
   
   # Private user thread.
   # 
@@ -123,17 +142,18 @@ use Mojo::Base 'Mojolicious::Controller';
     {
     }
   
+  
+  # Show user's home page.
+  #
+  
   sub home
     {
       my $this = shift;
       
       # Not found for anonymous.
-      #
-      
       $this->stop(404) unless $this->user->{id};
       
       $this->stash( user => $this->user );
-      $this->render;
     }
   
   sub config
@@ -142,6 +162,17 @@ use Mojo::Base 'Mojolicious::Controller';
   
   sub profile
     {
+      my $this = shift;
+      my $id = $this->param('id') || 0;
+      
+      my $user = User::Object->new->load($id) || $this->stop(404);
+      my @items;
+      
+      @items = Pony::Model::Crud::MySQL->new('item')->list()
+        if grep { $_ eq 2 } @{ $this->user->{groups} }; # Is Archon?
+      
+      $this->stash( items => \@items );
+      $this->stash( user => $user );
     }
   
   sub logout

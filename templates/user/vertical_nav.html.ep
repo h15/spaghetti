@@ -14,7 +14,7 @@
     </div>
 </a>
 
-<a href="<%= url_for 'user_projects' %>">
+<!--a href="<%= url_for 'user_projects' %>">
     <div class="item <%= 'selected' if $tab eq 'projects' %>">
         <%=l 'Projects' %>
     </div>
@@ -42,7 +42,7 @@
     <div class="item <%= 'selected' if $tab eq 'sshKey' %>">
         <%=l 'Public keys' %>
     </div>
-</a>
+</a-->
 
 <!--
 %# <a href="<%#= url_for 'user_config' %>">

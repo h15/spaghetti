@@ -218,7 +218,7 @@ nav.overall a
 
 header.overall
 {
-  margin-left:10px;
+  margin:10px;
 }
 
 footer.overall
@@ -285,6 +285,7 @@ table.list
 
 table.list tr
 {
+  border-top: 1px solid #ddd;
   background: #F0F0F0;
 }
 
@@ -300,7 +301,7 @@ table.list tr:nth-child(2n)
 
 table.list td
 {
-  padding:2px;
+  padding:4px;
   margin:0px;
 }
 
@@ -935,4 +936,20 @@ li.L1, li.L3, li.L5, li.L7, li.L9
   margin-top:-6px;
 }
 
+a.brand
+{
+  color: #eee !importent;
+}
 
+.navbar .nav .num
+{
+  -moz-border-radius:   3px;
+  -webkit-border-radius:  3px;
+  border-radius:      3px;
+  -khtml-border-radius:   3px;
+  padding: 1px 3px 0px 2px;
+  background: #AC1A1A;
+  font-size: 10px;
+  position:relative;
+  top:-6px;
+}
