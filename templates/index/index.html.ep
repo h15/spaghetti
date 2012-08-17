@@ -1,17 +1,5 @@
 % layout 'default';
-
-<a href="http://twitter.com/LorCode" style="text-decoration:none;">
-  <div class="follow alignright">
-    Follow us on Twitter <img src="http://twitter.com/phoenix/img/tiny-timeline-bird.png">
-  </div>
-</a>
-
-<a href="http://lorcode.org">
-  <div style="margin-bottom:20px;">
-    <img src="/pic/lorcode.png" alt="LorCode" title="LorCode" style="border:0px">
-  </div>
-</a>
-
+% title '<a href="http://lorcode.org"><div style="margin-bottom:20px;"><img src="/pic/lorcode.png" alt="LorCode" title="LorCode" style="border:0px"></div></a>';
 
   <!-- projects -->
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%=strip title %></title>
+    <title>LorCode &rarr; <%=strip title %></title>
     %= stylesheet '/js/redactor/css/redactor.css'
     %= stylesheet '/css/bootstrap.css'
     %= stylesheet '/css/bootstrap-responsive.css'

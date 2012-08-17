@@ -5,12 +5,11 @@ body
   font-family:"DejaVu Sans", Helvetica, Arial, Sans;
   color:#222;
   font-size:14px;
-  background:#EDEDED;
+  background:#272D2D;
 }
 
 html
 {
-  background:#EDEDED;
 }
 
 nav, header, article, footer { display: block; }
@@ -952,4 +951,9 @@ a.brand
   font-size: 10px;
   position:relative;
   top:-6px;
+}
+
+footer.overall a
+{
+  color: #E35181;
 }
