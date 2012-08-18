@@ -69,12 +69,7 @@
 %   $topicForm->elements->{topicId}->value  = $topic->{id};
 
 <div style="margin:10px 0px">
-    <a href="#" class=showButton id="showButton-<%= $topic->{id} %>"><%=l 'New topic' %></a>
-    <a href="#" class="hidden hideButton" id="hideButton-<%= $topic->{id} %>"><%=l 'hide' %></a>
-
-    <div class=hidden id="hiddenArea-<%= $topic->{id} %>">
-        %=b $topicForm->render
-    </div>
+    <a href="<%= url_for 'thread_createTopic', parentId => $topic->{id}, topicId => $topic->{id}, tree => 0 %>"><%=l 'New topic' %></a>
 </div>
 
 % }

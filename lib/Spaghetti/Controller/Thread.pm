@@ -384,7 +384,7 @@ use Mojo::Base 'Mojolicious::Controller';
                  });
           
           $threadModel->update( { textId  => $teId },
-                      { id    => $thId } );
+                                { id    => $thId } );
           
           # Inheritance of groups
           #
