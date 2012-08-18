@@ -25,9 +25,10 @@
         
         <div class="cb"></div>
     </a>
-    <div class="postContent">
+    <div class="postContent" style="margin-left:-4px;">
         <%=b $news->{legend} %>
     </div>
+    <a href="<%= url_for('thread_show', url => $news->{url}) %>"><%=l 'read more' %> &rarr;</a>
 </article>
 
 % }

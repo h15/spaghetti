@@ -49,21 +49,11 @@
             <a href="#" class=showButton id="showButton-<%= $news->{id} %>"><%=l 'response' %></a>
             <a href="#" class="hidden hideButton" id="hideButton-<%= $news->{id} %>"><%=l 'hide' %></a>
             
-            <a href="#" class=showButton id="showButton-createTopic<%= $news->{id} %>"><%=l 'create topic' %></a>
-            <a href="#" class="hidden hideButton" id="hideButton-createTopic<%= $news->{id} %>"><%=l 'hide' %></a>
-            
             <div class=hidden id="hiddenArea-<%= $news->{id} %>">
                 % $form->elements->{parentId}->value = $news->{id};
                 % $form->elements->{topicId}->value  = $news->{id};
             
                 %=b $form->render
-            </div>
-            
-            <div class=hidden id="hiddenArea-createTopic<%= $news->{id} %>">
-                % $topicForm->elements->{parentId}->value = $news->{id};
-                % $topicForm->elements->{topicId}->value  = $news->{id};
-                
-                %=b $topicForm->render
             </div>
     %   }
 </header>

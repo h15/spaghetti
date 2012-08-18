@@ -186,7 +186,7 @@ use Mojo::Base 'Mojolicious';
       $r->route('/thread/tracker')
         ->to('thread#tracker')
           ->name('thread_tracker_index');
-      $r->route('/thread/tracker/:page', page => qr/\d/)
+      $r->route('/thread/tracker/:page', page => qr/\d+/)
         ->to('thread#tracker')
           ->name('thread_tracker');
       $r->route('/thread/:url')

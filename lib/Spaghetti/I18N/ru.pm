@@ -154,6 +154,7 @@ use Encode 'decode';
                 'Repo is empty' => 'Репозиторий пуст',
                 'more'          => 'далее',
                 'Search'        => 'Поиск',
+                'read more'     => 'читать',
             };
             
             $lang->{$_} = decode('utf8', $lang->{$_}) for keys %$lang;
@@ -162,3 +163,4 @@ use Encode 'decode';
         }
 
 1;
+
