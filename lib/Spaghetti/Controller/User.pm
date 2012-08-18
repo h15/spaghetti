@@ -92,6 +92,11 @@ use Mojo::Base 'Mojolicious::Controller';
                       attempts => 0, sshKeyCount => 0,
                       banId => 0, banTime => 0})->save();
           
+          # Add user to default user group.
+          Pony::Model::Crud::MySQL
+            ->new('userToGroup')
+              ->create({ groupId => 999, userId => $user->getId() });
+          
           $this->session( userId => $user->getId() )->redirect_to('user_home');
         }
       }
