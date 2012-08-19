@@ -12,8 +12,10 @@ use Mojo::Base 'Mojolicious::Controller';
   use Pony::Model::Dbh::MySQL;
   use Pony::Model::Crud::MySQL;
   use Pony::Stash;
+  
   use Digest::MD5 "md5_hex";
   use Storable qw(thaw freeze);
+  use Captcha::AreYouAHuman;
   
   use User::Object;
   
@@ -101,7 +103,12 @@ use Mojo::Base 'Mojolicious::Controller';
         }
       }
       
-      $this->stash( form => $form->render );
+      my $ayah = new Captcha::AreYouAHuman (
+        publisher_key => Pony::Stash->get('areYouAHuman')->{publisher},
+        scoring_key   => Pony::Stash->get('areYouAHuman')->{scoring}
+      );
+      
+      $this->stash( form => $form->render, ayah => $ayah );
     }
   
   
