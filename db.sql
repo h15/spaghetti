@@ -1,6 +1,6 @@
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
-drop table if exists `user`;
+-- drop table if exists `user`;
 create table `user`
 (
     `id`        int(11) unsigned auto_increment primary key,
@@ -27,7 +27,7 @@ INSERT INTO `user` (`id`, `mail`, `password`, `name`, `createAt`, `modifyAt`, `a
 (0,'anonymous@lorcode.org','','anonymous',0,0,0,0,0),
 (1,'admin@lorcode.org','eaf959d9e23b7a07bf6364f50efd6007','admin',0,0,0,0,0);
 
-drop table if exists `sshKey`;
+-- drop table if exists `sshKey`;
 create table `sshKey`
 (
     `id`        int(11) unsigned auto_increment primary key,
@@ -39,7 +39,7 @@ create table `sshKey`
     FOREIGN KEY (`userId`) REFERENCES `user`(`id`)
 ) ENGINE = MYISAM;
 
-drop table if exists `responses`;
+-- drop table if exists `responses`;
 create table `responses`
 (
     `id`        int(11) unsigned auto_increment primary key,
@@ -53,7 +53,7 @@ create table `responses`
     FOREIGN KEY (`message`) REFERENCES `thread`(`id`)
 ) ENGINE = MYISAM;
 
-drop table if exists `item`;
+-- drop table if exists `item`;
 create table `item`
 (
     `id`        int(11) unsigned auto_increment primary key,
@@ -68,7 +68,7 @@ INSERT INTO `item` (`id`, `name`, `desc`, `trade`, `effect`, `params`) VALUES
 (1,'nil', 'nothing',1,NULL,NULL),
 (2,'Project ticket', 'Free ticket for one project',0,'CreateProject',1);
 
-drop table if exists `userToItem`;
+-- drop table if exists `userToItem`;
 create table `userToItem`
 (
     `id`     int(11) unsigned auto_increment primary key,
@@ -79,7 +79,7 @@ create table `userToItem`
     FOREIGN KEY (`itemId`) REFERENCES `item`(`id`)
 ) ENGINE = MYISAM;
 
-drop table if exists `userInfo`;
+-- drop table if exists `userInfo`;
 create table `userInfo`
 (
     `id`        int(11) unsigned not null default 0,
@@ -91,12 +91,12 @@ create table `userInfo`
     FOREIGN KEY (`id`)  REFERENCES `user`(`id`)
 ) ENGINE = MYISAM;
 /*
-drop table if exists `task`
+-- drop table if exists `task`
 (
       
 ) ENGINE = MYISAM;
 */
-drop table if exists `mailConfirm`;
+-- drop table if exists `mailConfirm`;
 create table `mailConfirm`
 (
     `expair`    int(11) unsigned not null default 0,
@@ -105,7 +105,7 @@ create table `mailConfirm`
     `attempts`  int(1) unsigned not null default 0
 ) ENGINE = MYISAM;
 
-drop table if exists `ban`;
+-- drop table if exists `ban`;
 create table `ban`
 (
     `id`        int(11) unsigned not null auto_increment primary key,
@@ -117,7 +117,7 @@ create table `ban`
     FOREIGN KEY (`userId`)  REFERENCES `user`(`id`)
 ) ENGINE = MYISAM;
 
-drop table if exists `group`;
+-- drop table if exists `group`;
 create table `group`
 (
     `id`        int(11) unsigned not null auto_increment primary key,
@@ -133,7 +133,7 @@ INSERT INTO `group` (`id`, `name`, `desc`, `prioritet`) VALUES
 (998, 'Project leader', '', 100),
 (999, 'User', 'Simple user', 9999);
 
-drop table if exists `userToGroup`;
+-- drop table if exists `userToGroup`;
 create table `userToGroup`
 (
     `userId`    int(11) unsigned not null,
@@ -147,7 +147,7 @@ INSERT INTO `userToGroup` (`userId`, `groupId`) VALUES
 (0,0),
 (1,1);
 
-drop table if exists `access`;
+-- drop table if exists `access`;
 create table `access`
 (
     `groupId`   int(11) unsigned not null,
@@ -158,7 +158,7 @@ create table `access`
     FOREIGN KEY (`dataTypeId`) REFERENCES `dataType`(`id`)
 ) ENGINE = MYISAM;
 
-drop table if exists `dataType`;
+-- drop table if exists `dataType`;
 create table `dataType`
 (
     `id`        int(11) unsigned not null auto_increment primary key,
@@ -167,7 +167,7 @@ create table `dataType`
     `prioritet` int(11) unsigned not null default 0
 ) ENGINE = MYISAM;
 
-drop table if exists `threadToDataType`;
+-- drop table if exists `threadToDataType`;
 create table `threadToDataType`
 (
     `threadId`  int(11) unsigned not null,
@@ -177,7 +177,7 @@ create table `threadToDataType`
     FOREIGN KEY (`dataTypeId`) REFERENCES `dataType`(`id`)
 ) ENGINE = MYISAM;
 
-drop table if exists `thread`;
+-- drop table if exists `thread`;
 create table `thread`
 (
     `id`        int(11) unsigned not null auto_increment primary key,
@@ -196,7 +196,7 @@ create table `thread`
     FOREIGN KEY (`textId`)   REFERENCES `text`(`id`)
 ) ENGINE = MYISAM;
 
-drop table if exists `text`;
+-- drop table if exists `text`;
 create table `text`
 (
     `id`        int(11) unsigned not null auto_increment primary key,
@@ -206,7 +206,7 @@ create table `text`
     FOREIGN KEY (`threadId`)  REFERENCES `thread`(`id`)
 ) ENGINE = MYISAM;
 
-drop table if exists `topic`;
+-- drop table if exists `topic`;
 create table `topic`
 (
     `threadId`  int(11) unsigned not null,
@@ -218,7 +218,7 @@ create table `topic`
     FOREIGN KEY (`threadId`)  REFERENCES `thread`(`id`)
 ) ENGINE = MYISAM;
 
-drop table if exists `threadToTag`;
+-- drop table if exists `threadToTag`;
 create table `threadToTag`
 (
     `threadId`  int(11) unsigned not null,
@@ -228,7 +228,7 @@ create table `threadToTag`
     FOREIGN KEY (`tagId`)    REFERENCES `tag`(`id`)
 ) ENGINE = MYISAM;
 
-drop table if exists `tag`;
+-- drop table if exists `tag`;
 create table `tag`
 (
     `id`        int(11) unsigned not null auto_increment primary key,
@@ -238,7 +238,7 @@ create table `tag`
     unique(`url`)
 ) ENGINE = MYISAM;
 
-drop table if exists `news`;
+-- drop table if exists `news`;
 create table `news`
 (
     `threadId`  int(11) unsigned not null,
@@ -247,7 +247,7 @@ create table `news`
     FOREIGN KEY (`threadId`)  REFERENCES `thread`(`id`)
 ) ENGINE = MYISAM;
 
-drop table if exists `project`;
+-- drop table if exists `project`;
 create table `project`
 (
     `id`        int(11) unsigned not null,
@@ -260,7 +260,7 @@ create table `project`
     FOREIGN KEY (`id`)    REFERENCES `thread`(`id`)
 ) ENGINE = MYISAM;
 
-drop table if exists `repo`;
+-- drop table if exists `repo`;
 create table `repo`
 (
     `id`        int(11) unsigned not null,
@@ -271,7 +271,7 @@ create table `repo`
     FOREIGN KEY (`id`)    REFERENCES `thread`(`id`)
 ) ENGINE = MYISAM;
 
-drop table if exists `repoGroup`;
+-- drop table if exists `repoGroup`;
 create table `repoGroup`
 (
     `id`        int(11) unsigned not null auto_increment primary key,
@@ -279,7 +279,7 @@ create table `repoGroup`
     `desc`      varchar(1024) character  set utf8 collate utf8_general_ci not null
 ) ENGINE = MYISAM;
 
-drop table if exists `repoRights`;
+-- drop table if exists `repoRights`;
 create table `repoRights`
 (
     `repoId`    int(11)     unsigned not null,
@@ -290,7 +290,7 @@ create table `repoRights`
     FOREIGN KEY (`groupId`) REFERENCES `repoGroup`(`id`)
 ) ENGINE = MYISAM;
 
-drop table if exists `repoRightsViaUser`;
+-- drop table if exists `repoRightsViaUser`;
 create table `repoRightsViaUser`
 (
     `repoId`    int(11)     unsigned not null,
@@ -301,7 +301,7 @@ create table `repoRightsViaUser`
     FOREIGN KEY (`userId`) REFERENCES `user`(`id`)
 ) ENGINE = MYISAM;
 
-drop table if exists `userToRepoGroup`;
+-- drop table if exists `userToRepoGroup`;
 create table `userToRepoGroup`
 (
     `userId`    int(11) unsigned not null,
@@ -310,3 +310,34 @@ create table `userToRepoGroup`
     FOREIGN KEY (`userId`)  REFERENCES `user`(`id`),
     FOREIGN KEY (`groupId`) REFERENCES `repoGroup`(`id`)
 ) ENGINE = MYISAM;
+
+-- WIKI
+
+create table `wikiDocument`(
+  `id`        int(11) unsigned not null auto_increment primary key,
+  `revisionId`int(11) unsigned not null,
+  `title`     varchar(256) character set utf8 collate utf8_general_ci not null,
+  `text`      varchar(60000) character set utf8 collate utf8_general_ci not null,
+  `url`       varchar(128) character set ascii collate ascii_general_ci not null,
+  `createAt`  int(11) unsigned not null,
+  `modifyAt`  int(11) unsigned not null,
+  
+  FOREIGN KEY (`revisionId`) REFERENCES `wikiRevision`(`id`)
+) ENGINE = MYISAM;
+
+create table `wikiRevision`(
+  `id`        int(11) unsigned not null auto_increment primary key,
+  `next`      int(11) unsigned not null default 0,
+  `prev`      int(11) unsigned not null default 0,
+  `isCurrent` tinyint(1) unsigned not null default 0,
+  `documentId`int(11) unsigned not null,
+  `author`    int(11) unsigned not null,
+  `createAt`  int(11) unsigned not null,
+  `diff`      varchar(60000) character set utf8 collate utf8_general_ci not null,
+  
+  FOREIGN KEY (`next`) REFERENCES `wikiRevision`(`id`),
+  FOREIGN KEY (`prev`) REFERENCES `wikiRevision`(`id`),
+  FOREIGN KEY (`documentId`) REFERENCES `wikiDocument`(`id`),
+  FOREIGN KEY (`author`) REFERENCES `user`(`id`)
+) ENGINE = MYISAM;
+

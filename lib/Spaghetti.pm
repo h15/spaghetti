@@ -381,6 +381,15 @@ use Mojo::Base 'Mojolicious';
         ->to('repo#readBlobPath', format => '0')
           ->name('repo_readBlobPath');
       
+      # WIKI
+      # document
+      $r->route('/wiki/Create\::url')->to('wiki#create')->name('wiki_create');
+      $r->route('/wiki/Edit\::url')->to('wiki#update')->name('wiki_create');
+      $r->route('/wiki/Delete\::url')->to('wiki#delete')->name('wiki_delete');
+      $r->route('/wiki/:url')->to('wiki#read')->name('wiki_read');
+      
+      # revision
+      
       ##
       ##  Helpers
       ##
