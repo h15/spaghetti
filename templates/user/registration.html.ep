@@ -31,4 +31,5 @@
     });
 </script>
 
-%=b $form
+%=b $ayah->getPublisherHTML();
+%=b $form;

@@ -108,7 +108,7 @@ use Mojo::Base 'Mojolicious::Controller';
         scoring_key   => Pony::Stash->get('areYouAHuman')->{scoring}
       );
       
-      $this->stash( form => $form->render, ayah => $ayah );
+      $this->stash({form => $form->render, ayah => $ayah});
     }
   
   
