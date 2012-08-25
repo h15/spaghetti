@@ -39,24 +39,31 @@ use Mojo::Base 'Mojolicious::Controller';
           my $user = new User::Object;
           $user->load({mail => $e->{mail}->value});
           
-          # Too much attempts.
-          if ( $user->attempts > Pony::Stash->get('user')->{attempts} )
+          if (! defined $user->getId() )
           {
-            $e->{submit}->errors = ['Too much login attempts'];
+            $e->{submit}->errors = ['Invalid mail or password'];
           }
           else
           {
-            # Does user with this mail and password exists?
-            if ($user->password ne $user->cryptPassword($e->{password}->value))
+            # Too much attempts.
+            if ( $user->attempts > Pony::Stash->get('user')->{attempts} )
             {
-              $user->set({attempts => $user->attempts + 1})->save();
-              $e->{password}->errors = ['Invalid mail or password'];
+              $e->{submit}->errors = ['Too much login attempts'];
             }
             else
             {
-              # All fine. Flush attempt count.
-              $user->set({attempts => 0, accessAt => time})->save();
-              $this->session(userId=>$user->getId())->redirect_to('user_home');
+              # Does user with this mail and password exists?
+              if ($user->password ne $user->cryptPassword($e->{password}->value))
+              {
+                $user->set({attempts => $user->attempts + 1})->save();
+                $e->{password}->errors = ['Invalid mail or password'];
+              }
+              else
+              {
+                # All fine. Flush attempt count.
+                $user->set({attempts => 0, accessAt => time})->save();
+                $this->session(userId=>$user->getId())->redirect_to('user_home');
+              }
             }
           }
         }
