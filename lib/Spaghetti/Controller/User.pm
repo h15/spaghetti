@@ -78,19 +78,21 @@ use Mojo::Base 'Mojolicious::Controller';
         scoring_key   => Pony::Stash->get('areYouAHuman')->{scoring}
       );
       
-      $this->session(secret => md5_hex(rand)) unless $this->session('secret');
+      $this->cookie('session_secret' => md5_hex(rand))
+        unless $this->cookie('session_secret');
       
       if ( $this->req->method eq 'POST' )
       {
         $form->data->{$_} = $this->param($_) for keys %{$form->elements};
-        
+        say $this->cookie('session_secret');
+        say $this->tx->remote_address;
         # Are you a human?
         # Get check result.
         my $result = $ayah->scoreResult(
-            "session_secret" => $this->session('secret'),
+            "session_secret" => $this->cookie('session_secret'),
             "client_ip" => $this->tx->remote_address
         );
-        
+        say $this->dumper($result);
         if ( $result && $form->isValid() )
         {
           my $e = $form->elements;
@@ -118,7 +120,7 @@ use Mojo::Base 'Mojolicious::Controller';
       
       $this->stash({ form   => $form->render,
                      ayah   => $ayah,
-                     secret => $this->session('secret')});
+                     secret => $this->cookie('session_secret')});
     }
   
   
