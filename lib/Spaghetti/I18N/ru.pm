@@ -155,6 +155,7 @@ use Encode 'decode';
                 'more'          => 'далее',
                 'Search'        => 'Поиск',
                 'read more'     => 'читать',
+                'Show password' => 'Показать пароль',
             };
             
             $lang->{$_} = decode('utf8', $lang->{$_}) for keys %$lang;

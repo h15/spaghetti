@@ -73,12 +73,25 @@ use Mojo::Base 'Mojolicious::Controller';
     {
       my $this = shift;
       my $form = new Spaghetti::Form::User::Registration;
+      my $ayah = new Captcha::AreYouAHuman (
+        publisher_key => Pony::Stash->get('areYouAHuman')->{publisher},
+        scoring_key   => Pony::Stash->get('areYouAHuman')->{scoring}
+      );
+      
+      $this->session(secret => md5_hex(rand)) unless $this->session('secret');
       
       if ( $this->req->method eq 'POST' )
       {
         $form->data->{$_} = $this->param($_) for keys %{$form->elements};
         
-        if ( $form->isValid )
+        # Are you a human?
+        # Get check result.
+        my $result = $ayah->scoreResult(
+            "session_secret" => $this->session('secret'),
+            "client_ip" => $this->tx->remote_address
+        );
+        
+        if ( $result && $form->isValid() )
         {
           my $e = $form->elements;
           my $user = new User::Object;
@@ -103,12 +116,9 @@ use Mojo::Base 'Mojolicious::Controller';
         }
       }
       
-      my $ayah = new Captcha::AreYouAHuman (
-        publisher_key => Pony::Stash->get('areYouAHuman')->{publisher},
-        scoring_key   => Pony::Stash->get('areYouAHuman')->{scoring}
-      );
-      
-      $this->stash({form => $form->render, ayah => $ayah});
+      $this->stash({ form   => $form->render,
+                     ayah   => $ayah,
+                     secret => $this->session('secret')});
     }
   
   

@@ -21,15 +21,53 @@
                 new_pass.attr('type', 'password');
                 new_pass.attr('id', password);
             }
-
+            
             new_pass.insertBefore(old_pass);
             old_pass.remove();
-
+            
             return true;
-
+            
         });
     });
 </script>
 
-%=b $ayah->getPublisherHTML();
-%=b $form;
+<form id="form-registration" method="post" action="/user/registration">
+  <table class="pony-form">
+    <tbody>
+      <tr>
+        <td><%=l 'Name' %> <span class="required">*</span></td>
+        <td><input type="text" required="" name="name" value="" id="form-registration-name" class="pony-text"></td>
+      </tr>
+      <tr><td></td></tr>
+      <tr>
+        <td>E-mail <span class="required">*</span></td>
+          <td><input type="text" required="" name="mail" value="" id="form-registration-mail" class="pony-text"></td>
+      </tr>
+      <tr><td></td></tr>
+      <tr>
+        <td><%=l 'Password' %> <span class="required">*</span></td>
+        <td><input type="password" required="" name="password" id="form-registration-password" class="pony-password"></td>
+      </tr>
+      <tr>
+        <td colspan=2><label for="show"><%=l 'Show password' %>
+          <input type="checkbox" name="show" id="form-registration-show" class="pony-checkbox"></label></td>
+      </tr>
+      <tr><td></td></tr>
+      <tr>
+        <td colspan=2>
+          <div><%=l 'I`m not bot' %></div>
+          
+            <input type="hidden" name="Submit" value="Yes">
+            %=b $ayah->getPublisherHTML();
+            %=b $ayah->recordConversion("session_secret" => $secret);
+            <p style="text-align: center">
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=2><input type="submit" name="submit" id="form-registration-submit" class="pony-submit"></td>
+      </tr>
+    </tbody>
+  </table>
+</form>
+
