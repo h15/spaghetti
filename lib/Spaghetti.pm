@@ -54,6 +54,13 @@ use Mojo::Base 'Mojolicious';
       $this->plugin('mail');
       $this->plugin('thread');
       
+      $this->plugin(recaptcha => {
+        public_key  => Pony::Stash->get('reCaptcha')->{public},
+        private_key => Pony::Stash->get('reCaptcha')->{private},
+        lang        => 'ru',
+        ssl         => 1, # uses https Google URLs
+      });
+      
       ##
       ##  Routes
       ##

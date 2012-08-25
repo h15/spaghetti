@@ -58,8 +58,7 @@
           <div><%=l 'I`m not bot' %></div>
           
             <input type="hidden" name="Submit" value="Yes">
-            %=b $ayah->getPublisherHTML();
-            %=b $ayah->recordConversion("session_secret" => $secret);
+            <%= recaptcha_html %>
             <p style="text-align: center">
             </p>
         </td>

@@ -15,7 +15,7 @@ use Mojo::Base 'Mojolicious::Controller';
   
   use Digest::MD5 "md5_hex";
   use Storable qw(thaw freeze);
-  use Captcha::AreYouAHuman;
+  #use Captcha::AreYouAHuman;
   
   use User::Object;
   
@@ -80,10 +80,6 @@ use Mojo::Base 'Mojolicious::Controller';
     {
       my $this = shift;
       my $form = new Spaghetti::Form::User::Registration;
-      my $ayah = new Captcha::AreYouAHuman (
-        publisher_key => Pony::Stash->get('areYouAHuman')->{publisher},
-        scoring_key   => Pony::Stash->get('areYouAHuman')->{scoring}
-      );
       
       $this->cookie('session_secret' => md5_hex(rand))
         unless $this->cookie('session_secret');
@@ -91,43 +87,45 @@ use Mojo::Base 'Mojolicious::Controller';
       if ( $this->req->method eq 'POST' )
       {
         $form->data->{$_} = $this->param($_) for keys %{$form->elements};
-        say $this->cookie('session_secret');
-        say $this->tx->remote_address;
+        
         # Are you a human?
-        # Get check result.
-        my $result = $ayah->scoreResult(
-            "session_secret" => $this->cookie('session_secret'),
-            "client_ip" => $this->tx->remote_address
-        );
-        say $this->dumper($result);
-        if ( $result && $form->isValid() )
+        $this->recaptcha;
+        
+        if ( !$this->stash('recaptcha_error') && $form->isValid() )
         {
           my $e = $form->elements;
           my $user = new User::Object;
           
-          $e->{name}->errors = ['Name is already used'], break
-            if $user->load({name => $e->{name}->value})->getId();
-          $e->{mail}->errors = ['Mail is already used'], break
-            if $user->load({mail => $e->{mail}->value})->getId();
-          
-          $user->setStorable( $form->data );
-          $user->setPassword( $user->password );
-          $user->set({createAt => time, modifyAt => time, accessAt => time,
-                      attempts => 0, sshKeyCount => 0,
-                      banId => 0, banTime => 0})->save();
-          
-          # Add user to default user group.
-          Pony::Model::Crud::MySQL
-            ->new('userToGroup')
-              ->create({ groupId => 999, userId => $user->getId() });
-          
-          $this->session( userId => $user->getId() )->redirect_to('user_home');
+          if ( $user->load({name => $e->{name}->value})->getId() )
+          {
+            $e->{name}->errors = ['Name is already used'];
+          }
+          else
+          {
+            if ( $user->load({mail => $e->{mail}->value})->getId() )
+            {
+              $e->{mail}->errors = ['Mail is already used'];
+            }
+            else
+            {
+              $user->setStorable( $form->data );
+              $user->setPassword( $user->password );
+              $user->set({createAt => time, modifyAt => time, accessAt => time,
+                          attempts => 0, sshKeyCount => 0,
+                          banId => 0, banTime => 0})->save();
+              
+              # Add user to default user group.
+              Pony::Model::Crud::MySQL
+                ->new('userToGroup')
+                  ->create({ groupId => 999, userId => $user->getId() });
+              
+              $this->session( userId => $user->getId() )->redirect_to('user_home');
+            }
+          }
         }
       }
       
-      $this->stash({ form   => $form->render,
-                     ayah   => $ayah,
-                     secret => $this->cookie('session_secret')});
+      $this->stash({ form => $form->render });
     }
   
   
