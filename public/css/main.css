@@ -16,7 +16,7 @@ nav, header, article, footer { display: block; }
 
 .wrap
 {
-  background:#fff;
+  background: url('/pic/bg.png') #fff;
   padding:0px 0px;
 }
 
