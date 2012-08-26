@@ -29,8 +29,8 @@ nav, header, article, footer { display: block; }
   position: relative;
   overflow-x: auto;
   box-shadow:
-    10px 0 10px -10px rgba(0,0,0,0.5),
-    -10px 0 10px -10px rgba(0,0,0,0.5);
+    10px 0 10px -10px rgba(0,0,0,0.4),
+    -10px 0 10px -10px rgba(0,0,0,0.4);
 }
 
 .contentColumn
@@ -616,7 +616,7 @@ input.red
 nav.vertical
 {
   position:relative;
-  right:400px;
+  right:398px;
   padding-top:16px;
   float:right;
   text-align:left;
@@ -967,4 +967,12 @@ footer.overall
 footer.overall a
 {
   color: #E35181;
+}
+
+.icon-user
+{
+  width: 20px;
+  position: relative;
+  top: -2px;
+  left: -6px;
 }
