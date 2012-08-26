@@ -33,6 +33,12 @@ nav, header, article, footer { display: block; }
     -10px 0 10px -10px rgba(0,0,0,0.5);
 }
 
+.contentColumn
+{
+  background: url('/pic/bg1.png') #fff;
+  width: 800px;
+}
+
 article.post, .topic
 {
   -moz-border-radius:5px;
