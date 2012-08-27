@@ -18,7 +18,10 @@
     
     <meta charset="utf-8">
     <script type="text/javascript">
-        $(document).ready(function(){ $('textarea').each(function(i){ $(this).redactor(); }) });
+        $(document).ready(function(){
+          $('textarea').each(function(i){ $(this).redactor(); });
+          $('code').each(function(i){ $(this).addClass('prettyprint'); });
+        });
     </script>
   </head>
   <body onload="prettyPrint()">

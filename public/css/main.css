@@ -976,3 +976,8 @@ footer.overall a
   top: -2px;
   left: -6px;
 }
+
+code
+{
+  display: block !important;
+}
