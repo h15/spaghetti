@@ -42,7 +42,7 @@
           <div class="nav-collapse">
             <ul class="nav">
               <li <%#= ( $topNavTabs eq 'news'     ? 'class=active' : '' %>><a href="/news"><%=l 'News list' %></a></li>
-              <li <%#= ( $topNavTabs eq 'thread'   ? 'class=active' : '' %>><a href="/thread"><%=l 'Forum' %></a></li>
+              <li <%#= ( $topNavTabs eq 'thread'   ? 'class=active' : '' %>><a href="/forum"><%=l 'Forum' %></a></li>
               <li <%#= ( $topNavTabs eq 'tracker'  ? 'class=active' : '' %>><a href="/thread/tracker"><%=l 'Tracker' %></a></li>
               <!--li <%#= ( $topNavTabs eq 'projects' ? 'class=active' : '' %>><a href="<%= url_for 'project_list' %>"><%=l 'Projects' %></a></li-->
               <li <%#= ( $topNavTabs eq 'search'   ? 'class=active' : '' %>><a href="<%= url_for 'search_index' %>"><%=l 'Search' %></a></li>
