@@ -1,3 +1,177 @@
+commit 6a58b9761209350e8aaac96c7d9524706b39bad6
+Author: Georgy.Bazhukov <gosha@bugov.net>
+Date:   Mon Aug 27 22:53:47 2012 +0600
+
+    fix code rendering
+
+commit 39cd1792acf39448d7968d652824b03fae751e2b
+Author: Georgy.Bazhukov <gosha@bugov.net>
+Date:   Sun Aug 26 15:21:28 2012 +0600
+
+    fix templates
+
+commit 5ff9e159911f24775ff90905a9521eaf1b0919c2
+Author: Georgy.Bazhukov <gosha@bugov.net>
+Date:   Sun Aug 26 14:58:03 2012 +0600
+
+    add background for center column
+
+commit 623a6e61408c6f2c68a6f28269c75b396538e774
+Author: Georgy.Bazhukov <gosha@bugov.net>
+Date:   Sun Aug 26 14:38:55 2012 +0600
+
+    add background
+
+commit dcc0d3bea3f1c6a01982f2cd9e4803f9487ce842
+Author: Georgy.Bazhukov <gosha@bugov.net>
+Date:   Sun Aug 26 01:42:52 2012 +0600
+
+    remove ayah && add recaptcha
+
+commit bf1bdfedef0585f8436d4bec500243b622ebddca
+Author: Georgy.Bazhukov <gosha@bugov.net>
+Date:   Sat Aug 25 14:31:59 2012 +0600
+
+    fix login - add error message on unknown mail
+
+commit 2e8c5eb6f106a8527e3a357b2446462effa3e0cc
+Author: Georgy.Bazhukov <gosha@bugov.net>
+Date:   Sat Aug 25 14:25:59 2012 +0600
+
+    captcha one more try
+
+commit a5a2e560e4411133c81a7e2ce8a2821a97d70a7f
+Author: Georgy.Bazhukov <gosha@bugov.net>
+Date:   Sat Aug 25 13:56:07 2012 +0600
+
+    captcha looks good
+
+commit 23a696639f90d40263b2afbcd367ae83f174bc55
+Author: Georgy.Bazhukov <gosha@bugov.net>
+Date:   Fri Aug 24 23:20:42 2012 +0600
+
+    add ayah captcha
+
+commit f798d834c5fcf79fd909e5d0b2b9cbc7a00abc9b
+Author: bug <bug@top.(none)>
+Date:   Mon Aug 20 00:12:21 2012 +0600
+
+    fix html tag parse
+
+commit cfef68247c08cd847439ea3507ec6b940c33fc6e
+Author: bug <bug@top.(none)>
+Date:   Sun Aug 19 17:36:53 2012 +0600
+
+    cleanup
+
+commit 8134bf3c86709253fcd50817d875095cfd9eb51d
+Author: bug <bug@top.(none)>
+Date:   Sun Aug 19 16:12:48 2012 +0600
+
+    first code lines for wiki support
+
+commit feecdf1f8158eb834079abf5db4027c714685a27
+Author: bug <bug@top.(none)>
+Date:   Sat Aug 18 21:38:14 2012 +0600
+
+    add user default group
+
+commit 3f57b051f16ffac6e05dde671378f67fa5abed3f
+Author: bug <bug@top.(none)>
+Date:   Sat Aug 18 21:02:34 2012 +0600
+
+    change sphinx.conf
+
+commit d45d9d03db55765adf6d40968cd57201d3014092
+Author: bug <bug@top.(none)>
+Date:   Sat Aug 18 20:23:49 2012 +0600
+
+    fix get log
+
+commit cc53ea18f60e4f6e3556bfa02c3fe326941516f9
+Author: bug <bug@top.(none)>
+Date:   Sat Aug 18 19:17:33 2012 +0600
+
+    add ya metric for lorcode
+
+commit 4b034b604081063fb3a49a4f5f46d271814bf27a
+Author: bug <bug@top.(none)>
+Date:   Sat Aug 18 19:08:27 2012 +0600
+
+    fix news pages
+
+commit b207385f9d9fa2f79b4693e4cf5c69a5c43f55b0
+Author: bug <bug@top.(none)>
+Date:   Sat Aug 18 17:17:33 2012 +0600
+
+    create topic fix
+
+commit 81a0b7462b26d1f6396f6be75680e9f79749d16c
+Author: bug <bug@top.(none)>
+Date:   Sat Aug 18 01:29:48 2012 +0600
+
+    new version of redictor
+
+commit 1f53590ccf77baafa10a403b6d06a8fa62c1b286
+Author: bug <bug@top.(none)>
+Date:   Sat Aug 18 00:34:01 2012 +0600
+
+    fix user nav
+
+commit f4c3a94690f227dffd54e2025eab1b742317bbc9
+Author: bug <bug@top.(none)>
+Date:   Sat Aug 18 00:31:26 2012 +0600
+
+    add password change
+
+commit c49be667ba1f59a171745f86e12649941005475d
+Author: bug <bug@top.(none)>
+Date:   Sat Aug 18 00:02:33 2012 +0600
+
+    add logout action
+
+commit f21886d9ff1071dcbb6f72856f7ee220f5dc60b5
+Author: bug <bug@top.(none)>
+Date:   Sat Aug 18 00:00:34 2012 +0600
+
+    fix mail template
+
+commit ed7e2497224751c1b43dc619037d7e48fd992607
+Author: bug <bug@top.(none)>
+Date:   Fri Aug 17 23:57:15 2012 +0600
+
+    back login via mail confirm action
+
+commit 0d71cafbfc1aa939b3916c85ac7cc3627f863c1e
+Author: bug <bug@top.(none)>
+Date:   Fri Aug 17 23:52:11 2012 +0600
+
+    back login via mail action
+
+commit c7c57f090edd87bbf819563cd0d9950fd6b3c486
+Author: bug <bug@top.(none)>
+Date:   Fri Aug 17 23:43:53 2012 +0600
+
+    view fix
+
+commit 03a2eab8ece7f90687e8e6187cb2e2c967188086
+Author: bug <bug@top.(none)>
+Date:   Fri Aug 17 23:38:17 2012 +0600
+
+    view fix
+
+commit 537672167b223a4b9317df9070bb6603b18c0ed6
+Author: bug <bug@top.(none)>
+Date:   Fri Aug 17 23:35:37 2012 +0600
+
+    view fix
+
+commit 40358f90e514938f23e86c99915ed46b9a6a55a2
+Author: bug <bug@top.(none)>
+Date:   Fri Aug 17 23:23:51 2012 +0600
+
+    v0.0.15
+
 commit 22a8a75884cba6e93645b10526b82a6bf722ee48
 Author: bug <bug@top.(none)>
 Date:   Thu Aug 16 21:16:49 2012 +0600

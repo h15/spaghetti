@@ -1,6 +1,7 @@
 package Spaghetti::Controller::Wiki;
 use Mojo::Base 'Mojolicious::Controller';
 
+  use Text::Diff;
   use Wiki::Document;
   use Wiki::Revision;
   
@@ -9,8 +10,6 @@ use Mojo::Base 'Mojolicious::Controller';
       my $this = shift;
       my $rev = new Wiki::Revision;
       my $doc = new Wiki::Document;
-      
-      $
       
       $doc->set( url      => $this->param('url'),
                  title    => $this->param('title'),
@@ -23,7 +22,55 @@ use Mojo::Base 'Mojolicious::Controller';
   
   sub read
     {
-    
+      my $this = shift;
+      my $a = q{
+        1
+        2
+        3
+        4
+        5
+        6
+        7
+        8
+        9
+        0
+        1
+        2
+        3
+        4
+        5
+        6
+        7
+        8
+        9
+        9
+      };
+      my $b = q{
+        1
+        2
+        3
+        4
+        5
+        6
+        71
+        81
+        91
+        0
+        1
+        2
+        3
+        4
+        5
+        6
+        7
+        8
+        9
+        9
+      };
+      
+      my $c = diff \$a, \$b;
+      say $this->dumper($c);
+      die;
     }
   
   sub update

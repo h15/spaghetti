@@ -183,9 +183,13 @@ use Mojo::Base 'Mojolicious';
       $r->route('/topic/edit/:id')
         ->to('thread#editTopic')
           ->name('topic_edit');
-      $r->route('/thread')
+      
+      $r->route('/forum')
         ->to('thread#index')
           ->name('thread_index');
+      $r->route('/thread')
+        ->to('thread#index');
+       
       $r->route( '/thread/:url/page/:page',
              url => qr/[\w\d\-]+/, page => qr/\d+/ )
         ->to('thread#show')
